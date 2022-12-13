@@ -8,9 +8,9 @@ Below is a table containing all Terraform modules verified by Microsoft Azure. E
 
 <!-- Begin Module Table -->
 
-| Module                    | Module Version | Minimum Terraform Version | Docs                                                 |Key Metrics                                                               | Version Details|
-| ----------                | :-----------:  | :-----------:             |----------                                            | :-----------:                                                           |:-----------:   |
-| terraform-azurerm-subnets | 1.0.0          | 1.13.0                    |https://github.com/Azure/terraform-azurerm-subnets    | daily downloads           weekly downloads        yearly downloads    |docs            |
+| Module                    | Module Version | Minimum Terraform Version | Docs                                                 |Key Metrics                                                               | Version Details                                                                    |
+| ----------                | :-----------:  | :-----------:             |----------                                            | :-----------:                                                           |:-----------:                                                                       |
+| Terraform-AzureRM-Subnets | 1.0.0          | 1.13.0                    |https://github.com/Azure/terraform-azurerm-subnets    | daily downloads           weekly downloads        yearly downloads    |https://github.com/Azure/terraform-azurerm-subnets/blob/master/README.md            |
 
 
 
@@ -29,4 +29,4 @@ When creating a new module in alignment with our verified module pipeline, you s
 3. Describe your module (A clear and concise description of your module would be strongly preferred)
 
 #### CI/CD Pipeline Deployment 
-Run make pre-commit to check the Terraform code in local environment
+Run `make pre-commit` to check the Terraform code in local environment
