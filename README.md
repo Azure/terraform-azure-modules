@@ -8,18 +8,21 @@ Below is a table containing all Terraform modules verified by Microsoft Azure. E
 
 <!-- Begin Module Table -->
 
-| Module     | Module Version | Minimum Terraform Version | Docs           |Key Metrics     | Version Details|
-| ---------- | :-----------:  | :-----------:             |----------      | :-----------:  |:-----------:   |
-| 第一行     | 第一列     | 第二列     |
+| Module            | Module Version | Minimum Terraform Version | Docs                                                 |Key Metrics                                                 | Version Details|
+| ----------        | :-----------:  | :-----------:             |----------                                            | :-----------:                                             |:-----------:   |
+| Terraform-AzureRM | 1.2.0          | 1.13.0                    |https://github.com/Azure/terraform-azurerm-subnets    | daily downloads     weekly downloads  yearly downloads    |docs            |
 
 
-| Module                                     |                                                                                                                                                       Version |                                                                                                                                                                                                                                                                  Docs |
-
-| :----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-
-| `terraform-azurerm-subnet`                 |                    <a href="https://mcr.microsoft.com/v2/bicep/app/dapr-containerapp/tags/list"><image src="https://img.shields.io/badge/mcr-1.0.2-blue"></a> |                                       [🦾 Code](https://github.com/Azure/bicep-registry-modules/tree/main/modules/app/dapr-containerapp/main.bicep](https://github.com/Azure/terraform-azurerm-subnets) ｜ [📃 Readme]([https://github.com/Azure/bicep-registry-modules/tree/main/modules/app/dapr-containerapp/README.md](https://github.com/Azure/terraform-azurerm-subnets/blob/master/README.md)|
 
 ## Contributing
 
 We only accept contributions from Microsoft employees at this time. Teams within Microsoft can refer to Contributing to Terraform Verified Modules Registry for more information. External customers can propose new modules or report bugs by opening an issue.  
 
+### Prerequisite
+https://github.com/apps/1es-resource-management/ Install the 1ES (One Engineering Service) Resource Management GitHub APP 
+
+### Creating a new verified module
+When creating a new module in alignment with our verified module pipeline, you should make a pull request. Each module needs to have its own pull request. The pull request shall integrate the following content:  
+1. Has your module already existed in the Terraform-Azure-registry?
+2. Module Path (Please provide the GitHub Repository of your module. You should guarantee that your repository looks the same as this template created by Zijie: https://github.com/lonegunmanb/terraform-verified-module 
+3. Describe your module (A clear and concise description of your module would be strongly preferred)
