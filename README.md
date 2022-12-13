@@ -22,7 +22,11 @@ We only accept contributions from Microsoft employees at this time. Teams within
 https://github.com/apps/1es-resource-management/ Install the 1ES (One Engineering Service) Resource Management GitHub APP 
 
 ### Creating a new verified module
+#### Making a pull request
 When creating a new module in alignment with our verified module pipeline, you should make a pull request. Each module needs to have its own pull request. The pull request shall integrate the following content:  
 1. Has your module already existed in the Terraform-Azure-registry?
 2. Module Path (Please provide the GitHub Repository of your module. You should guarantee that your repository looks the same as this template created by Zijie: https://github.com/lonegunmanb/terraform-verified-module 
 3. Describe your module (A clear and concise description of your module would be strongly preferred)
+
+#### CI/CD Pipeline Deployment 
+Run make pre-commit to check the Terraform code in local environment
