@@ -1,33 +1,30 @@
-# Project
+# Azure Terraform Verified Modules
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+This GitHub repository contains essential information related to Azure Terraform verified modules, including a brief introduction of modules, the documentation for verified modules and pointers to the module repos, and how can Terraform practitioners contribute to verified modules. Please note that all the verified modules meet the quality pipeline established by the Microsoft Azure team. 
 
-As the maintainer of this project, please make a few updates:
+## What is Terraform Module
+Terraform modules encapsulate groups of resources dedicated to one task, reducing the code you have to develop for similar infrastructure components. A typical module might contain a set of configuration files in one single directory, and integrate the following items: main.tf, variables.tf, output.tf, and README.md.
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+## Verified Modules Table
+Below is a table containing all Terraform modules verified by Microsoft Azure. Here is a detailed explanation of the column header for your notification: 
+
+The `Module Version` badge shows the latest version of the corresponding module, and you may click on it to check the core functions and changes in each version of the module. 
+
+The `Minimum Terraform Version` shows the minimum version requirement for Terraform when calling the verified module. Using the verified module below the required Terraform version might cause potential inconsistency and disruption. For instance, when it displays 1.13.0, we suggest you use a Terraform version greater than v1.13.0.
+
+In the `Docs` section, you can click on the `README.md` file to learn the contained resources of the verified modules, how to CRUD the verified modules in your environment, as well as the key input and output of verified modules. 
+
+The `Total Downloads` calculate the downloads of the specific verified module over time, indicating its popularity among Terraform practitioners. 
+
+
+<!-- Begin Module Table -->
+
+| Module                    | Module Version                                              | Minimum Terraform Version | Docs                                                                                                                  |Total Downloads|
+| ----------                | :-----------:                                               | :-----------:             |----------                                                                                                            | :-----------: |
+| Terraform-AzureRM-Subnets | [1.0.0](https://github.com/Azure/terraform-azurerm-subnets) | 1.13.0                    |[README.md](https://github.com/Azure/terraform-azurerm-subnets/blob/master/README.md)    | 11,300        |
+
+
 
 ## Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
-
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-
-## Trademarks
-
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
+We only accept contributions from Microsoft employees at this time. Teams within Microsoft can refer to [Contributing to Terraform Verified Modules Registry](https://github.com/Jingwei-MS/terraform-azure-modules/blob/main/Contribute.md) for more information. 
