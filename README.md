@@ -27,4 +27,4 @@ The `Total Downloads` calculate the downloads of the specific verified module ov
 
 ## Contributing
 
-We only accept contributions from Microsoft employees at this time. Teams within Microsoft can refer to [Contributing to Terraform Verified Modules Registry] (https://github.com/sfjkj) for more information. 
+We only accept contributions from Microsoft employees at this time. Teams within Microsoft can refer to [Contributing to Terraform Verified Modules Registry](https://github.com/Jingwei-MS/terraform-azure-modules/blob/main/Contribute.md) for more information. 
