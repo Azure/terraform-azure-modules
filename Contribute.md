@@ -1,5 +1,5 @@
 # Contributing to Terraform Verified Modules  
-We only accept pull requests created by Microsoft employees for now. The following instructions will help you with the development of Azure Terraform verified modules.
+We only accept pull requests created by Microsoft employees for now. The following instructions will help you with the development of Azure Terraform verified modules. Please follow it step by step. 
 
 ## Prerequisite
 Install the 1ES ([One Engineering Service](https://github.com/apps/1es-resource-management/Resource)) Management GitHub APP 
