@@ -1,6 +1,6 @@
 # Azure Terraform Verified Modules
 
-This GitHub repository contains essential information related to Azure Terraform verified modules, including a brief introduction of modules, the documentation for verified modules and pointers to the module repos, and how Terraform practitioners contribute to verified modules. Please note that all the verified modules meet the quality pipeline established by the Microsoft Azure team. 
+This GitHub repository contains essential information related to Azure Terraform verified modules, including a brief introduction of modules, the documentation for verified modules and pointers to the module repos, and how can Terraform practitioners contribute to verified modules. Please note that all the verified modules meet the quality pipeline established by the Microsoft Azure team. 
 
 ## What is Terraform Module
 Terraform modules encapsulate groups of resources dedicated to one task, reducing the code you have to develop for similar infrastructure components. A typical module might contain a set of configuration files in one single directory, and integrate the following items: main.tf, variables.tf, output.tf, and README.md.
