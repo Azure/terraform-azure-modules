@@ -1,8 +1,5 @@
 # Contributing to Terraform Verified Modules  
-We accept pull requests created by not only Microsoft employees but the wider developer community for now. The following instructions will help you with the development of Azure Terraform verified modules. Please follow it step by step. 
-
-## Prerequisite
-Install the 1ES ([One Engineering Service](https://github.com/apps/1es-resource-management/Resource)) Management GitHub APP 
+We accept pull requests created by not only Microsoft employees but the wider developer community. The following instructions will help you with the development of Azure Terraform verified modules. Please follow it step by step. 
 
 ## Creating a New Verified Module
 ### Create Your own GitHub Repository of Your Module
@@ -18,22 +15,26 @@ Please guarantee that your repository looks exactly the same as this [template](
 
 `outputs.tf` will contain the output definitions for your module. 
 
-`Examples` will contain real-world examples of using your module. Please make sure that they are up-dated, functional, and easy to understand. 
+`examples` will contain real-world examples of using your module. Please make sure that they are up-dated, functional, and easy to understand. 
 
-### Run our CI Pipeline
-First, you should set up service principal’s credentials in your environment variables like below: 
+`test` folder will normally contain functional test files covering e2e test, unit test, and upgrade test. 
 
-    o	export ARM_SUBSCRIPTION_ID="<azure_subscription_id>"
+### Tests before Commit
 
-    o	export ARM_TENANT_ID="<azure_subscription_tenant_id>"
+1. First, you should set up service principal’s credentials in your environment variables like below: 
 
-    o	export ARM_CLIENT_ID="<service_principal_appid>"
+```
+export ARM_SUBSCRIPTION_ID="<azure_subscription_id>"
 
-    o	export ARM_CLIENT_SECRET="<service_principal_password>"
-    
-Alternatively, if you do not want to set up environment variables, we recommend you run the pre-commit checks and tests in our provided docker image. In order to do this, you need to download [docker](https://www.docker.com/pricing/#/download), then run the command via your terminal: `mcr.microsoft.com/azterraform:latest`.
+export ARM_TENANT_ID="<azure_subscription_tenant_id>"
 
-Second, please run `make pre-commit` to check the Terraform code in your local environment. For Mac/Linux, the whole command should be like this: `$ docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make pre-commit`; for Windows, the whole command should be like this: `$ docker run --rm -v ${pwd}:/src -w /src mcr.microsoft.com/azterraform:latest make pre-commit` We have integrated the following steps in the single 'make pre-commit' command: 
+export ARM_CLIENT_ID="<service_principal_appid>"
+
+export ARM_CLIENT_SECRET="<service_principal_password>"
+```
+2. Second, we recommend you run the pre-commit checks and tests in our provided docker image. In order to do this, you need to download [docker](https://www.docker.com/pricing/#/download), then run the command via your terminal: `mcr.microsoft.com/azterraform:latest`.
+
+3. Third, please run `make pre-commit` to check the Terraform code in your local environment. For Mac/Linux, the whole command should be like this: `$ docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make pre-commit`; for Windows, the whole command should be like this: `$ docker run --rm -v ${pwd}:/src -w /src mcr.microsoft.com/azterraform:latest make pre-commit` We have integrated the following steps in the single `make pre-commit` command: 
 
 ```
   Run `terraform fmt -recursive` command for your Terraform code.
@@ -49,12 +50,16 @@ Second, please run `make pre-commit` to check the Terraform code in your local e
   Run `terraform-docs` on README.md file, then run `markdown-table-formatter` to format markdown tables in README.md.
 ```
 
-Third, please run the `pr-check` task to check whether our code meets our pipeline’s requirement. For Mac/Linux, the whole command should be like this: `$ docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make pr-check`; for Windows, the whole command should be like this: `$ docker run --rm -v ${pwd}:/src -w /src mcr.microsoft.com/azterraform:latest make pre-commit`
+4. Forth, please run the `pr-check` task to check whether our code meets our pipeline’s requirement. For Mac/Linux, the whole command should be like this: `$ docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make pr-check`; for Windows, the whole command should be like this: `$ docker run --rm -v ${pwd}:/src -w /src mcr.microsoft.com/azterraform:latest make pre-commit`
 
-Finally, please run the `e2e-test` with the following command. For Mac/Linux, the whole command should be like this: `docker run --rm -v $(pwd):/src -w /src -e ARM_SUBSCRIPTION_ID -e`; for Windows, the whole command should be like this: `docker run --rm -v ${pwd}:/src -w /src -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_CLIENT_SECRET mcr.microsoft.com/azterraform:latest make e2e-test`
+5. Finally, please run the `e2e-test` with the following command. For Mac/Linux, the whole command should be like this: `docker run --rm -v $(pwd):/src -w /src -e ARM_SUBSCRIPTION_ID -e`; for Windows, the whole command should be like this: `docker run --rm -v ${pwd}:/src -w /src -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_CLIENT_SECRET mcr.microsoft.com/azterraform:latest make e2e-test`
+
+6. Finally, install the 1ES ([One Engineering Service](https://github.com/apps/1es-resource-management/installations/24223778)) to enable the subsequent automatic tests. 
 
 ### Make a Pull Request
-After passing all the pre-commit & pr-check & E2E test, which indicates that your modules are in alignment with our verified module pipeline, you can make a pull request in our [repo](https://github.com/Azure/terraform-azure-modules). Please note that each module needs to have its own pull request. 
+After passing all the pre-commit & pr-check & E2E test, you can make a pull request in our [repo](https://github.com/Azure/terraform-azure-modules). Please note that each module needs to have its own pull request. 
+
+Subsequently, our CI pr-check will be executed automatically. Once the pr-check has passed, the e2e test and version upgrade test will be executed with manual approval. Passing all tests indicates that your modules are in alignment with our verified module pipeline. If the tests fail, please refer to the pipeline's output and make modifications. Thank you for your cooperation. 
 
 ### The End
 When your pull request has been merged into our main branch, as the module owner, you are responsible for maintaining and updating it. In cases that you are not able to guarantee its applicability in real business scenarios, please inform the Azure Terraform team as soon as possible. We will alert users the potential risk or roll it off from our GitHub repo. 

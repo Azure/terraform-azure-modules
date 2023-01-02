@@ -3,10 +3,10 @@
 This GitHub repository contains essential information related to Azure Terraform verified modules, including a brief introduction of modules, the documentation for verified modules and pointers to the module repos, and how Terraform practitioners can contribute to verified modules. Please note that all the verified modules meet the quality pipeline established by the Microsoft Azure team. 
 
 ## What is Terraform Module
-Terraform modules encapsulate groups of resources dedicated to one task, reducing the code you have to develop for similar infrastructure components. A typical module might contain a set of configuration files in one single directory, and integrate the following items: main.tf, variables.tf, output.tf, and README.md.
+Terraform modules encapsulate groups of resources dedicated to one task, reducing the code you have to develop for similar infrastructure components. A typical module will contain a set of configuration files in one single directory, and integrate the following items: main.tf, variables.tf, output.tf, test folder, and README.md.
 
 ## Verified Modules Table
-Below is a table containing all Terraform modules verified by Microsoft Azure. Here is a detailed explanation of the column header for your notification: 
+Below is a table containing all Terraform modules verified by Microsoft Azure. Here is a detailed explanation of the items for your notification: 
 
 The `Module Version` badge shows the latest version of the corresponding module, and you may click on it to check the core functions and changes in each version of the module. 
 
@@ -21,10 +21,10 @@ The `Total Downloads` calculate the downloads of the specific verified module ov
 
 | Module                    | Module Version                                              | Minimum Terraform Version | Docs                                                                                                                  |Total Downloads|
 | ----------                | :-----------:                                               | :-----------:             |----------                                                                                                            | :-----------: |
-| Terraform-AzureRM-Subnets | [1.0.0](https://github.com/Azure/terraform-azurerm-subnets) | 1.13.0                    |[README.md](https://github.com/Azure/terraform-azurerm-subnets/blob/master/README.md)    | 11,300        |
+| Terraform-AzureRM-Subnets | [1.0.0](https://github.com/Azure/terraform-azurerm-subnets) | 1.2.0                    |[README.md](https://github.com/Azure/terraform-azurerm-subnets/blob/master/README.md)    | 11,300        |
 
 
 
 ## Contributing
 
-We accept contributions from not only Microsoft employees but the broader developer community at this time. If you want to make contributions, please refer to [Contributing to Terraform Verified Modules Registry](https://github.com/Jingwei-MS/terraform-azure-modules/blob/main/Contribute.md) for more information. 
+We accept contributions from not only Microsoft employees but the broader developer community. If you want to make contributions, please refer to [Contributing to Terraform Verified Modules Registry](https://github.com/Jingwei-MS/terraform-azure-modules/blob/main/Contribute.md) for more information. 
