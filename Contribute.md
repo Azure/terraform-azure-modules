@@ -1,13 +1,29 @@
 # Contributing to Terraform Verified Modules  
-We accept pull requests created by not only Microsoft employees but the wider developer community. The following instructions will help you with the development of Azure Terraform verified modules. Please follow it step by step. 
+We accept modules created by not only Microsoft employees but the wider developer community. The following instructions will help you with the development of Azure Terraform verified modules. Please follow it step by step. 
 
 ## Creating a New Verified Module
+### Before Getting Started
+Before designing the first version of your module, please keep in mind the following guidances:
+
+* Always deliver a module that works for at least 80% of user cases. 
+* Never include corner cases in your module. A module should be a reusable block of code. 
+* Your module should only expose the most commonly modified arguments as variables. That is to say, your module should only support variables that you are most likely to need. 
+
+### Label your Module with Our Naming Convention
+Please follow our naming convention to make your module easy to understand and work with. The order should be: Terraform-AzureRM-{module function}, like `Terraform-AzureRM-Subnet`
+
 ### Create Your own GitHub Repository of Your Module
 Please guarantee that your repository looks exactly the same as this [template](https://github.com/lonegunmanb/terraform-verified-module) created by Zijie. The repo shall normally contain the following items: 
 
 `LICENSE` will contain the license under which your module will be distributed. When you share your module, the LICENSE file will let people using it know the terms under which it has been made available.
 
-`README.md` will contain documentation describing how to use your module, in markdown format. A clear and concise description of your module would be strongly preferred. 
+`README.md` will contain documentation describing what your module contains and how to use your module, in markdown format. Nornally, they shall contain the following components in order: 
+  
+* A clear and concise description.
+* A **Resource types** section with a table that outlines all resources that can be deployed as part of your module.
+* A **Parameters** section with a table containing all parameters, their types, default and allowed values, and their brief description.
+* An **Output** section with a table describing all outputs the module template returns.
+* A **Template references** section listing relevant resources.
 
 `main.tf` will contain the main set of configuration for your module. You can also create other configuration files and organize them however makes sense for your project.
 
@@ -17,7 +33,11 @@ Please guarantee that your repository looks exactly the same as this [template](
 
 `examples` will contain real-world examples of using your module. Please make sure that they are up-dated, functional, and easy to understand. 
 
-`test` folder will normally contain functional test files covering e2e test, unit test, and upgrade test. 
+`test` folder will normally contain functional test files and should follow these general guidelines:
+* A module should have as many moudle test files as it needs (at least includes e2e test, unit test, and upgrade test) to evaluate all parts of the module's functionality. 
+* Sensitive data should not be stored in the module test files. 
+
+`gitignore`(optional) will specify intentionally untracked files that Git should ignore. 
 
 ### Tests before Commit
 
@@ -62,6 +82,6 @@ After passing all the pre-commit & pr-check & E2E test, you can make a pull requ
 Subsequently, our CI pr-check will be executed automatically. Once the pr-check has passed, the e2e test and version upgrade test will be executed with manual approval. Passing all tests indicates that your modules are in alignment with our verified module pipeline. If the tests fail, please refer to the pipeline's output and make modifications. Thank you for your cooperation. 
 
 ### The End
-When your pull request has been merged into our main branch, as the module owner, you are responsible for maintaining and updating it. In cases that you are not able to guarantee its applicability in real business scenarios, please inform the Azure Terraform team as soon as possible. We will alert users the potential risk or roll it off from our GitHub repo. 
+When your pull request has been merged into our main branch, as the module owner, **you are responsible for maintaining and updating it**. In cases that you are not able to guarantee its applicability in real business scenarios, please inform the Azure Terraform team as soon as possible. We will alert users the potential risk or roll it off from our GitHub repo. 
 
 Thank you for your attention and hope you enjoy the whole process!
