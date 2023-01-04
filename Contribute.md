@@ -10,7 +10,7 @@ Before designing the first version of your module, please keep in mind the follo
 * Your module should only expose the most commonly modified arguments as variables. That is to say, your module should only support variables that you are most likely to need. 
 
 ### Label your Module with Our Naming Convention
-Please follow our naming convention to make your module easy to understand and work with. The order should be: Terraform-AzureRM-{module function}, like `Terraform-AzureRM-Subnet`
+Please follow our naming convention to make your module easy to understand and work with. The order should be: terraform-azurerm-{module function}, like `terraform-azurerm-subnet`
 
 ### Create Your own GitHub Repository of Your Module
 Please guarantee that your repository looks exactly the same as this [template](https://github.com/lonegunmanb/terraform-verified-module) created by Zijie. The repo shall normally contain the following items: 
@@ -52,27 +52,25 @@ export ARM_CLIENT_ID="<service_principal_appid>"
 
 export ARM_CLIENT_SECRET="<service_principal_password>"
 ```
-2. Second, we recommend you run the pre-commit checks and tests in our provided docker image. In order to do this, you need to download [docker](https://www.docker.com/pricing/#/download), then run the command via your terminal: `mcr.microsoft.com/azterraform:latest`.
+2. We recommend you run the pre-commit checks and tests in our provided docker image. In order to do this, you need to download [docker](https://www.docker.com/pricing/#/download), then run the command via your terminal: `mcr.microsoft.com/azterraform:latest`.
 
-3. Third, please run `make pre-commit` to check the Terraform code in your local environment. For Mac/Linux, the whole command should be like this: `$ docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make pre-commit`; for Windows, the whole command should be like this: `$ docker run --rm -v ${pwd}:/src -w /src mcr.microsoft.com/azterraform:latest make pre-commit` We have integrated the following steps in the single `make pre-commit` command: 
+3. Please run `make pre-commit` to check the Terraform code in your local environment. 
 
-```
-  Run `terraform fmt -recursive` command for your Terraform code.
+    For Mac/Linux, the whole command should be: `$ docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make pre-commit`
 
-  Run `terrafmt fmt -f` command for markdown files and go code files to ensure that the Terraform code embedded in these files are well formatted.
+    For Windows, the whole command should be: `$ docker run --rm -v ${pwd}:/src -w /src mcr.microsoft.com/azterraform:latest make pre-commit`
 
-  Run `go mod tidy` and `go mod vendor` for test folder to ensure that all the dependencies have been synced.
+4. Run the `pr-check` task to check whether your code meets our pipeline’s requirement. 
 
-  Run `gofmt` for all go code files.
+    For Mac/Linux, the whole command should be: `$ docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make pr-check`
 
-  Run `gofumpt` for all go code files.
+    For Windows, the whole command should be: `$ docker run --rm -v ${pwd}:/src -w /src mcr.microsoft.com/azterraform:latest make pr-check`
 
-  Run `terraform-docs` on README.md file, then run `markdown-table-formatter` to format markdown tables in README.md.
-```
+5. Please run the e2e-test with the following command. 
 
-4. Forth, please run the `pr-check` task to check whether our code meets our pipeline’s requirement. For Mac/Linux, the whole command should be like this: `$ docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make pr-check`; for Windows, the whole command should be like this: `$ docker run --rm -v ${pwd}:/src -w /src mcr.microsoft.com/azterraform:latest make pre-commit`
+    For Mac/Linux, the whole command should be: `docker run --rm -v $(pwd):/src -w /src -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_CLIENT_SECRET mcr.microsoft.com/azterraform:latest make e2e-test`
 
-5. Finally, please run the `e2e-test` with the following command. For Mac/Linux, the whole command should be like this: `docker run --rm -v $(pwd):/src -w /src -e ARM_SUBSCRIPTION_ID -e`; for Windows, the whole command should be like this: `docker run --rm -v ${pwd}:/src -w /src -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_CLIENT_SECRET mcr.microsoft.com/azterraform:latest make e2e-test`
+    For Windows, the whole command should be: `docker run --rm -v ${pwd}:/src -w /src -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_CLIENT_SECRET mcr.microsoft.com/azterraform:latest make e2e-test`
 
 6. Finally, install the 1ES ([One Engineering Service](https://github.com/apps/1es-resource-management/installations/24223778)) to enable the subsequent automatic tests. 
 

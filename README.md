@@ -21,7 +21,7 @@ The `Total Downloads` calculate the downloads of the specific verified module ov
 
 | Module                    | Module Version                                              | Minimum Terraform Version | Docs                                                                                                                  |Total Downloads|
 | ----------                | :-----------:                                               | :-----------:             |----------                                                                                                            | :-----------: |
-| Terraform-AzureRM-Subnets | [1.0.0](https://github.com/Azure/terraform-azurerm-subnets) | 1.2.0                    |[README.md](https://github.com/Azure/terraform-azurerm-subnets/blob/master/README.md)    | 11,300        |
+| terraform-azurerm-subnets | [1.0.0](https://github.com/Azure/terraform-azurerm-subnets) | 1.2.0                    |[README.md](https://github.com/Azure/terraform-azurerm-subnets/blob/master/README.md)    | 11,300        |
 
 
 
