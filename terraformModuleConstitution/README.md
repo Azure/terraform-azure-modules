@@ -1,0 +1,16 @@
+# Terraform Module Rules
+
+1. [General rules](../terraformModuleConstitution/general_rules.md)
+2. [Logic code of modules](../terraformModuleConstitution/logic_code/readme.md)
+    - 2.1 [variables.tf](../terraformModuleConstitution/logic_code/variables.tf.md)
+    - 2.2 [outputs.tf](../terraformModuleConstitution/logic_code/outputs.md)
+    - 2.3 [locals.tf](../terraformModuleConstitution/logic_code/locals.tf.md)
+    - 2.4 [versions.tf](../terraformModuleConstitution/logic_code/versions.tf.md)
+    - 2.5 [Logic code containing resource definitions](../terraformModuleConstitution/logic_code/resource.md)
+3. [Example code](../terraformModuleConstitution/example_code.md)
+4. [Test code](../terraformModuleConstitution/test_code/testing_code.md)
+    - 4.1 [Unit tests](../terraformModuleConstitution/test_code/unit_test.md)
+    - 4.2 [e2e tests](../terraformModuleConstitution/test_code/e2e_test.md)
+    - 4.3 [Version upgrade tests](../terraformModuleConstitution/test_code/version_upgrade_tests.md)
+5. [LISENCE](../terraformModuleConstitution/LISENCE.md)
+6. [CHANGELOG](../terraformModuleConstitution/CHANGELOG.md)
