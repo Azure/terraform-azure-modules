@@ -7,11 +7,11 @@ Input variables should follow this order:
 1. All required fields, in alphabetical order
 2. All optional fields, in alphabetical order
 
-A `variable` with `default` value is a required fields, otherwise it's an optional one.
+A `variable` with `default` value is a required field, otherwise it's an optional one.
 
 ## `variable` follows case law
 
-Ensure that the `name`, `description`, `validation` of `variable` are consistent with `resource`, `data` in the context, while make sure the same `variable` in different modules have the same name.
+Ensure that the `name`, `description`, `validation` of `variable` are consistent with `resource`, `data` in the context, while making sure the same `variable` in different modules has the same name.
 
 Prefixes ending with `_` are allowed to differentiate `variable`s. Eg.
 
@@ -27,7 +27,7 @@ resource "azurerm_linux_virtual_machine" "webserver" {
 
 In this case, in `webserver_source_image_id`, `source_image_id` is aligned with the argument in `resource`, `webserver_` is allowed as a prefix.
 
-Assuming a `variable` is a input parameter used for passing value to a resource, then the name of this `variable` should use the name of the input parameter defined in the resource(prefix is allowed). `description` should copy from the related descriptions in resource definition documents.
+Assuming a `variable` is an input parameter used for passing value to a resource, then the name of this `variable` should use the name of the input parameter defined in the resource(prefix is allowed). `description` should copy from the related descriptions in resource definition documents.
 
 ## Name of a `variable` should follow rules
 
@@ -68,15 +68,17 @@ variable "test_obj" {
 * Use `bool` instead of `string` or `number` for `true/false`
 * Use `string` for text
 
-## `error_message` of a `variable`'s `validation` should use a full sentence to describe the rules need to be followed by the expected data
+## `error_message` of a `variable`'s `validation` should use a full sentence to describe the rules that need to be followed by the expected data
 
 ## `variable` containing confidential data should be declared as `sensitive = true`
+
+If `variable`'s `type` is `object` and contains one or more fields that would be assigned to a `sensitive` argument, then this `variable` should be declared as `sensitive = true`.
 
 ## Declare `nullable = false` if possible
 
 ## Do not declare `nullable = true`
 
-## `variable` with `sensitive = true` cannot have default value unless `default = null`
+## ## `variable` with `sensitive = true` cannot have default value unless the default value represents turning off a feature, like `default = null` or `default = []`
 
 ## `default` value of a `variable`
 
@@ -143,7 +145,7 @@ Safe `default` values should be provided to the utmost.
 
 Sometimes we will find names for some `variable` are not suitable anymore, or a change should be made to the data type. We want to ensure forward compatibility within a major version, so direct changes are strictly forbidden. The right way to do this is move this `variable` to an independent `deprecated_variables.tf` file, then redefine the new parameter in `variable.tf` and make sure it's compatible everywhere else.
 
-Deprecated `variable` must be annotated at the beginning of the `description`, at the same time the replacement's name should be declared. E.g.
+Deprecated `variable` must be annotated as `DEPRECATED` at the beginning of the `description`, at the same time the replacement's name should be declared. E.g.
 
 ```terraform
 variable "enable_network_security_group" {

@@ -1,8 +1,14 @@
 # Rules for Files Containing Resource Definitions
 
-Resource declaration code should be placed together by its scope. If the number of resources defined in a module is not large, or the types are highly cohesive (Eg. there are multiple resources belong to the same domain), they can be defined in the same `main.tf` file. If it involves resources from multiple different domains, they should be placed in files which can represent their types. Eg. `virtual_machines.tf`, `network.tf`, `storage.tf` etc. The core scope of a module should be defined in `main.tf`.
+Resource declaration code should be placed together by its domain. If the number of resources defined in a module is not large, or the types are highly cohesive (Eg. there are multiple resources belong to the same domain), they can be defined in the same `main.tf` file. If it involves resources from multiple different domains, they should be placed in files which can represent their types. Eg. `virtual_machines.tf`, `network.tf`, `storage.tf` etc. The core scope of a module should be defined in `main.tf`.
 
-## The Order of `resource` and `data` in the Same File
+## What kind of `resource` should be declared in a module
+
+Let's say we have a module named `terraform-azurerm-vm`, which can create virtual machine related resources.
+
+The criterion for determining whether a `resource` should be put into the current module is: only the `resource` that "belongs" to this module should be declared.
+
+e.g.: an `azurerm_linux_virtual_machine` could be declared along with an `azurerm_dedicated_host_group`, but obviously, an `azurerm_dedicated_host_group` won't be exclusive to a virtual machine, so there **should not** be `azurerm_dedicated_host_group` in `terraform-azurerm-vm` module.## The Order of `resource` and `data` in the Same File
 
 For the definition of resources in the same file, the resources be depended on come first, after them are the resources depending on others.
 
@@ -119,7 +125,7 @@ Code within a nested block will also be ranked following the rules above.
 
 ## Order within a `module` block
 
-The meta-arguments below should be declared on the top of a `resource` block with the following order:
+The meta-arguments below should be declared on the top of a `module` block with the following order:
 
 1. `source`
 2. `version`
@@ -210,4 +216,29 @@ The following example shows how to use `"${var.subnet_name}-nsg"` when `var.new_
 
 ```terraform
 coalesce(var.new_network_security_group_name, "${var.subnet_name}-nsg")
+```
+
+## Use the `try` function flexibly
+
+Let's say we have such resource declaration:
+
+```terraform
+resource "azurerm_public_ip" "pip" {
+  count = var.create_public_ip ?  : 0
+  allocation_method   = "Dynamic"
+  location            = local.resource_group.location
+  name                = "pip-${random_id.id.hex}"
+  resource_group_name = local.resource_group.name
+}
+```
+
+We can use the `try` function to simplify the code without reading the value of `var.create_public_ip` when we'd like to use `azurerm_public_ip`:
+
+```terraform
+ip_configurations = [
+  {
+    public_ip_address_id = try(azurerm_public_ip.pip[0].id, null)
+    primary              = true
+  }
+]
 ```

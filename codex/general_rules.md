@@ -2,16 +2,16 @@
 
 ## Definitions
 
-All directories containing Terraform file can be seen as a Terraform module. The module used to define the deployment and interacts with Terraform state file is the root module, others are child modules. The Terraform module mentioned below are all child modules if not specified.
+All directories containing Terraform files can be seen as a Terraform module. The module used to define the deployment and interacts with Terraform state file is the root module, others are child modules. The Terraform modules mentioned below are all child modules if not specified.
 
-This article would like to define a set of rules for Terraform child module composing, and encourage child modules with features below:
+This article would like to define a set of rules for Terraform child module composing, and encourage child modules with the following features:
 
 * Instead of making a large and comprehensive module, make modules for specific scenarios （Eg. [dynamic-subnets](https://registry.terraform.io/modules/cloudposse/dynamic-subnets/aws/latest) vs [named-subnets](https://registry.terraform.io/modules/cloudposse/named-subnets/aws/latest))
 * Unless explicitly set, defaults to obey the security rules
 * Unless explicitly set, defaults to ensure the safety of state data
 * Make sure users who are familiar with official documentation of involved `resource`, `data` also feel familiar with `variable` and `output` defined in the module, misunderstanding should be reduced to the maximum extent
 * Users of the module should have greater privileges, user inputs should be able to override the default value provided. Make as many arguments configurable as possible, unless the restrictions are intended.
-* Provide test suites can be easily executed after a quick environment setup for ops
+* Provide test suites that can be easily executed after a quick environment setup for ops
 * Provide complete example code as simple as possible for users to quickly demonstrate the module
 * Ensure the latest version of example code can work with the API of the current cloud service at anytime
 * Use tools to demonstrate the code is compliant with major security rules
@@ -22,7 +22,7 @@ This rule set is an extension of the documents below, it is default to follow th
 * [Module Creation - Recommended Pattern](https://learn.hashicorp.com/tutorials/terraform/pattern-module-creation?in=terraform/modules)
 * Terraform Style Guide
 
-This set of rules are for modules developed for Azure. If sample code is required in the following chapters, Azure resources should be used in the examples.
+This set of rules is made for modules developed for Azure. If sample code is required in the following chapters, Azure resources should be used in the examples.
 
 ## Module Version Requirements
 
@@ -30,9 +30,9 @@ Since Terraform 0.13, `count`, `for_each` and `depends_on` are introduced for mo
 
 ## Purpose of Modules
 
-A module should focus on the best practice of a specific service under a certain usage scenario. The resources in the module should be highly cohesive, in the meantime they should be designed to use with other modules as well.
+A module should focus on the best practice of a specific service under a certain usage scenario. The resources in the module should be highly cohesive, and the module should be easy to composite with other modules and resources.
 
-Modules should have consistent style with the official documentation of involved `resource`, `data`, as well as other modules following these rules. Consistent user experience should be provided at all time to reduce the risk of mistakes and misunderstandings.
+Modules should have a consistent style with the official documentation of involved `resource`, `data`, as well as other modules following these rules. A consistent user experience should be provided at all times to reduce the risk of mistakes and misunderstandings.
 
 ## Types of Modules
 
@@ -45,7 +45,7 @@ The modules mentioned below are the first type if not specified.
 
 ## Design of Modules
 
-A module should refer to the concept of aggregated root in DDD (Domain Driven Development), there will be a dominated resource and a series of resources work with it.
+A module should refer to the concept of aggregated root in DDD (Domain Driven Development), there will be a leading resource and a series of resources work with it.
 
 The information aggregated root resource depends on should be passed through corresponding `variable` instead of creating on its own or inquiring with `data`. [HashiCorp defined dependency-inversion](https://www.terraform.io/docs/language/modules/develop/composition.html#dependency-inversion) should be practiced.
 
@@ -87,22 +87,22 @@ The information aggregated root resource depends on should be passed through cor
 
 This is a typical structure of a module project.
 
-A Module consists of an author written part and an auto generated part.
+A Module consists of an auto-generated part and the repo's maintainer-composed part.
 
 The below parts should be written by the author:
 
 * Logical code of the module - all `.tf` files under the root directory
-* File used to generate documentations - README.yaml
-* Automated tests - `e2e`, `upgrade` and `unit_test` directory under `test` directory
+* documentation - `README.md`
+* Automated tests - `e2e`, `upgrade` and `unit_test` directories under `test` directory
 * Examples - `example` directory
 
-The rest parts are rely on code auto generation. The author should not modify the content of these auto generated files. The content will be generated automatically before every commit and overwrite the previous contents.
+The rest parts rely on code auto-generation. The author should not modify the content of these auto-generated files. The content will be generated automatically before every commit and overwrite the previous contents.
 
 We consider these parts equally important, so they should have the same code quality standard.
 
 ## Static Files and Template Files
 
-Under some scenarios the static file and template files the module will use are saved under `files` directory (Eg. a long script file configured to [`user_data`](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_virtual_machine#user_data)).
+Under some scenarios the static file and template files the module will use are saved under `files` directory.
 
 Template files for Terraform [`templatefile` function's](https://www.terraform.io/docs/configuration/functions/templatefile.html) use should be named as `.tftpl` and placed under `template` directory.
 
