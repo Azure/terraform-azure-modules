@@ -37,7 +37,7 @@ Please guarantee that your repository looks exactly the same as this [template](
 * A module should have as many moudle test files as it needs (at least includes e2e test, unit test, and upgrade test) to evaluate all parts of the module's functionality. 
 * Sensitive data should not be stored in the module test files. 
 
-`gitignore`(optional) will specify intentionally untracked files that Git should ignore. 
+`.gitignore`(optional) will specify intentionally untracked files that Git should ignore. 
 
 ### Tests before Commit
 
