@@ -13,7 +13,7 @@ We use the name of CHANGELOG.md to help verifying the next major version. For ex
 
 The latest version of the past major release is `v5`, so the next version going be released will be `6`. Assuming there is only `CHANGELOG.md` file under the current directory, then the major version number will be `0`.
 
-[Version upgrade tests](../terraformModuleConstitution/test_code/version_upgrade_tests.md) are also based on this. It will verify the major version going to be released, then try to clone the latest code in this major version and perform version upgrade tests with the current PR version. If the major version going to be released does not have a tag, then the version upgrade tests will be skipped.
+[Version upgrade tests](/test_code/version_upgrade_tests.md) are also based on this. It will verify the major version going to be released, then try to clone the latest code in this major version and perform version upgrade tests with the current PR version. If the major version going to be released does not have a tag, then the version upgrade tests will be skipped.
 
 The auto generation of CHANGELOG will be triggered once the default branch in the repo received a `push`, it will collect all the pull request information from the first version after the current major version and put them in CHANGELOG.
 
