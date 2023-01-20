@@ -137,7 +137,7 @@ resource "azurerm_network_security_rule" "example" {
 }
 ```
 
-Safe `default` values should be provided to the utmost.
+Secure `default` values should be provided to the utmost.
 
 ## A blank line should exist between 2 `variable`s
 

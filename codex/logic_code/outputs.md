@@ -2,7 +2,7 @@
 
 ## `output` should be arranged alphabetically
 
-## Naming and `description` of an `output` should be consistent with related `description` of `resource` parameters in the official documents
+## Name and `description` of an `output` should be consistent with related `description` of `resource` parameters in the official documents
 
 ## `output` contains confidential data should declare `sensitive = true`
 

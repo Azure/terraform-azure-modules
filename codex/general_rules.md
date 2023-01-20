@@ -54,18 +54,13 @@ The information aggregated root resource depends on should be passed through cor
 ```config
 .
 ├── LICENSE
-├── Makefile
+├── GNUmakefile
 ├── README.md
-├── README.yaml
-├── CHANGE.log
+├── CHANGELOG.md
 ├── context.tf
-├── docs
-│   ├── targets.md
-│   └── terraform.md
 ├── examples
 │   └── startup
 │       ├── context.tf
-│       ├── fixtures.us-east-2.tfvars
 │       ├── main.tf
 │       ├── outputs.tf
 │       ├── variables.tf
@@ -74,11 +69,9 @@ The information aggregated root resource depends on should be passed through cor
 ├── main.tf
 ├── outputs.tf
 ├── test
-│   ├── Makefile
 │   ├── Makefile.alpine
 │   ├── e2e
 │   ├── go.mod
-│   ├── go.sum
 │   ├── upgrade
 |   └── unit_test
 ├── variables.tf

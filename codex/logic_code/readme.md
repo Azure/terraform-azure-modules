@@ -5,10 +5,10 @@ All `.tf` code should follow [Terraform Style Guide]() first.
 
 Module logical code consists of the following parts:
 
-* A set of input - `variable.tf`
-* A set of output - `output.tf`
-* All expressions independent from `resource` and `data`, containing calculations and logics, are defined as `local` in `local.tf`
-* `version.tf` file containing `terraform` blocks
+* A set of input - `variables.tf`
+* A set of output - `outputs.tf`
+* All expressions independent from `resource` and `data`, containing calculations and logics, are defined as `local` in `locals.tf`
+* `versions.tf` file containing `terraform` blocks
 * Files containing resource definitions
 * (Optional) `deprecated-variables.tf` and `deprecated-outputs.tf` file containing deprecated input/output parameters
 * Other files
