@@ -8,7 +8,9 @@ Let's say we have a module named `terraform-azurerm-vm`, which can create virtua
 
 The criterion for determining whether a `resource` should be put into the current module is: only the `resource` that "belongs" to this module should be declared.
 
-e.g.: an `azurerm_linux_virtual_machine` could be declared along with an `azurerm_dedicated_host_group`, but obviously, an `azurerm_dedicated_host_group` won't be exclusive to a virtual machine, so there **should not** be `azurerm_dedicated_host_group` in `terraform-azurerm-vm` module.## The Order of `resource` and `data` in the Same File
+e.g.: an `azurerm_linux_virtual_machine` could be declared along with an `azurerm_dedicated_host_group`, but obviously, an `azurerm_dedicated_host_group` won't be exclusive to a virtual machine, so there **should not** be `azurerm_dedicated_host_group` in `terraform-azurerm-vm` module.
+
+## The Order of `resource` and `data` in the Same File
 
 For the definition of resources in the same file, the resources be depended on come first, after them are the resources depending on others.
 
