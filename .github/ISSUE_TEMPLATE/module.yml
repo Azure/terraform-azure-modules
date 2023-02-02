@@ -1,0 +1,70 @@
+name: New Module Request
+description: Request a new Azure verified module.
+title: "[Module]: "
+labels: ["module"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this module request!
+  - type: textarea
+    id: scenario
+    attributes:
+      label: Module Scenario
+      description: Please describe the scenario this module should address.
+      placeholder: This module should allow me to manage an Azure Web App with a public IP address.
+    validations:
+      required: true
+  - type: input
+    id: module-name
+    attributes:
+      label: Proposed module name
+      description: Please provide a name for the proposed module.
+      placeholder: terraform-azure-public-web-app
+    validations:
+      required: true
+  - type: input
+    id: existing-module-link
+    attributes:
+      label: Link to existing example module
+      description: Is there an existing module that already covers this scenario that should be onboarded to verified modules? If there is a similar Azure module that has been published to the Terraform regisrty or exists in a github repo, please provide a link.
+      placeholder: https://registry.terraform.io/modules/Azure/naming/azurerm/latest
+  - type: textarea
+    id: included-resources
+    attributes:
+      label: Expected resources
+      description: What resources do expect this module to contain?
+      placeholder: |
+        - azurerm_virtual_network
+        - azurerm_linux_web_app
+        - azurerm_subnet
+  - type: textarea
+    id: inputs
+    attributes:
+      label: Module inputs
+      description: Please provide a list of inputs that you expect this module to have. If possible please specify whether or not the input should be required.
+      placeholder: |
+        | Name | Required | Default |
+        | name | yes |  |
+        | resource_group_name | yes |  |
+        | location | no | westus2 |
+      render: Markdown
+    validations:
+      required: true
+  - type: textarea
+    id: outputs
+    attributes:
+      label: Module outputs
+      description: Please provide a list of outputs that you expect this module to have.
+      placeholder: |
+        - website_url
+        - website_ip_address
+      render: Markdown
+    validations:
+      required: false
+  - type: textarea
+    id: other
+    attributes:
+      label: Other information
+      description: Please provide any other information that will help in the development of this module.
+      placeholder: More stuff

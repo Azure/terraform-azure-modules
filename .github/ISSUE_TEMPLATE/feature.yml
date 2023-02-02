@@ -1,0 +1,34 @@
+name: Feature Request
+description: File a feature request
+title: "[Feature]: "
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature request!
+  - type: input
+    id: module_name
+    attributes:
+      label: Module Name
+      description: Name of the module where this feature should be added.
+      placeholder: terraform-azure-network
+    validations:
+      required: true
+  - type: textarea
+    id: feature_description
+    attributes:
+      label: Description
+      description: Please describe the functionality that you would like to have added to the module.
+  - type: textarea
+    id: hcl
+    attributes:
+      label: Example usage
+      description: Please provide an example of what you expect this feature to look like in the module. This will be automatically formatted into HCL, so no need for backticks.
+      render: HCL
+  - type: textarea
+    id: other
+    attributes:
+      label: Other information
+      description: Please provide any other information that will help in the development of this module.
+      placeholder: More stuff

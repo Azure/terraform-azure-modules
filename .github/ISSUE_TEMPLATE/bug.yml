@@ -1,0 +1,47 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: input
+    id: module_name
+    attributes:
+      label: Module Name
+      description: Name of the module that has a bug.
+      placeholder: terraform-azure-network
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Description
+      description: Please describe the bug that you have encountered.
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+  - type: textarea
+    id: hcl
+    attributes:
+      label: code
+      description: Please copy and paste the terraform code that you used to reproduce this issue. This will be automatically formatted into HCL, so no need for backticks.
+      render: HCL
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output.
+  - type: textarea
+    id: expected
+    attributes:
+      label: What was your expected output?
+      description: Please describe what you expected for output.
+  - type: textarea
+    id: other
+    attributes:
+      label: Other information
+      description: Please provide any other information that will help in the development of this module.
+      placeholder: More stuff
