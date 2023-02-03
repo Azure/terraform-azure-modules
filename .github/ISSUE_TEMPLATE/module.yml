@@ -33,16 +33,21 @@ body:
     id: included-resources
     attributes:
       label: Expected resources
-      description: What resources do expect this module to contain?
+      description: |
+        What resources do expect this module to contain?
+        _Note: this content will be automatically formatted as Markdown._
       placeholder: |
         - azurerm_virtual_network
         - azurerm_linux_web_app
         - azurerm_subnet
+      render: Markdown
   - type: textarea
     id: inputs
     attributes:
       label: Module inputs
-      description: Please provide a list of inputs that you expect this module to have. If possible please specify whether or not the input should be required.
+      description: |
+        Please provide a list of inputs that you expect this module to have. If possible please specify whether or not the input should be required.
+        _Note: this content will be automatically formatted as Markdown._
       placeholder: |
         | Name | Required | Default |
         | name | yes |  |
@@ -55,7 +60,9 @@ body:
     id: outputs
     attributes:
       label: Module outputs
-      description: Please provide a list of outputs that you expect this module to have.
+      description: |
+        Please provide a list of outputs that you expect this module to have.
+        _Note: this content will be automatically formatted as Markdown._
       placeholder: |
         - website_url
         - website_ip_address
