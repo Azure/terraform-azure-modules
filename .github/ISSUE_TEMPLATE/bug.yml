@@ -27,8 +27,12 @@ body:
     id: hcl
     attributes:
       label: code
-      description: Please copy and paste the terraform code that you used to reproduce this issue. This will be automatically formatted into HCL, so no need for backticks.
+      description: |
+        Please copy and paste the terraform code that you used to reproduce this issue.
+        _Note: This will be automatically formatted as HCL, so no need for backticks._
       render: HCL
+    validations:
+      required: true
   - type: textarea
     id: logs
     attributes:

@@ -20,11 +20,15 @@ body:
     attributes:
       label: Description
       description: Please describe the functionality that you would like to have added to the module.
+    validations:
+      required: true
   - type: textarea
     id: hcl
     attributes:
       label: Example usage
-      description: Please provide an example of what you expect this feature to look like in the module. This will be automatically formatted into HCL, so no need for backticks.
+      description: |
+        Please provide an example of what you expect this feature to look like in the module. 
+        _Note: This will be automatically formatted as HCL, so no need for backticks._
       render: HCL
   - type: textarea
     id: other
