@@ -26,7 +26,7 @@ body:
   - type: textarea
     id: hcl
     attributes:
-      label: code
+      label: Code
       description: |
         Please copy and paste the terraform code that you used to reproduce this issue.
         _Note: This will be automatically formatted as HCL, so no need for backticks._
