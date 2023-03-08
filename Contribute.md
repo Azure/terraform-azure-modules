@@ -13,7 +13,7 @@ Before designing the first version of your module, please keep in mind the follo
 Please follow our naming convention to make your module easy to understand and work with. The order should be: terraform-azurerm-{module function}, like `terraform-azurerm-subnet`
 
 ### Create Your own GitHub Repository of Your Module
-Please guarantee that your repository looks exactly the same as this [template](https://github.com/lonegunmanb/terraform-verified-module) created by Zijie. The repo shall normally contain the following items: 
+Please guarantee that your repository looks exactly the same as this [template](https://github.com/Azure/terraform-verified-module) created by Zijie. The repo shall normally contain the following items: 
 
 `LICENSE` will contain the license under which your module will be distributed. When you share your module, the LICENSE file will let people using it know the terms under which it has been made available.
 
