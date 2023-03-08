@@ -14,6 +14,6 @@ Please explicitly set `prevent_deletion_if_contains_resources` to `false`.
 
 ## Demo code should be directly runnable and self-sufficient
 
-Demo code can have some `variable`s with `default` value configured or have corresponding `terraform.tfvars` file created, which enables the user to run `terraform apply` directly.
+Demo code can have some `variable`'s with `default` value configured or have corresponding `terraform.tfvars` file created, which enables the user to run `terraform apply` directly.
 
 All resources and preconditions required to run an example should be created by the example code itself. E.g.: we can setup `admin_ssh_key` for `azurerm_linux_virtual_machine`. We SHOULD NOT assume that there must be a public key file under `$HOME` directory, instead we should use `tls_private_key` to create the keys we need.
