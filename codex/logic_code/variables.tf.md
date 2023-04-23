@@ -78,6 +78,8 @@ If `variable`'s `type` is `object` and contains one or more fields that would be
 
 ## Do not declare `nullable = true`
 
+## Do not declare `sensitive = false`
+
 ## `variable` with `sensitive = true` cannot have default value unless the default value represents turning off a feature, like `default = null` or `default = []`
 
 ## `default` value of a `variable`

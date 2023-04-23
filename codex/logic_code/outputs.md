@@ -6,6 +6,8 @@
 
 ## `output` contains confidential data should declare `sensitive = true`
 
+## Do not declare `sensitive = false`
+
 ## A blank line should exist between 2 `output`s
 
 ## Dealing with Deprecated `output`s
