@@ -21,12 +21,12 @@ The `Total Downloads` calculate the downloads of the specific verified module ov
 
 | Module                    | Module Version                                              | Minimum Terraform Version | Docs                                                                                                                  |Total Downloads|
 | ----------                | :-----------:                                               | :-----------:             |----------                                                                                                            | :-----------: |
-| terraform-azurerm-aks | [6.5.0](https://github.com/Azure/terraform-azurerm-aks) | 1.2.0 | [README.md](https://github.com/Azure/terraform-azurerm-aks/blob/master/README.md) | xxxx |
-| terraform-azurerm-compute | [5.0.0](https://github.com/Azure/terraform-azurerm-compute) | 1.2.0 | [README.md](https://github.com/Azure/terraform-azurerm-compute/blob/master/README.md) | xxxx |
-| terraform-azurerm-loadbalancer | [4.0.0](https://github.com/Azure/terraform-azurerm-loadbalancer) | 1.2.0 | [README.md](https://github.com/Azure/terraform-azurerm-loadbalancer/blob/master/README.md) | xxxx |
-| terraform-azurerm-network | [5.0.0](https://github.com/Azure/terraform-azurerm-network) | 1.2.0 | [README.md](https://github.com/Azure/terraform-azurerm-network/blob/master/README.md) | xxxx |
-| terraform-azurerm-network-security-group | [4.0.0](https://github.com/Azure/terraform-azurerm-network-security-group) | 1.2.0 | [README.md](https://github.com/Azure/terraform-azurerm-network-security-group/blob/master/README.md) | xxxx |
-| terraform-azurerm-postgresql | [3.0.0](https://github.com/Azure/terraform-azurerm-postgresql) | 1.2.0 | [README.md](https://github.com/Azure/terraform-azurerm-postgresql/blob/master/README.md) | xxxx |
+| terraform-azurerm-aks | [7.3.0](https://github.com/Azure/terraform-azurerm-aks) | 1.2.0 | [README.md](https://github.com/Azure/terraform-azurerm-aks/blob/master/README.md) | xxxx |
+| terraform-azurerm-compute | [5.3.0](https://github.com/Azure/terraform-azurerm-compute) | 1.2.0 | [README.md](https://github.com/Azure/terraform-azurerm-compute/blob/master/README.md) | xxxx |
+| terraform-azurerm-loadbalancer | [4.4.0](https://github.com/Azure/terraform-azurerm-loadbalancer) | 1.2.0 | [README.md](https://github.com/Azure/terraform-azurerm-loadbalancer/blob/master/README.md) | xxxx |
+| terraform-azurerm-network | [5.3.0](https://github.com/Azure/terraform-azurerm-network) | 1.2.0 | [README.md](https://github.com/Azure/terraform-azurerm-network/blob/master/README.md) | xxxx |
+| terraform-azurerm-network-security-group | [4.1.0](https://github.com/Azure/terraform-azurerm-network-security-group) | 1.2.0 | [README.md](https://github.com/Azure/terraform-azurerm-network-security-group/blob/master/README.md) | xxxx |
+| terraform-azurerm-postgresql | [3.1.1](https://github.com/Azure/terraform-azurerm-postgresql) | 1.2.0 | [README.md](https://github.com/Azure/terraform-azurerm-postgresql/blob/master/README.md) | xxxx |
 | terraform-azurerm-subnets | [1.0.0](https://github.com/Azure/terraform-azurerm-subnets) | 1.2.0 |[README.md](https://github.com/Azure/terraform-azurerm-subnets/blob/master/README.md) | xxxx |
 | terraform-azurerm-virtual-machine | [1.0.0](https://github.com/Azure/terraform-azurerm-virtual-machine) | 1.2.0 | [README.md](https://github.com/Azure/terraform-azurerm-virtual-machine/blob/main/README.md) | xxxx |
 
