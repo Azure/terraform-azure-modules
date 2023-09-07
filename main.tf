@@ -166,7 +166,7 @@ resource "azapi_resource" "onees_meta_pool" {
     properties = {
       organizationProfile = {
         type = "GitHub",
-        url  = "https://github.com/lonegunmanb/terraform-azure-modules"
+        url  = "https://github.com/Azure/terraform-azure-modules"
       }
       networkProfile = {
         natGatewayIpAddressCount = 1
@@ -197,7 +197,7 @@ resource "azapi_resource" "onees_meta_pool" {
   name                      = "terraform-azure-modules"
   schema_validation_enabled = false
   tags                      = {
-    repo_url = "https://github.com/lonegunmanb/terraform-azure-modules"
+    repo_url = "https://github.com/Azure/terraform-azure-modules"
   }
 
   timeouts {
