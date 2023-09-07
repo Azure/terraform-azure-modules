@@ -40,3 +40,12 @@ jobs:
       - name: Upload plan file
         run: |
           az storage blob upload -f ./tfplan --account-name tfmod1espoolstatestorage --container-name azure-verified-tfmod-pull-request-plans --name tfplan_${{ github.event.number }} --tier Cool --no-progress --overwrite --auth-mode login
+      - name: Save the PR number in an artifact
+        env:
+          PR_NUM: ${{ github.event.number }}
+        run: echo $PR_NUM > pr_num.txt
+      - name: Upload the PR number
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 #3.1.3
+        with:
+          name: pr_num
+          path: ./pr_num.txt
