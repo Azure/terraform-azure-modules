@@ -40,18 +40,3 @@ jobs:
       - name: Upload plan file
         run: |
           az storage blob upload -f ./tfplan --account-name tfmod1espoolstatestorage --container-name azure-verified-tfmod-pull-request-plans --name tfplan_${{ github.event.number }} --tier Cool --no-progress --overwrite --auth-mode login
-      - name: Show Terraform Plan
-        id: tfshow
-        uses: mathiasvr/command-output@34408ea3d0528273faff3d9e201761ae96106cd0 # 2.0.0
-        with:
-          run:
-            terraform show -no-color tfplan
-      - name: Comment PR
-        uses: thollander/actions-comment-pull-request@d61db783da9abefc3437960d0cce08552c7c004f # 2.4.2
-        with:
-          message: |
-            ```
-            ${{ steps.tfshow.outputs.stdout }}
-            ```
-#          pr_number: ${{ github.event.number }}
-#          curl -s -X POST -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments -d @body.txt
