@@ -8,7 +8,6 @@ locals {
     "https://github.com/Azure/terraform" : "terraform-azurerm-doc"
     "https://github.com/Azure/terraform-azurerm-hubnetworking" : "terraform-azure-hubnetworking"
     "https://github.com/Azure/terraform-azure-container-apps" : "terraform-azurerm-container-apps"
-    "https://github.com/lonegunmanb/terraform-azurerm-aks": "terraform-azurerm-aks-lonegunman"
   })
   repos = [
     "https://github.com/Azure/terraform-azurerm-aks",
@@ -30,7 +29,6 @@ locals {
     "https://github.com/Azure/terraform-azurerm-vnet-gateway",
     "https://github.com/Azure/terraform-azure-storage-account",
     "https://github.com/WodansSon/terraform-azurerm-cdn-frontdoor",
-    "https://github.com/lonegunmanb/terraform-azurerm-aks",
   ]
   repos_fw = [
 #    "https://github.com/lonegunmanb/terraform-azurerm-aks",
