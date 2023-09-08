@@ -153,11 +153,11 @@ data azurerm_user_assigned_identity bambrane_operator {
   resource_group_name = data.azurerm_resource_group.runner_state.name
 }
 
-data "azurerm_subnet" "bambrane_onees_pool" {
-  name                 = "runner"
-  virtual_network_name = "control-plane-meta-controller"
-  resource_group_name  = data.azurerm_resource_group.runner_state.name
-}
+#data "azurerm_subnet" "bambrane_onees_pool" {
+#  name                 = "runner"
+#  virtual_network_name = "control-plane-meta-controller"
+#  resource_group_name  = data.azurerm_resource_group.runner_state.name
+#}
 
 resource "azapi_resource" "onees_meta_pool" {
   parent_id = azurerm_resource_group.onees_runner_pool.id
@@ -218,4 +218,69 @@ resource "azapi_update_resource" "runner_backend_identity" {
     }
   })
   resource_id = azapi_resource.onees_meta_pool.id
+}
+
+resource "azapi_resource" "onees_pool_with_backend" {
+  for_each = toset(local.repos_with_backend)
+
+  parent_id = azurerm_resource_group.onees_runner_pool.id
+  type      = "Microsoft.CloudTest/hostedpools@2020-05-07"
+  body      = jsonencode({
+    properties = {
+      organizationProfile = {
+        type = "GitHub",
+        url  = each.value
+      }
+      networkProfile = {
+        natGatewayIpAddressCount = 1
+      }
+      vmProviderProperties = {
+        VssAdminPermissions = "CreatorOnly"
+      }
+      agentProfile = {
+        type = "Stateless"
+      }
+      maxPoolSize = 3
+      images      = [
+        {
+          imageName            = "bambrane-runner"
+          subscriptionId       = data.azurerm_client_config.current.subscription_id
+          poolBufferPercentage = "100"
+        }
+      ]
+      sku = {
+        name       = "Standard_D2ds_v4"
+        tier       = "StandardSSD"
+        enableSpot = false
+      }
+      vmProvider = "Azure"
+    }
+  })
+  location                  = "eastus"
+  name                      = lookup(local.repo_pool_names, each.value, reverse(split("/", each.value))[0])
+  schema_validation_enabled = false
+  tags                      = {
+    repo_url = each.value
+  }
+
+  timeouts {
+    create = "30m"
+    delete = "30m"
+    read   = "10m"
+  }
+}
+
+resource "azapi_update_resource" "gitops_runner_backend_identity" {
+  for_each = toset(local.repos_with_backend)
+
+  type = "Microsoft.CloudTest/hostedpools@2020-05-07"
+  body = jsonencode({
+    identity = {
+      type                   = "UserAssigned"
+      userAssignedIdentities = {
+        (data.azurerm_user_assigned_identity.bambrane_operator.id) : {}
+      }
+    }
+  })
+  resource_id = azapi_resource.onees_pool_with_backend[each.value].id
 }

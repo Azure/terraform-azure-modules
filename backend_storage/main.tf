@@ -33,29 +33,30 @@ resource "azurerm_storage_account" "state" {
 }
 
 resource "azurerm_storage_container" "state" {
-  name                 = "azure-verified-tfmod-runner-state"
-  storage_account_name = azurerm_storage_account.state.name
+  name                  = "azure-verified-tfmod-runner-state"
+  storage_account_name  = azurerm_storage_account.state.name
+  container_access_type = "private"
 
   lifecycle {
     prevent_destroy = true
+    postcondition {
+      condition     = self.container_access_type == "private"
+      error_message = "this blob container's access type must be `private`."
+    }
   }
 }
 
 resource "azurerm_storage_container" "plan" {
-  name                 = "azure-verified-tfmod-pull-request-plans"
-  storage_account_name = azurerm_storage_account.state.name
+  name                  = "azure-verified-tfmod-pull-request-plans"
+  storage_account_name  = azurerm_storage_account.state.name
+  container_access_type = "private"
 
   lifecycle {
     prevent_destroy = true
-  }
-}
-
-resource "azurerm_storage_container" "telemetry" {
-  name                 = "azure-verified-module-telemetry"
-  storage_account_name = azurerm_storage_account.state.name
-
-  lifecycle {
-    prevent_destroy = true
+    postcondition {
+      condition     = self.container_access_type == "private"
+      error_message = "this blob container's access type must be `private`."
+    }
   }
 }
 
@@ -86,11 +87,16 @@ resource "azurerm_storage_account" "bambrane_provision_script" {
 #Authentication method must be set to Azure AD User Account for your container
 #For now I cannot find the corresponding Terraform argument yet, I set this argument via GUI.
 resource "azurerm_storage_container" "provision_script" {
-  name                 = "onees-provison-script"
-  storage_account_name = azurerm_storage_account.bambrane_provision_script.name
+  name                  = "onees-provison-script"
+  storage_account_name  = azurerm_storage_account.bambrane_provision_script.name
+  container_access_type = "private"
 
   lifecycle {
     prevent_destroy = true
+    postcondition {
+      condition     = self.container_access_type == "private"
+      error_message = "this blob container's access type must be `private`."
+    }
   }
 }
 

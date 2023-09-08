@@ -33,6 +33,10 @@ locals {
   repos_fw = [
 #    "https://github.com/lonegunmanb/terraform-azurerm-aks",
   ]
+  # repos that use GitOps to manage testing infrastructures, not for verified modules
+  repos_with_backend = [
+    "https://github.com/lonegunmanb/TerraformModuleTelemetryService"
+  ]
   runner_network_whitelist = sort(distinct([
     # OneES
     "*.dev.cloudtest.microsoft.com",
