@@ -271,7 +271,7 @@ resource "azapi_resource" "onees_pool_with_backend" {
 }
 
 resource "azapi_update_resource" "gitops_runner_backend_identity" {
-  for_each = local.repos_with_backend
+  for_each = toset(local.repos_with_backend)
 
   type = "Microsoft.CloudTest/hostedpools@2020-05-07"
   body = jsonencode({
