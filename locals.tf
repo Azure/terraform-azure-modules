@@ -8,6 +8,7 @@ locals {
     "https://github.com/Azure/terraform" : "terraform-azurerm-doc"
     "https://github.com/Azure/terraform-azurerm-hubnetworking" : "terraform-azure-hubnetworking"
     "https://github.com/Azure/terraform-azure-container-apps" : "terraform-azurerm-container-apps"
+    "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts": "terraform-azure-storage-account"
   })
   repos = [
     "https://github.com/Azure/terraform-azurerm-aks",
@@ -27,11 +28,15 @@ locals {
     "https://github.com/Azure/terraform-azurerm-alz-management",
     "https://github.com/Azure/terraform-azure-container-apps",
     "https://github.com/Azure/terraform-azurerm-vnet-gateway",
-    "https://github.com/Azure/terraform-azure-storage-account",
+    "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts",
     "https://github.com/WodansSon/terraform-azurerm-cdn-frontdoor",
   ]
   repos_fw = [
 #    "https://github.com/lonegunmanb/terraform-azurerm-aks",
+  ]
+  # repos that use GitOps to manage testing infrastructures, not for verified modules
+  repos_with_backend = [
+    "https://github.com/lonegunmanb/TerraformModuleTelemetryService"
   ]
   runner_network_whitelist = sort(distinct([
     # OneES
