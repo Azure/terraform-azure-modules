@@ -1,5 +1,13 @@
 # Azure Terraform Verified Modules
 
+## ⚠️ Notice
+
+This program is merging with [Azure Verified Modules](https://aka.ms/avm) to provide a consistent user experiance across IaC languages on Azure.
+***Existing TFVM modules will continue to be supported***, but for new projects you are advised to check the AVM [available modules](https://azure.github.io/Azure-Verified-Modules/indexes/terraform/) and use those if available.
+New modules will be created under the branding of AVM, so please check the website for more inforamtion.
+
+## Background
+
 This GitHub repository contains essential information related to Azure Terraform verified modules, including a brief introduction of modules, the documentation for verified modules and pointers to the module repos, and how Terraform practitioners can contribute to verified modules. Please note that all the verified modules meet the quality pipeline established by the Microsoft Azure team. 
 
 ## What is Terraform Module
