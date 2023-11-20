@@ -9,7 +9,7 @@ locals {
     "https://github.com/Azure/terraform-azurerm-hubnetworking" : "terraform-azure-hubnetworking"
     "https://github.com/Azure/terraform-azure-container-apps" : "terraform-azurerm-container-apps"
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts": "terraform-azure-storage-account"
-    //"https://github.com/Azure/terraform-azurerm-avm-ptn-vnetgateway": "terraform-azurerm-vnet-gateway"
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-vnetgateway": "terraform-azurerm-vnet-gateway"
   })
   repos = [
     "https://github.com/Azure/terraform-azurerm-aks",
@@ -28,7 +28,7 @@ locals {
     "https://github.com/Azure/terraform-azurerm-database",
     "https://github.com/Azure/terraform-azurerm-alz-management",
     "https://github.com/Azure/terraform-azure-container-apps",
-   // "https://github.com/Azure/terraform-azurerm-avm-ptn-vnetgateway",
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-vnetgateway",
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts",
     "https://github.com/WodansSon/terraform-azurerm-cdn-frontdoor",
   ]
