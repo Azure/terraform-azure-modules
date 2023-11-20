@@ -2,9 +2,9 @@
 
 ## ⚠️ Notice
 
-This program is merging with [Azure Verified Modules](https://aka.ms/avm) to provide a consistent user experiance across IaC languages on Azure.
+This program is merging with [Azure Verified Modules](https://aka.ms/avm) to provide a consistent user experience across IaC languages on Azure.
 ***Existing TFVM modules will continue to be supported***, but for new projects you are advised to check the AVM [available modules](https://azure.github.io/Azure-Verified-Modules/indexes/terraform/) and use those if available.
-New modules will be created under the branding of AVM, so please check the website for more inforamtion.
+New modules will be created under the branding of AVM, so please check the website for more information.
 
 ## Background
 
