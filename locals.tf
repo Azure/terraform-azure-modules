@@ -10,6 +10,7 @@ locals {
     "https://github.com/Azure/terraform-azure-container-apps" : "terraform-azurerm-container-apps"
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts": "terraform-azure-storage-account"
     "https://github.com/Azure/terraform-azurerm-avm-ptn-vnetgateway": "terraform-azurerm-vnet-gateway"
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-alz-management": "terraform-azurerm-alz-management"
   })
   repos = [
     "https://github.com/Azure/terraform-azurerm-aks",
@@ -26,7 +27,7 @@ locals {
     "https://github.com/Azure/terraform-azurerm-openai",
     "https://github.com/Azure/terraform-azure-mdc-defender-plans-azure",
     "https://github.com/Azure/terraform-azurerm-database",
-    "https://github.com/Azure/terraform-azurerm-alz-management",
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-alz-management",
     "https://github.com/Azure/terraform-azure-container-apps",
     "https://github.com/Azure/terraform-azurerm-avm-ptn-vnetgateway",
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts",
