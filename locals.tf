@@ -31,6 +31,7 @@ locals {
     "https://github.com/Azure/terraform-azure-container-apps",
     "https://github.com/Azure/terraform-azurerm-avm-ptn-vnetgateway",
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts",
+    "https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault",
     "https://github.com/WodansSon/terraform-azurerm-cdn-frontdoor",
   ]
   repos_fw = [
