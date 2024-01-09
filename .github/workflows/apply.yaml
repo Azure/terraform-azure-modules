@@ -7,7 +7,7 @@ permissions:
 
 jobs:
   apply:
-    runs-on: [self-hosted, 1ES.Pool=terraform-azurerm-container-apps]
+    runs-on: [self-hosted, 1ES.Pool=terraform-azure-modules]
     environment:
       name: tfstate
     steps:
