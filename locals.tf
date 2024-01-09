@@ -20,7 +20,7 @@ locals {
   avm_pattern_mod_csv = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformPatternModules.csv")
   avm_res_mod_repos = [for i in csvdecode(local.avm_res_mod_csv) : i.RepoURL]
   avm_pattern_mod_repos = [for i in csvdecode(local.avm_pattern_mod_csv) : i.RepoURL]
-  raw_repos = [for r in concat([
+  repos = [for r in concat([
     "https://github.com/Azure/terraform-azurerm-aks",
     "https://github.com/Azure/terraform-azurerm-compute",
     "https://github.com/Azure/terraform-azurerm-loadbalancer",
@@ -42,7 +42,9 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault",
     "https://github.com/WodansSon/terraform-azurerm-cdn-frontdoor",
   ], local.avm_res_mod_repos, local.avm_pattern_mod_repos) : r if !contains(local.bypass_set, r)]
-  repos = [for r in local.raw_repos : length(reverse(split("/", r))[0]) >= 45 ? replace(r, reverse(split("/", r))[0], sha1(reverse(split("/", r))[0])) : r]
+  repo_names = {
+    for r in local.repos : r => length(reverse(split("/", r))[0]) >= 45 ? sha1(reverse(split("/", r))[0]) : reverse(split("/", r))[0]
+  }
   repos_fw = [
 #    "https://github.com/lonegunmanb/terraform-azurerm-aks",
   ]

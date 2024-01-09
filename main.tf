@@ -48,7 +48,7 @@ resource "azapi_resource" "oneespool" {
     }
   })
   location                  = "eastus"
-  name                      = lookup(local.repo_pool_names, each.value, reverse(split("/", each.value))[0])
+  name                      = lookup(local.repo_pool_names, each.value, local.repo_names[each.value])
   schema_validation_enabled = false
   tags                      = {
     repo_url = each.value
