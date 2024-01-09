@@ -17,6 +17,8 @@ jobs:
       - name: checkout
         if: steps.PR.outputs.number != ''
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # 3.6.0
+        with:
+          submodules: "recursive"
       - name: Download pr tfplan
         if: steps.PR.outputs.number != ''
         run: |
