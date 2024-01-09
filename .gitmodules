@@ -1,0 +1,3 @@
+[submodule "Azure-Verified-Modules"]
+	path = Azure-Verified-Modules
+	url = https://github.com/Azure/Azure-Verified-Modules.git
