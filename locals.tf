@@ -43,7 +43,7 @@ locals {
     "https://github.com/WodansSon/terraform-azurerm-cdn-frontdoor",
   ], local.avm_res_mod_repos, local.avm_pattern_mod_repos) : r if !contains(local.bypass_set, r)]
   repo_names = {
-    for r in local.repos : r => length(reverse(split("/", r))[0]) >= 45 ? sha1(reverse(split("/", r))[0]) : reverse(split("/", r))[0]
+    for r in distinct(local.repos) : r => length(reverse(split("/", r))[0]) >= 45 ? sha1(reverse(split("/", r))[0]) : reverse(split("/", r))[0]
   }
   repos_fw = [
 #    "https://github.com/lonegunmanb/terraform-azurerm-aks",
