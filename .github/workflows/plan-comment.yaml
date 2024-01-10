@@ -39,13 +39,13 @@ jobs:
       - name: Init
         if: env.PR_NUM != ''
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GH_PAT: ${{ secret.GH_PAT }}
         run: |
           az login --identity --username $MSI_ID > /dev/null
           export ARM_SUBSCRIPTION_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .id')
           export ARM_TENANT_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .tenantId')
           export ARM_USE_MSI=true
-          sh scripts/terragrunt-init.sh
+          GITHUB_TOKEN=$GH_PAT sh scripts/terragrunt-init.sh
       - name: Show Terraform Plan
         if: env.PR_NUM != ''
         id: tfshow

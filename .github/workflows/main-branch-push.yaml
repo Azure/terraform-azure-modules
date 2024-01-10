@@ -29,14 +29,14 @@ jobs:
       - name: Apply
         if: steps.PR.outputs.number != ''
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GH_PAT: ${{ secret.GH_PAT }}
         run: |
           az login --identity --username $MSI_ID > /dev/null
           export ARM_SUBSCRIPTION_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .id')
           export ARM_TENANT_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .tenantId')
           export ARM_USE_MSI=true
           sh scripts/terragrunt-init.sh
-          terraform apply -auto-approve -input=false -compact-warnings tfplan
+          GITHUB_TOKEN=$GH_PAT terraform apply -auto-approve -input=false -compact-warnings tfplan
       - name: Delete tfplan file
         if: steps.PR.outputs.number != ''
         run: |

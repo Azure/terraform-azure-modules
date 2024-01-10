@@ -24,14 +24,14 @@ jobs:
       - uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # 2.0.3
       - name: plan
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GH_PAT: ${{ secret.GH_PAT }}
         run: |
           az login --identity --username $MSI_ID > /dev/null
           export ARM_SUBSCRIPTION_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .id')
           export ARM_TENANT_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .tenantId')
           export ARM_USE_MSI=true
-          sh scripts/terragrunt-init.sh
-          sh scripts/terragrunt-plan.sh
+          GITHUB_TOKEN=$GH_PAT sh scripts/terragrunt-init.sh
+          GITHUB_TOKEN=$GH_PAT sh scripts/terragrunt-plan.sh
       - name: Upload plan file
         run: |
           az storage blob upload -f ./tfplan --account-name tfmod1espoolstatestorage --container-name azure-verified-tfmod-pull-request-plans --name tfplan_${{ github.event.number }} --tier Cool --no-progress --overwrite --auth-mode login

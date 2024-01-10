@@ -18,7 +18,7 @@ jobs:
       - uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # 2.0.3
       - name: apply
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GH_PAT: ${{ secret.GH_PAT }}
         run: |
           if [ -z "$GITHUB_TOKEN" ]
           then
@@ -29,4 +29,4 @@ jobs:
           export ARM_TENANT_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .tenantId')
           export ARM_USE_MSI=true
           sh scripts/terragrunt-init.sh
-          terraform apply -auto-approve -input=false -compact-warnings
+          GITHUB_TOKEN=$GH_PAT terraform apply -auto-approve -input=false -compact-warnings
