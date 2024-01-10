@@ -33,7 +33,7 @@ jobs:
           export ARM_SUBSCRIPTION_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .id')
           export ARM_TENANT_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .tenantId')
           export ARM_USE_MSI=true
-          export TF_VAR_github_token=$GITHUB_TOKEN
+          export TF_VAR_github_token=${{ secrets.GITHUB_TOKEN }}
           sh scripts/terragrunt-init.sh
           terraform apply -auto-approve -input=false -compact-warnings tfplan
       - name: Delete tfplan file
