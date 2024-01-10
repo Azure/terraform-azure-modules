@@ -18,7 +18,7 @@ jobs:
       - uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # 2.0.3
       - name: apply
         env:
-          GH_PAT: ${{ secret.GH_PAT }}
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           if [ -z "$GITHUB_TOKEN" ]
           then
