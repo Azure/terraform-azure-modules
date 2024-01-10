@@ -12,6 +12,10 @@ terraform {
       source  = "hashicorp/azuread"
       version = "~>2.0"
     }
+    github = {
+      source = "integrations/github"
+      version = "5.43.0"
+    }
   }
 }
 
@@ -21,4 +25,8 @@ provider "azurerm" {
       prevent_deletion_if_contains_resources = false
     }
   }
+}
+
+provider "github" {
+  
 }

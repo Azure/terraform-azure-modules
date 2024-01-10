@@ -41,7 +41,7 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts",
     "https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault",
     "https://github.com/WodansSon/terraform-azurerm-cdn-frontdoor",
-  ], local.avm_res_mod_repos, local.avm_pattern_mod_repos) : r if !contains(local.bypass_set, r)]
+  ], local.valid_avm_repos) : r if !contains(local.bypass_set, r)]
   repo_names = {
     for r in distinct(local.repos) : r => length(reverse(split("/", r))[0]) >= 45 ? sha1(reverse(split("/", r))[0]) : reverse(split("/", r))[0]
   }
