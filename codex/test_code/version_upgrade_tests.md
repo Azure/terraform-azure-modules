@@ -2,7 +2,7 @@
 
 To ensure that minor version upgrades do not introduce breaking changes, we perform version upgrade tests.
 
-The logic for these tests is implemented in the End-to-End (E2E) test helper, located at github.com/Azure/terraform-module-test-helper.
+The logic for these tests is implemented in the End-to-End (E2E) test helper, located at [github.com/Azure/terraform-module-test-helper](https://github.com/Azure/terraform-module-test-helper).
 
 The process for these tests is as follows:
 
