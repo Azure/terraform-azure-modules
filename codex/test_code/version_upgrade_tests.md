@@ -1,9 +1,16 @@
-# Version upgrade tests
+# Version Upgrade Tests
 
-To avoid breaking changes after a minor version upgrade, we need a version upgrade test.
+To ensure that minor version upgrades do not introduce breaking changes, we perform version upgrade tests.
 
-The logics of version upgrade tests are implemented in E2E test helper: [github.com/Azure/terraform-module-test-helper](https://github.com/Azure/terraform-module-test-helper).
+The logic for these tests is implemented in the End-to-End (E2E) test helper, located at github.com/Azure/terraform-module-test-helper.
 
-Firstly it will get the latest version number through GitHub API, then a copy of the latest module code will be checked out under `/tmp/`. After that Terratest will be executed in every subdirectory under `examples`, change the `source` of `module` which has a path like `../..` or `../../`, pointing it to the directory in the main branch after merging the current PR. Then re-execute `terraform init` and `terraform plan` to see of there are changes. If the changes exist, that means the upgrade contains an "accident" breaking change.
+The process for these tests is as follows:
 
-Ideally, users won't see any changes in minor version upgrade if they don't modify input `variable`s. The version upgrade test would be skipped if the next release would be a major version upgrade.
+1. Retrieve the latest version number of the module using the GitHub API.
+2. Check out a copy of the latest module code into the /tmp/ directory.
+3. Run Terratest, a tool for testing infrastructure code, on each subdirectory under the 'examples' directory.
+4. If the source of the module in the example configurations is a relative path (like '../..' or '../../'), update it to point to the directory in the main branch that will exist after the current Pull Request (PR) is merged.
+5. Run 'terraform init' and 'terraform plan' again to check for any changes.
+6. If there are changes, this indicates that the upgrade unintentionally introduced a breaking change.
+
+In an ideal scenario, users should not see any changes when upgrading minor versions, unless they modify input variables. If the next release is a major version upgrade, the version upgrade test is skipped.
