@@ -25,7 +25,9 @@ jobs:
         with:
           path: ./pr_num/pr_num.txt
       - name: Remove new line characters
-        run: echo "PR_NUM=$(echo '${{ steps.pr_num_reader.outputs.content }}' | tr -d '\n')" >> $GITHUB_ENV
+        env:
+           PR_NUM_INPUT: ${{ steps.pr_num_reader.outputs.content }}
+        run: echo "PR_NUM=$(echo $PR_NUM_INPUT | tr -d '\n')" >> $GITHUB_ENV
       - name: checkout
         if: env.PR_NUM != ''
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # 3.6.0
@@ -33,7 +35,7 @@ jobs:
         if: env.PR_NUM != ''
         run: |
           az login --identity --username $MSI_ID > /dev/null
-          az storage blob download --account-name tfmod1espoolstatestorage --container-name azure-verified-tfmod-pull-request-plans --name tfplan_${{ env.PR_NUM }} --no-progress --file tfplan --auth-mode login
+          az storage blob download --account-name tfmod1espoolstatestorage --container-name azure-verified-tfmod-pull-request-plans --name tfplan_${PR_NUM} --no-progress --file tfplan --auth-mode login
       - uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # 2.0.3
         if: env.PR_NUM != ''
       - name: Init
