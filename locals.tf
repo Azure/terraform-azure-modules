@@ -9,8 +9,8 @@ locals {
     "https://github.com/Azure/terraform-azurerm-hubnetworking" : "terraform-azure-hubnetworking"
     "https://github.com/Azure/terraform-azure-container-apps" : "terraform-azurerm-container-apps"
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts": "terraform-azure-storage-account"
-    "https://github.com/Azure/terraform-azurerm-avm-ptn-vnetgateway": "terraform-azurerm-vnet-gateway"
-    "https://github.com/Azure/terraform-azurerm-avm-ptn-alz-management": "terraform-azurerm-alz-management"
+#    "https://github.com/Azure/terraform-azurerm-avm-ptn-vnetgateway": "terraform-azurerm-vnet-gateway"
+#    "https://github.com/Azure/terraform-azurerm-avm-ptn-alz-management": "terraform-azurerm-alz-management"
   })
   bypass_set = toset([
     "https://github.com/Azure/terraform-azurerm-avm-res-authorization-roleassignment",   # needs access at higher scopes than subscription
@@ -36,12 +36,12 @@ locals {
     "https://github.com/Azure/terraform-azurerm-openai",
     "https://github.com/Azure/terraform-azure-mdc-defender-plans-azure",
     "https://github.com/Azure/terraform-azurerm-database",
-    "https://github.com/Azure/terraform-azurerm-avm-ptn-alz-management",
+#    "https://github.com/Azure/terraform-azurerm-avm-ptn-alz-management",
     "https://github.com/Azure/terraform-azure-container-apps",
-    "https://github.com/Azure/terraform-azurerm-avm-ptn-vnetgateway",
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts",
     "https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault",
     "https://github.com/WodansSon/terraform-azurerm-cdn-frontdoor",
+    "https://github.com/Azure/aks-production-standard",
   ], local.valid_avm_repos) : r if !contains(local.bypass_set, r)]
   repo_names = {
     for r in distinct(local.repos) : r => length(reverse(split("/", r))[0]) >= 45 ? sha1(reverse(split("/", r))[0]) : reverse(split("/", r))[0]
