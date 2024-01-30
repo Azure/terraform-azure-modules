@@ -9,8 +9,9 @@ locals {
     "https://github.com/Azure/terraform-azurerm-hubnetworking" : "terraform-azure-hubnetworking"
     "https://github.com/Azure/terraform-azure-container-apps" : "terraform-azurerm-container-apps"
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts": "terraform-azure-storage-account"
-#    "https://github.com/Azure/terraform-azurerm-avm-ptn-vnetgateway": "terraform-azurerm-vnet-gateway"
-#    "https://github.com/Azure/terraform-azurerm-avm-ptn-alz-management": "terraform-azurerm-alz-management"
+  })
+  repo_pool_max_runners = tomap({
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-virtualwan": 14
   })
   bypass_set = toset([
     "https://github.com/Azure/terraform-azurerm-avm-res-authorization-roleassignment",   # needs access at higher scopes than subscription
@@ -36,7 +37,6 @@ locals {
     "https://github.com/Azure/terraform-azurerm-openai",
     "https://github.com/Azure/terraform-azure-mdc-defender-plans-azure",
     "https://github.com/Azure/terraform-azurerm-database",
-#    "https://github.com/Azure/terraform-azurerm-avm-ptn-alz-management",
     "https://github.com/Azure/terraform-azure-container-apps",
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts",
     "https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault",

@@ -31,7 +31,7 @@ resource "azapi_resource" "oneespool" {
       agentProfile = {
         type = "Stateless"
       }
-      maxPoolSize = 3
+      maxPoolSize = try(local.repo_pool_max_runners[each.value], 3)
       images      = [
         {
           imageName            = "ghrunner"
