@@ -47,7 +47,7 @@ resource "azapi_resource" "oneespool" {
       vmProvider = "Azure"
     }
   })
-  location                  = "eastus"
+  location                  = try(local.repo_region[each.value], "eastus")
   name                      = lookup(local.repo_pool_names, each.value, local.repo_names[each.value])
   schema_validation_enabled = false
   tags                      = {
