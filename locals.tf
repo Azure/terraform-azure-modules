@@ -46,6 +46,7 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault",
     "https://github.com/WodansSon/terraform-azurerm-cdn-frontdoor",
     "https://github.com/Azure/avm-ptn-aks-production",
+    "https://github.com/Azure/tfmod-scaffold",
   ], local.valid_avm_repos) : r if !contains(local.bypass_set, r)]
   repo_names = {
     for r in distinct(local.repos) : r => length(reverse(split("/", r))[0]) >= 45 ? sha1(reverse(split("/", r))[0]) : reverse(split("/", r))[0]
