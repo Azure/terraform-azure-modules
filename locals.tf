@@ -21,6 +21,7 @@ locals {
   repo_region = tomap({
     "https://github.com/Azure/terraform-azurerm-avm-ptn-virtualnetworkpeering": "westeurope",
     "https://github.com/Azure/avm-ptn-aks-production": "westeurope",
+    "https://github.com/lonegunmanb/avm-gh-app": "eastus2"
   })
   avm_res_mod_csv = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformResourceModules.csv")
   avm_pattern_mod_csv = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformPatternModules.csv")
@@ -46,6 +47,7 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault",
     "https://github.com/WodansSon/terraform-azurerm-cdn-frontdoor",
     "https://github.com/Azure/avm-ptn-aks-production",
+    "https://github.com/lonegunmanb/avm-gh-app",
   ], local.valid_avm_repos) : r if !contains(local.bypass_set, r)]
   repo_names = {
     for r in distinct(local.repos) : r => length(reverse(split("/", r))[0]) >= 45 ? sha1(reverse(split("/", r))[0]) : reverse(split("/", r))[0]
