@@ -20,7 +20,6 @@ locals {
   ])
   repo_region = tomap({
     "https://github.com/Azure/terraform-azurerm-avm-ptn-virtualnetworkpeering": "westeurope",
-    "https://github.com/Azure/avm-ptn-aks-production": "westeurope",
     "https://github.com/lonegunmanb/avm-gh-app": "eastus2"
   })
   avm_res_mod_csv = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformResourceModules.csv")
@@ -46,7 +45,6 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts",
     "https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault",
     "https://github.com/WodansSon/terraform-azurerm-cdn-frontdoor",
-    "https://github.com/Azure/avm-ptn-aks-production",
     "https://github.com/lonegunmanb/avm-gh-app",
   ], local.valid_avm_repos) : r if !contains(local.bypass_set, r)]
   repo_names = {
