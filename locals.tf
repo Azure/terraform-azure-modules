@@ -20,7 +20,16 @@ locals {
   ])
   repo_region = tomap({
     "https://github.com/Azure/terraform-azurerm-avm-ptn-virtualnetworkpeering": "westeurope",
-    "https://github.com/lonegunmanb/avm-gh-app": "eastus2"
+    "https://github.com/lonegunmanb/avm-gh-app": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-function-app-storage-private-endpoints": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-compute-disk": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-cache-redis": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-component": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-search-searchservice": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-logic-workflow": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-policyassignment": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-network-applicationsecuritygroup": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-batch-batchaccount": "eastus2",
   })
   avm_res_mod_csv = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformResourceModules.csv")
   avm_pattern_mod_csv = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformPatternModules.csv")
@@ -45,7 +54,7 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts",
     "https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault",
     "https://github.com/WodansSon/terraform-azurerm-cdn-frontdoor",
-    "https://github.com/lonegunmanb/avm-gh-app",
+    "https://github.com/Azure/avm-gh-app",
   ], local.valid_avm_repos) : r if !contains(local.bypass_set, r)]
   repo_names = {
     for r in distinct(local.repos) : r => length(reverse(split("/", r))[0]) >= 45 ? sha1(reverse(split("/", r))[0]) : reverse(split("/", r))[0]
