@@ -59,6 +59,11 @@ resource "azapi_resource" "oneespool" {
     delete = "30m"
     read   = "10m"
   }
+  lifecycle {
+    ignore_changes = [
+      tags,
+    ]
+  }
 }
 
 resource "azapi_update_resource" "identity" {
@@ -205,6 +210,11 @@ resource "azapi_resource" "onees_meta_pool" {
     delete = "30m"
     read   = "10m"
   }
+  lifecycle {
+    ignore_changes = [
+      tags,
+    ]
+  }
 }
 
 resource "azapi_update_resource" "runner_backend_identity" {
@@ -267,6 +277,11 @@ resource "azapi_resource" "onees_pool_with_backend" {
     create = "30m"
     delete = "30m"
     read   = "10m"
+  }
+  lifecycle {
+    ignore_changes = [
+      tags,
+    ]
   }
 }
 
