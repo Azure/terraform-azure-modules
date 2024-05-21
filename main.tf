@@ -66,6 +66,13 @@ resource "azapi_resource" "oneespool" {
   }
 }
 
+resource "null_resource" "pool_size_keeper" {
+  for_each = toset(local.repos)
+  triggers = {
+    size = try(local.repo_pool_max_runners[each.value], 3)
+  }
+}
+
 resource "azapi_update_resource" "identity" {
   for_each = toset(local.repos)
 
@@ -79,6 +86,11 @@ resource "azapi_update_resource" "identity" {
     }
   })
   resource_id = azapi_resource.oneespool[each.value].id
+  lifecycle {
+    replace_triggered_by = [
+      null_resource.pool_size_keeper[each.key]
+    ]
+  }
 }
 
 # Onees Pool with Azure Firewall is still WIP. It seems like we cannot share one subnet with multiple pools, so this

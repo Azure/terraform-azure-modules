@@ -14,6 +14,7 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-ptn-virtualwan": 14
     "https://github.com/Azure/terraform-azurerm-avm-res-compute-disk": 5
     "https://github.com/Azure/terraform-azurerm-avm-res-network-virtualnetwork": 5
+    "https://github.com/Azure/terraform-azurerm-avm-res-cdn-profile": 8
   })
   bypass_set = toset([
     "https://github.com/Azure/terraform-azurerm-avm-res-authorization-roleassignment",   # needs access at higher scopes than subscription
