@@ -22,6 +22,9 @@ resource "azapi_resource" "oneespool" {
         type = "GitHub",
         url  = each.value
       }
+      #       networkProfile = {
+      #         subnetId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.onees_runner_pool.name}/providers/Microsoft.Network/virtualNetworks/${azurerm_virtual_network.onees_vnet.name}/subnets/${azurerm_subnet.runner.name}"
+      #       }
       networkProfile = {
         natGatewayIpAddressCount = 1
       }
@@ -50,7 +53,7 @@ resource "azapi_resource" "oneespool" {
   location                  = try(local.repo_region[each.value], "eastus")
   name                      = lookup(local.repo_pool_names, each.value, local.repo_names[each.value])
   schema_validation_enabled = false
-  tags                      = {
+  tags = {
     repo_url = each.value
   }
 
@@ -79,7 +82,7 @@ resource "azapi_update_resource" "identity" {
   type = "Microsoft.CloudTest/hostedpools@2020-05-07"
   body = jsonencode({
     identity = {
-      type                   = "UserAssigned"
+      type = "UserAssigned"
       userAssignedIdentities = {
         (azurerm_user_assigned_identity.pool_identity["runner"].id) : {}
       }
@@ -213,7 +216,7 @@ resource "azapi_resource" "onees_meta_pool" {
   location                  = "eastus"
   name                      = "terraform-azure-modules"
   schema_validation_enabled = false
-  tags                      = {
+  tags = {
     repo_url = "https://github.com/Azure/terraform-azure-modules"
   }
 
@@ -233,7 +236,7 @@ resource "azapi_update_resource" "runner_backend_identity" {
   type = "Microsoft.CloudTest/hostedpools@2020-05-07"
   body = jsonencode({
     identity = {
-      type                   = "UserAssigned"
+      type = "UserAssigned"
       userAssignedIdentities = {
         (data.azurerm_user_assigned_identity.bambrane_operator.id) : {}
       }
@@ -281,7 +284,7 @@ resource "azapi_resource" "onees_pool_with_backend" {
   location                  = "eastus"
   name                      = lookup(local.repo_pool_names, each.value, reverse(split("/", each.value))[0])
   schema_validation_enabled = false
-  tags                      = {
+  tags = {
     repo_url = each.value
   }
 
@@ -303,7 +306,7 @@ resource "azapi_update_resource" "gitops_runner_backend_identity" {
   type = "Microsoft.CloudTest/hostedpools@2020-05-07"
   body = jsonencode({
     identity = {
-      type                   = "UserAssigned"
+      type = "UserAssigned"
       userAssignedIdentities = {
         (data.azurerm_user_assigned_identity.bambrane_operator.id) : {}
       }

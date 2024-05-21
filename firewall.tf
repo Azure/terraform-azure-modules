@@ -1,34 +1,34 @@
-#resource "azurerm_virtual_network" "onees_vnet" {
-#  address_space       = ["192.168.0.0/16"]
-#  location            = azurerm_resource_group.onees_runner_pool.location
-#  name                = "runner_vnet"
-#  resource_group_name = azurerm_resource_group.onees_runner_pool.name
-#}
-#
-#resource "azurerm_subnet" "fw" {
-#  address_prefixes     = ["192.168.0.0/24"]
-#  name                 = "AzureFirewallSubnet"
-#  resource_group_name  = azurerm_resource_group.onees_runner_pool.name
-#  virtual_network_name = azurerm_virtual_network.onees_vnet.name
-#}
-#
-#resource "azurerm_subnet" "runner" {
-#  address_prefixes     = ["192.168.1.0/24"]
-#  name                 = "runner"
-#  resource_group_name  = azurerm_resource_group.onees_runner_pool.name
-#  virtual_network_name = azurerm_virtual_network.onees_vnet.name
-#
-#  delegation {
-#    name = "delegation"
-#
-#    service_delegation {
-#      name    = "Microsoft.CloudTest/hostedpools"
-#      actions = [
-#        "Microsoft.Network/virtualNetworks/subnets/join/action",
-#      ]
-#    }
-#  }
-#}
+resource "azurerm_virtual_network" "onees_vnet" {
+ address_space       = ["192.168.0.0/16","10.0.0.0/16"]
+ location            = azurerm_resource_group.onees_runner_pool.location
+ name                = "runner_vnet"
+ resource_group_name = azurerm_resource_group.onees_runner_pool.name
+}
+
+resource "azurerm_subnet" "fw" {
+ address_prefixes     = ["192.168.0.0/24"]
+ name                 = "AzureFirewallSubnet"
+ resource_group_name  = azurerm_resource_group.onees_runner_pool.name
+ virtual_network_name = azurerm_virtual_network.onees_vnet.name
+}
+
+resource "azurerm_subnet" "runner" {
+ address_prefixes     = ["10.0.0.0/16"]
+ name                 = "runner"
+ resource_group_name  = azurerm_resource_group.onees_runner_pool.name
+ virtual_network_name = azurerm_virtual_network.onees_vnet.name
+
+ delegation {
+   name = "delegation"
+
+   service_delegation {
+     name    = "Microsoft.CloudTest/hostedpools"
+     actions = [
+       "Microsoft.Network/virtualNetworks/subnets/join/action",
+     ]
+   }
+ }
+}
 #
 #resource "azurerm_role_assignment" "onees_subnet_reader" {
 #  principal_id         = data.azuread_service_principal.onees_resource_management.object_id
