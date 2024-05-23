@@ -13,8 +13,9 @@ resource "azurerm_subnet" "fw" {
 }
 
 resource "azurerm_subnet" "runner" {
- address_prefixes     = ["10.0.0.0/16"]
- name                 = "runner"
+ for_each = local.repo_index
+ address_prefixes     = [cidrsubnet("10.0.0.0/8", 16, tonumber(each.value))]
+ name                 = "runner-${reverse(split("/", each.key))[0]}"
  resource_group_name  = azurerm_resource_group.onees_runner_pool.name
  virtual_network_name = azurerm_virtual_network.onees_vnet.name
 
@@ -29,6 +30,7 @@ resource "azurerm_subnet" "runner" {
    }
  }
 }
+
 #
 #resource "azurerm_role_assignment" "onees_subnet_reader" {
 #  principal_id         = data.azuread_service_principal.onees_resource_management.object_id
