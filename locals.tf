@@ -15,6 +15,7 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-compute-disk": 5
     "https://github.com/Azure/terraform-azurerm-avm-res-network-virtualnetwork": 5
     "https://github.com/Azure/terraform-azurerm-avm-res-cdn-profile": 8
+    "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccount": 5
   })
   // Please do not delete a repo name if the repo is no longer available, put deprecated repo in this list so subnet's order won't be changed.
   bypass_set = toset([
