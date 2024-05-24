@@ -8,7 +8,6 @@ locals {
     "https://github.com/Azure/terraform" : "terraform-azurerm-doc"
     "https://github.com/Azure/terraform-azurerm-hubnetworking" : "terraform-azure-hubnetworking"
     "https://github.com/Azure/terraform-azure-container-apps" : "terraform-azurerm-container-apps"
-    "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts": "terraform-azure-storage-account"
   })
   repo_pool_max_runners = tomap({
     "https://github.com/Azure/terraform-azurerm-avm-ptn-virtualwan": 14
