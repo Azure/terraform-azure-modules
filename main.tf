@@ -16,7 +16,7 @@ resource "azapi_resource" "oneespool" {
 
   parent_id = azurerm_resource_group.onees_runner_pool.id
   type      = "Microsoft.CloudTest/hostedpools@2020-05-07"
-  body      = jsonencode({
+  body = jsonencode({
     properties = {
       organizationProfile = {
         type = "GitHub",
@@ -25,8 +25,14 @@ resource "azapi_resource" "oneespool" {
       #       networkProfile = {
       #         subnetId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.onees_runner_pool.name}/providers/Microsoft.Network/virtualNetworks/${azurerm_virtual_network.onees_vnet.name}/subnets/${azurerm_subnet.runner.name}"
       #       }
+#       networkProfile = local.repo_index[each.value] < 30 ? {
+#         subnetId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.onees_runner_pool.name}/providers/Microsoft.Network/virtualNetworks/${azurerm_virtual_network.onees_vnet[try(local.repo_region[each.value], "eastus")].name}/subnets/${azurerm_subnet.runner[each.value].name}"
+#       } : (local.repo_index[each.value] >= 30 && local.repo_index[each.value] < 40 ? {
+#                  natGatewayIpAddressCount = 0
+# #         subnetId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.onees_runner_pool.name}/providers/Microsoft.Network/virtualNetworks/${azurerm_virtual_network.onees_vnet[try(local.repo_region[each.value], "eastus")].name}/subnets/${azurerm_subnet.runner[each.value].name}"
+#       } : { natGatewayIpAddressCount = 1 })
       networkProfile = {
-        natGatewayIpAddressCount = 1
+        natGatewayIpAddressCount = 0
       }
       vmProviderProperties = {
         VssAdminPermissions = "CreatorOnly"
@@ -50,7 +56,8 @@ resource "azapi_resource" "oneespool" {
       vmProvider = "Azure"
     }
   })
-  location                  = try(local.repo_region[each.value], "eastus")
+    location                  = try(local.repo_region[each.value], "eastus")
+#   location                  = "eastus"
   name                      = lookup(local.repo_pool_names, each.value, local.repo_names[each.value])
   schema_validation_enabled = false
   tags = {
@@ -73,6 +80,7 @@ resource "null_resource" "pool_size_keeper" {
   for_each = toset(local.repos)
   triggers = {
     size = try(local.repo_pool_max_runners[each.value], 3)
+    temp = uuid()
   }
 }
 

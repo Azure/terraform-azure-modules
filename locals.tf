@@ -21,7 +21,11 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-authorization-roleassignment",   # needs access at higher scopes than subscription
     "https://github.com/Azure/terraform-azurerm-avm-ptn-alz",
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts", # Would be cancelled by 1es, need further investigation
+    "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccount",
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-component",
+    "https://github.com/Azure/terraform-azurerm-avm-res-search-searchservice",
   ])
+  regions = toset(["eastus", "eastus2", "westeurope"])
   repo_region = tomap({
     "https://github.com/Azure/terraform-azurerm-avm-ptn-virtualnetworkpeering": "westeurope",
     "https://github.com/lonegunmanb/avm-gh-app": "eastus2",
@@ -170,6 +174,7 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-web-serverfarm" : 93,
     "https://github.com/Azure/terraform-azurerm-avm-res-web-site" : 94,
     "https://github.com/Azure/terraform-azurerm-avm-res-web-staticsite" : 95,
+    "https://github.com/Azure/terraform-azurerm-avm-res-resources-resourcegroup": 96,
   } : k => tostring(v)}
 
   runner_network_whitelist = sort(distinct([

@@ -1,34 +1,65 @@
 resource "azurerm_virtual_network" "onees_vnet" {
- address_space       = ["192.168.0.0/16","10.0.0.0/16"]
- location            = azurerm_resource_group.onees_runner_pool.location
- name                = "runner_vnet"
- resource_group_name = azurerm_resource_group.onees_runner_pool.name
+  for_each            = local.regions
+  address_space       = ["192.168.0.0/16", "10.0.0.0/16"]
+  location            = each.value
+  name                = "runner_vnet${each.value}"
+  resource_group_name = azurerm_resource_group.onees_runner_pool.name
 }
 
 resource "azurerm_subnet" "fw" {
- address_prefixes     = ["192.168.0.0/24"]
- name                 = "AzureFirewallSubnet"
- resource_group_name  = azurerm_resource_group.onees_runner_pool.name
- virtual_network_name = azurerm_virtual_network.onees_vnet.name
+  for_each             = local.regions
+  address_prefixes     = ["192.168.0.0/24"]
+  name                 = "AzureFirewallSubnet"
+  resource_group_name  = azurerm_resource_group.onees_runner_pool.name
+  virtual_network_name = azurerm_virtual_network.onees_vnet[each.key].name
+}
+
+resource "azurerm_public_ip" "runner_pip" {
+  for_each            = local.regions
+  name                = "runner-pip${each.value}"
+  location            = each.value
+  resource_group_name = azurerm_resource_group.onees_runner_pool.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+}
+
+resource "azurerm_nat_gateway" "natgw" {
+  for_each            = local.regions
+  name                = "runner-nat${each.value}"
+  location            = each.value
+  resource_group_name = azurerm_resource_group.onees_runner_pool.name
+  sku_name            = "Standard"
+}
+
+resource "azurerm_nat_gateway_public_ip_association" "example" {
+  for_each             = local.regions
+  nat_gateway_id       = azurerm_nat_gateway.natgw[each.value].id
+  public_ip_address_id = azurerm_public_ip.runner_pip[each.value].id
 }
 
 resource "azurerm_subnet" "runner" {
- for_each = local.repo_index
- address_prefixes     = [cidrsubnet("10.0.0.0/8", 16, tonumber(each.value))]
- name                 = "runner-${reverse(split("/", each.key))[0]}"
- resource_group_name  = azurerm_resource_group.onees_runner_pool.name
- virtual_network_name = azurerm_virtual_network.onees_vnet.name
+  for_each             = local.repo_index
+  address_prefixes     = [cidrsubnet("10.0.0.0/8", 16, tonumber(each.value))]
+  name                 = "runner-${reverse(split("/", each.key))[0]}"
+  resource_group_name  = azurerm_resource_group.onees_runner_pool.name
+  virtual_network_name = azurerm_virtual_network.onees_vnet[try(local.repo_region[each.key], "eastus")].name
 
- delegation {
-   name = "delegation"
+  delegation {
+    name = "delegation"
 
-   service_delegation {
-     name    = "Microsoft.CloudTest/hostedpools"
-     actions = [
-       "Microsoft.Network/virtualNetworks/subnets/join/action",
-     ]
-   }
- }
+    service_delegation {
+      name    = "Microsoft.CloudTest/hostedpools"
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/join/action",
+      ]
+    }
+  }
+}
+
+resource "azurerm_subnet_nat_gateway_association" "asso" {
+  for_each       = local.repo_index
+  nat_gateway_id = azurerm_nat_gateway.natgw[try(local.repo_region[each.key], "eastus")].id
+  subnet_id      = azurerm_subnet.runner[each.key].id
 }
 
 #
