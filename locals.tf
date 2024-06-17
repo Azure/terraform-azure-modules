@@ -62,7 +62,6 @@ locals {
     "https://github.com/WodansSon/terraform-azurerm-cdn-frontdoor",
     "https://github.com/Azure/avm-gh-app",
     "https://github.com/Azure/oneesrunnerscleaner",
-    "https://github.com/Azure/terraform-azurerm-avm-res-sql-instancepool",
   ], local.valid_avm_repos) : r if !contains(local.bypass_set, r)]
 
   repo_names = {
@@ -163,7 +162,7 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-recoveryservices-vault" : 83,
     "https://github.com/Azure/terraform-azurerm-avm-res-search-searchservice" : 84,
     "https://github.com/Azure/terraform-azurerm-avm-res-servicebus-namespace" : 85,
-    "https://github.com/Azure/terraform-azurerm-avm-res-sql-instancepool" : 86,
+#     "https://github.com/Azure/terraform-azurerm-avm-res-sql-instancepool" : 86,
     "https://github.com/Azure/terraform-azurerm-avm-res-sql-managedinstance" : 87,
     "https://github.com/Azure/terraform-azurerm-avm-res-sql-server" : 88,
     "https://github.com/Azure/terraform-azurerm-avm-res-sqlvirtualmachine-sqlvirtualmachine" : 89,
