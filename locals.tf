@@ -21,18 +21,16 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-authorization-roleassignment",   # needs access at higher scopes than subscription
     "https://github.com/Azure/terraform-azurerm-avm-ptn-alz",
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts", # Would be cancelled by 1es, need further investigation
-    "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccount",
-    "https://github.com/Azure/terraform-azurerm-avm-res-insights-component",
-    "https://github.com/Azure/terraform-azurerm-avm-res-search-searchservice",
+#     "https://github.com/Azure/terraform-azurerm-avm-res-insights-component",
   ])
   regions = toset(["eastus", "eastus2", "westeurope"])
   repo_region = tomap({
     "https://github.com/Azure/terraform-azurerm-avm-ptn-virtualnetworkpeering": "westeurope",
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-component": "eastus2",
     "https://github.com/lonegunmanb/avm-gh-app": "eastus2",
     "https://github.com/Azure/terraform-azurerm-avm-ptn-function-app-storage-private-endpoints": "eastus2",
     "https://github.com/Azure/terraform-azurerm-avm-res-compute-disk": "eastus2",
     "https://github.com/Azure/terraform-azurerm-avm-res-cache-redis": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-res-insights-component": "eastus2",
     "https://github.com/Azure/terraform-azurerm-avm-res-search-searchservice": "eastus2",
     "https://github.com/Azure/terraform-azurerm-avm-res-logic-workflow": "eastus2",
     "https://github.com/Azure/terraform-azurerm-avm-ptn-policyassignment": "eastus2",
@@ -64,6 +62,7 @@ locals {
     "https://github.com/WodansSon/terraform-azurerm-cdn-frontdoor",
     "https://github.com/Azure/avm-gh-app",
     "https://github.com/Azure/oneesrunnerscleaner",
+    "https://github.com/Azure/terraform-azurerm-avm-res-sql-instancepool",
   ], local.valid_avm_repos) : r if !contains(local.bypass_set, r)]
 
   repo_names = {
@@ -175,6 +174,9 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-web-site" : 94,
     "https://github.com/Azure/terraform-azurerm-avm-res-web-staticsite" : 95,
     "https://github.com/Azure/terraform-azurerm-avm-res-resources-resourcegroup": 96,
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-scheduledqueryrule": 97,
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-network-routeserver": 98,
+
   } : k => tostring(v)}
 
   runner_network_whitelist = sort(distinct([

@@ -22,17 +22,8 @@ resource "azapi_resource" "oneespool" {
         type = "GitHub",
         url  = each.value
       }
-      #       networkProfile = {
-      #         subnetId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.onees_runner_pool.name}/providers/Microsoft.Network/virtualNetworks/${azurerm_virtual_network.onees_vnet.name}/subnets/${azurerm_subnet.runner.name}"
-      #       }
-#       networkProfile = local.repo_index[each.value] < 30 ? {
-#         subnetId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.onees_runner_pool.name}/providers/Microsoft.Network/virtualNetworks/${azurerm_virtual_network.onees_vnet[try(local.repo_region[each.value], "eastus")].name}/subnets/${azurerm_subnet.runner[each.value].name}"
-#       } : (local.repo_index[each.value] >= 30 && local.repo_index[each.value] < 40 ? {
-#                  natGatewayIpAddressCount = 0
-# #         subnetId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.onees_runner_pool.name}/providers/Microsoft.Network/virtualNetworks/${azurerm_virtual_network.onees_vnet[try(local.repo_region[each.value], "eastus")].name}/subnets/${azurerm_subnet.runner[each.value].name}"
-#       } : { natGatewayIpAddressCount = 1 })
       networkProfile = {
-        natGatewayIpAddressCount = 0
+        subnetId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.onees_runner_pool.name}/providers/Microsoft.Network/virtualNetworks/${azurerm_virtual_network.onees_vnet[try(local.repo_region[each.value], "eastus")].name}/subnets/${azurerm_subnet.runner[each.value].name}"
       }
       vmProviderProperties = {
         VssAdminPermissions = "CreatorOnly"
@@ -41,7 +32,7 @@ resource "azapi_resource" "oneespool" {
         type = "Stateless"
       }
       maxPoolSize = try(local.repo_pool_max_runners[each.value], 3)
-      images      = [
+      images = [
         {
           imageName            = "ghrunner"
           subscriptionId       = data.azurerm_client_config.current.subscription_id
@@ -56,9 +47,8 @@ resource "azapi_resource" "oneespool" {
       vmProvider = "Azure"
     }
   })
-    location                  = try(local.repo_region[each.value], "eastus")
-#   location                  = "eastus"
-  name                      = lookup(local.repo_pool_names, each.value, local.repo_names[each.value])
+  location = try(local.repo_region[each.value], "eastus")
+  name = lookup(local.repo_pool_names, each.value, local.repo_names[each.value])
   schema_validation_enabled = false
   tags = {
     repo_url = each.value
@@ -80,7 +70,6 @@ resource "null_resource" "pool_size_keeper" {
   for_each = toset(local.repos)
   triggers = {
     size = try(local.repo_pool_max_runners[each.value], 3)
-    temp = uuid()
   }
 }
 
@@ -190,7 +179,7 @@ data azurerm_user_assigned_identity bambrane_operator {
 resource "azapi_resource" "onees_meta_pool" {
   parent_id = azurerm_resource_group.onees_runner_pool.id
   type      = "Microsoft.CloudTest/hostedpools@2020-05-07"
-  body      = jsonencode({
+  body = jsonencode({
     properties = {
       organizationProfile = {
         type = "GitHub",
@@ -206,7 +195,7 @@ resource "azapi_resource" "onees_meta_pool" {
         type = "Stateless"
       }
       maxPoolSize = 3
-      images      = [
+      images = [
         {
           imageName            = "bambrane-runner"
           subscriptionId       = data.azurerm_client_config.current.subscription_id
@@ -258,7 +247,7 @@ resource "azapi_resource" "onees_pool_with_backend" {
 
   parent_id = azurerm_resource_group.onees_runner_pool.id
   type      = "Microsoft.CloudTest/hostedpools@2020-05-07"
-  body      = jsonencode({
+  body = jsonencode({
     properties = {
       organizationProfile = {
         type = "GitHub",
@@ -274,7 +263,7 @@ resource "azapi_resource" "onees_pool_with_backend" {
         type = "Stateless"
       }
       maxPoolSize = 3
-      images      = [
+      images = [
         {
           imageName            = "bambrane-runner"
           subscriptionId       = data.azurerm_client_config.current.subscription_id
@@ -290,7 +279,7 @@ resource "azapi_resource" "onees_pool_with_backend" {
     }
   })
   location                  = "eastus"
-  name                      = lookup(local.repo_pool_names, each.value, reverse(split("/", each.value))[0])
+  name = lookup(local.repo_pool_names, each.value, reverse(split("/", each.value))[0])
   schema_validation_enabled = false
   tags = {
     repo_url = each.value
