@@ -21,7 +21,6 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-authorization-roleassignment",   # needs access at higher scopes than subscription
     "https://github.com/Azure/terraform-azurerm-avm-ptn-alz",
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts", # Would be cancelled by 1es, need further investigation
-#     "https://github.com/Azure/terraform-azurerm-avm-res-insights-component",
   ])
   regions = toset(["eastus", "eastus2", "westeurope"])
   repo_region = tomap({
@@ -175,6 +174,8 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-resources-resourcegroup": 96,
     "https://github.com/Azure/terraform-azurerm-avm-res-insights-scheduledqueryrule": 97,
     "https://github.com/Azure/terraform-azurerm-avm-ptn-network-routeserver": 98,
+    "https://github.com/Azure/terraform-azurerm-avm-res-machinelearningservices-workspace": 99,
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-logprofile": 100,
 
   } : k => tostring(v)}
 
