@@ -35,6 +35,12 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-ptn-policyassignment": "eastus2",
     "https://github.com/Azure/terraform-azurerm-avm-res-network-applicationsecuritygroup": "eastus2",
     "https://github.com/Azure/terraform-azurerm-avm-res-batch-batchaccount": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-alertrule": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-datacollectionendpoint": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-azure-ipam": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-network-dnszone": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-datacollectionrule": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-redhatopenshift-openshiftcluster": "eastus2",
   })
   avm_res_mod_csv = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformResourceModules.csv")
   avm_pattern_mod_csv = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformPatternModules.csv")
@@ -176,7 +182,14 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-ptn-network-routeserver": 98,
     "https://github.com/Azure/terraform-azurerm-avm-res-machinelearningservices-workspace": 99,
     "https://github.com/Azure/terraform-azurerm-avm-res-insights-logprofile": 100,
-
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-aks-economy": 101,
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-aks-dev": 102,
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-alertrule": 103,
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-datacollectionendpoint": 104,
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-azure-ipam": 105,
+    "https://github.com/Azure/terraform-azurerm-avm-res-network-dnszone": 106,
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-datacollectionrule": 107,
+    "https://github.com/Azure/terraform-azurerm-avm-res-redhatopenshift-openshiftcluster": 108,
   } : k => tostring(v)}
 
   runner_network_whitelist = sort(distinct([
