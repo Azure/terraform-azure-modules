@@ -10,41 +10,42 @@ locals {
     "https://github.com/Azure/terraform-azure-container-apps" : "terraform-azurerm-container-apps"
   })
   repo_pool_max_runners = tomap({
-    "https://github.com/Azure/terraform-azurerm-avm-ptn-virtualwan": 14
-    "https://github.com/Azure/terraform-azurerm-avm-res-compute-disk": 5
-    "https://github.com/Azure/terraform-azurerm-avm-res-network-virtualnetwork": 5
-    "https://github.com/Azure/terraform-azurerm-avm-res-cdn-profile": 8
-    "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccount": 5
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-virtualwan" : 14
+    "https://github.com/Azure/terraform-azurerm-avm-res-compute-disk" : 5
+    "https://github.com/Azure/terraform-azurerm-avm-res-network-virtualnetwork" : 5
+    "https://github.com/Azure/terraform-azurerm-avm-res-cdn-profile" : 8
+    "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccount" : 5
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-cicd-agents-and-runners" : 6
   })
   // Please do not delete a repo name if the repo is no longer available, put deprecated repo in this list so subnet's order won't be changed.
   bypass_set = toset([
-    "https://github.com/Azure/terraform-azurerm-avm-res-authorization-roleassignment",   # needs access at higher scopes than subscription
+    "https://github.com/Azure/terraform-azurerm-avm-res-authorization-roleassignment", # needs access at higher scopes than subscription
     "https://github.com/Azure/terraform-azurerm-avm-ptn-alz",
     "https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts", # Would be cancelled by 1es, need further investigation
   ])
   regions = toset(["eastus", "eastus2", "westeurope"])
   repo_region = tomap({
-    "https://github.com/Azure/terraform-azurerm-avm-ptn-virtualnetworkpeering": "westeurope",
-    "https://github.com/Azure/terraform-azurerm-avm-res-insights-component": "eastus2",
-    "https://github.com/lonegunmanb/avm-gh-app": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-ptn-function-app-storage-private-endpoints": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-res-compute-disk": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-res-cache-redis": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-res-search-searchservice": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-res-logic-workflow": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-ptn-policyassignment": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-res-network-applicationsecuritygroup": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-res-batch-batchaccount": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-res-insights-alertrule": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-res-insights-datacollectionendpoint": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-ptn-azure-ipam": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-res-network-dnszone": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-res-insights-datacollectionrule": "eastus2",
-    "https://github.com/Azure/terraform-azurerm-avm-res-redhatopenshift-openshiftcluster": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-virtualnetworkpeering" : "westeurope",
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-component" : "eastus2",
+    "https://github.com/lonegunmanb/avm-gh-app" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-function-app-storage-private-endpoints" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-compute-disk" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-cache-redis" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-search-searchservice" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-logic-workflow" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-policyassignment" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-network-applicationsecuritygroup" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-batch-batchaccount" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-alertrule" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-datacollectionendpoint" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-azure-ipam" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-network-dnszone" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-datacollectionrule" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-redhatopenshift-openshiftcluster" : "eastus2",
   })
-  avm_res_mod_csv = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformResourceModules.csv")
-  avm_pattern_mod_csv = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformPatternModules.csv")
-  avm_res_mod_repos = [for i in csvdecode(local.avm_res_mod_csv) : i.RepoURL]
+  avm_res_mod_csv       = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformResourceModules.csv")
+  avm_pattern_mod_csv   = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformPatternModules.csv")
+  avm_res_mod_repos     = [for i in csvdecode(local.avm_res_mod_csv) : i.RepoURL]
   avm_pattern_mod_repos = [for i in csvdecode(local.avm_pattern_mod_csv) : i.RepoURL]
   repos = [for r in concat([
     "https://github.com/Azure/terraform-azurerm-aks",
@@ -73,7 +74,7 @@ locals {
     for r in distinct(local.repos) : r => length(reverse(split("/", r))[0]) >= 45 ? sha1(reverse(split("/", r))[0]) : reverse(split("/", r))[0]
   }
   repos_fw = [
-#    "https://github.com/lonegunmanb/terraform-azurerm-aks",
+    #    "https://github.com/lonegunmanb/terraform-azurerm-aks",
   ]
   # repos that use GitOps to manage testing infrastructures, not for verified modules
   repos_with_backend = [
@@ -167,7 +168,7 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-recoveryservices-vault" : 83,
     "https://github.com/Azure/terraform-azurerm-avm-res-search-searchservice" : 84,
     "https://github.com/Azure/terraform-azurerm-avm-res-servicebus-namespace" : 85,
-#     "https://github.com/Azure/terraform-azurerm-avm-res-sql-instancepool" : 86,
+    #     "https://github.com/Azure/terraform-azurerm-avm-res-sql-instancepool" : 86,
     "https://github.com/Azure/terraform-azurerm-avm-res-sql-managedinstance" : 87,
     "https://github.com/Azure/terraform-azurerm-avm-res-sql-server" : 88,
     "https://github.com/Azure/terraform-azurerm-avm-res-sqlvirtualmachine-sqlvirtualmachine" : 89,
@@ -177,20 +178,24 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-web-serverfarm" : 93,
     "https://github.com/Azure/terraform-azurerm-avm-res-web-site" : 94,
     "https://github.com/Azure/terraform-azurerm-avm-res-web-staticsite" : 95,
-    "https://github.com/Azure/terraform-azurerm-avm-res-resources-resourcegroup": 96,
-    "https://github.com/Azure/terraform-azurerm-avm-res-insights-scheduledqueryrule": 97,
-    "https://github.com/Azure/terraform-azurerm-avm-ptn-network-routeserver": 98,
-    "https://github.com/Azure/terraform-azurerm-avm-res-machinelearningservices-workspace": 99,
-    "https://github.com/Azure/terraform-azurerm-avm-res-insights-logprofile": 100,
-    "https://github.com/Azure/terraform-azurerm-avm-ptn-aks-economy": 101,
-    "https://github.com/Azure/terraform-azurerm-avm-ptn-aks-dev": 102,
-    "https://github.com/Azure/terraform-azurerm-avm-res-insights-alertrule": 103,
-    "https://github.com/Azure/terraform-azurerm-avm-res-insights-datacollectionendpoint": 104,
-    "https://github.com/Azure/terraform-azurerm-avm-ptn-azure-ipam": 105,
-    "https://github.com/Azure/terraform-azurerm-avm-res-network-dnszone": 106,
-    "https://github.com/Azure/terraform-azurerm-avm-res-insights-datacollectionrule": 107,
-    "https://github.com/Azure/terraform-azurerm-avm-res-redhatopenshift-openshiftcluster": 108,
-  } : k => tostring(v)}
+    "https://github.com/Azure/terraform-azurerm-avm-res-resources-resourcegroup" : 96,
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-scheduledqueryrule" : 97,
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-network-routeserver" : 98,
+    "https://github.com/Azure/terraform-azurerm-avm-res-machinelearningservices-workspace" : 99,
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-logprofile" : 100,
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-aks-economy" : 101,
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-aks-dev" : 102,
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-alertrule" : 103,
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-datacollectionendpoint" : 104,
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-azure-ipam" : 105,
+    "https://github.com/Azure/terraform-azurerm-avm-res-network-dnszone" : 106,
+    "https://github.com/Azure/terraform-azurerm-avm-res-insights-datacollectionrule" : 107,
+    "https://github.com/Azure/terraform-azurerm-avm-res-redhatopenshift-openshiftcluster" : 108,
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-ai-platform-baseline" : 109,
+    "https://github.com/Azure/terraform-azurerm-avm-res-network-publicipprefix" : 110,
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-ai-reference-implementation" : 111,
+    "https://github.com/Azure/terraform-azurerm-avm-res-azurestackhci-cluster" : 112,
+  } : k => tostring(v) }
 
   runner_network_whitelist = sort(distinct([
     # OneES
@@ -354,8 +359,8 @@ locals {
     "ifconfig.me",
     "api.ipify.org",
     # For debugger
-#    "*.docker.com",
-#    "aka.ms",
+    #    "*.docker.com",
+    #    "aka.ms",
   ]))
 }
 

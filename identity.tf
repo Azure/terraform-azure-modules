@@ -1,6 +1,9 @@
 resource "azurerm_resource_group" "pool_identity" {
   location = "eastus"
   name     = "1es-runner-identity"
+  tags = {
+    "do_not_delete" : "",
+  }
 }
 
 resource "azurerm_user_assigned_identity" "pool_identity" {

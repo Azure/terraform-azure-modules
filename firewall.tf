@@ -6,6 +6,20 @@ resource "azurerm_virtual_network" "onees_vnet" {
   resource_group_name = azurerm_resource_group.onees_runner_pool.name
 }
 
+resource "azurerm_role_assignment" "onees_vnet_reader" {
+  for_each             = local.regions
+  principal_id         = "9391c2e6-0102-45b1-94fb-c9fd04dea7df" #1ES Resource Management
+  scope                = azurerm_virtual_network.onees_vnet[each.key].id
+  role_definition_name = "Reader"
+}
+
+resource "azurerm_role_assignment" "onees_vnet_network_contributor" {
+  for_each             = local.regions
+  principal_id         = "9391c2e6-0102-45b1-94fb-c9fd04dea7df" #1ES Resource Management
+  scope                = azurerm_virtual_network.onees_vnet[each.key].id
+  role_definition_name = "Network Contributor"
+}
+
 resource "azurerm_subnet" "fw" {
   for_each             = local.regions
   address_prefixes     = ["192.168.0.0/24"]
@@ -48,7 +62,7 @@ resource "azurerm_subnet" "runner" {
     name = "delegation"
 
     service_delegation {
-      name    = "Microsoft.CloudTest/hostedpools"
+      name = "Microsoft.CloudTest/hostedpools"
       actions = [
         "Microsoft.Network/virtualNetworks/subnets/join/action",
       ]

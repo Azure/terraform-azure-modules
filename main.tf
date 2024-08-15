@@ -7,6 +7,9 @@ locals {
 resource "azurerm_resource_group" "onees_runner_pool" {
   location = "eastus"
   name     = "1esrunner"
+  tags = {
+    "do_not_delete" : "",
+  }
 }
 
 data "azurerm_client_config" "current" {}
@@ -47,8 +50,8 @@ resource "azapi_resource" "oneespool" {
       vmProvider = "Azure"
     }
   })
-  location = try(local.repo_region[each.value], "eastus")
-  name = lookup(local.repo_pool_names, each.value, local.repo_names[each.value])
+  location                  = try(local.repo_region[each.value], "eastus")
+  name                      = lookup(local.repo_pool_names, each.value, local.repo_names[each.value])
   schema_validation_enabled = false
   tags = {
     repo_url = each.value
@@ -165,7 +168,7 @@ data "azurerm_resource_group" "runner_state" {
   name = "bambrane-runner-state"
 }
 
-data azurerm_user_assigned_identity bambrane_operator {
+data "azurerm_user_assigned_identity" "bambrane_operator" {
   name                = "bambrane_operator"
   resource_group_name = data.azurerm_resource_group.runner_state.name
 }
@@ -279,7 +282,7 @@ resource "azapi_resource" "onees_pool_with_backend" {
     }
   })
   location                  = "eastus"
-  name = lookup(local.repo_pool_names, each.value, reverse(split("/", each.value))[0])
+  name                      = lookup(local.repo_pool_names, each.value, reverse(split("/", each.value))[0])
   schema_validation_enabled = false
   tags = {
     repo_url = each.value
