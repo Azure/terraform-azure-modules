@@ -42,6 +42,11 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-network-dnszone" : "eastus2",
     "https://github.com/Azure/terraform-azurerm-avm-res-insights-datacollectionrule" : "eastus2",
     "https://github.com/Azure/terraform-azurerm-avm-res-redhatopenshift-openshiftcluster" : "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-azurestackhci-logicalnetwork": "westeurope",
+    "https://github.com/Azure/terraform-azurerm-avm-res-hybridcontainerservice-provisionedclusterinstance": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-edge-site": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-hci-server-provisioner": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-hci-ad-provisioner": "eastus2",
   })
   avm_res_mod_csv       = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformResourceModules.csv")
   avm_pattern_mod_csv   = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformPatternModules.csv")
@@ -195,6 +200,11 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-network-publicipprefix" : 110,
     "https://github.com/Azure/terraform-azurerm-avm-ptn-ai-reference-implementation" : 111,
     "https://github.com/Azure/terraform-azurerm-avm-res-azurestackhci-cluster" : 112,
+    "https://github.com/Azure/terraform-azurerm-avm-res-azurestackhci-logicalnetwork": 113,
+    "https://github.com/Azure/terraform-azurerm-avm-res-hybridcontainerservice-provisionedclusterinstance": 114,
+    "https://github.com/Azure/terraform-azurerm-avm-res-edge-site": 115,
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-hci-server-provisioner": 116,
+    "https://github.com/Azure/terraform-azurerm-avm-ptn-hci-ad-provisioner": 117,
   } : k => tostring(v) }
 
   runner_network_whitelist = sort(distinct([

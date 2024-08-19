@@ -54,7 +54,7 @@ resource "azurerm_nat_gateway_public_ip_association" "example" {
 resource "azurerm_subnet" "runner" {
   for_each             = local.repo_index
   address_prefixes     = [cidrsubnet("10.0.0.0/8", 16, tonumber(each.value))]
-  name                 = "runner-${reverse(split("/", each.key))[0]}"
+  name                 = length("runner-${reverse(split("/", each.key))[0]}") > 80 ? md5("runner-${reverse(split("/", each.key))[0]}") : "runner-${reverse(split("/", each.key))[0]}"
   resource_group_name  = azurerm_resource_group.onees_runner_pool.name
   virtual_network_name = azurerm_virtual_network.onees_vnet[try(local.repo_region[each.key], "eastus")].name
 
