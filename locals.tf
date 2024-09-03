@@ -47,6 +47,7 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-edge-site": "eastus2",
     "https://github.com/Azure/terraform-azurerm-avm-ptn-hci-server-provisioner": "eastus2",
     "https://github.com/Azure/terraform-azurerm-avm-ptn-hci-ad-provisioner": "eastus2",
+    "https://github.com/Azure/terraform-azurerm-avm-res-compute-diskencryptionset": "eastus2",
   })
   avm_res_mod_csv       = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformResourceModules.csv")
   avm_pattern_mod_csv   = file("${path.module}/Azure-Verified-Modules/docs/static/module-indexes/TerraformPatternModules.csv")
@@ -205,6 +206,7 @@ locals {
     "https://github.com/Azure/terraform-azurerm-avm-res-edge-site": 115,
     "https://github.com/Azure/terraform-azurerm-avm-ptn-hci-server-provisioner": 116,
     "https://github.com/Azure/terraform-azurerm-avm-ptn-hci-ad-provisioner": 117,
+    "https://github.com/Azure/terraform-azurerm-avm-res-compute-diskencryptionset": 118,
   } : k => tostring(v) }
 
   runner_network_whitelist = sort(distinct([
