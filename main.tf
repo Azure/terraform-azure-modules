@@ -1,316 +1,78 @@
-locals {
-  locations = var.dry_run ? [] : [
-    "eastus",
-  ]
-}
+data "azapi_client_config" "current" {}
 
-resource "azurerm_resource_group" "onees_runner_pool" {
-  location = "eastus"
-  name     = "1esrunner"
+resource "azapi_resource" "identity-rg" {
+  type     = "Microsoft.Resources/resourceGroups@2024-03-01"
+  name     = "rg-avm-identities"
+  location = "eastus2"
   tags = {
     "do_not_delete" : "",
   }
 }
 
-data "azurerm_client_config" "current" {}
+resource "azapi_resource" "identity" {
+  for_each  = toset(local.all_repos)
+  type      = "Microsoft.ManagedIdentity/userAssignedIdentities@2023-07-31-preview"
+  parent_id = azapi_resource.identity-rg.id
+  name      = "${local.all_repos_parsed[each.value].owner}-${local.all_repos_parsed[each.value].name}"
+  location  = azapi_resource.identity-rg.location
+  body      = {} # empty body as HCL object is reqired to force output to be HCL and not JSON string.
+  response_export_values = [
+    "properties.principalId",
+    "properties.clientId",
+    "properties.tenantId"
+  ]
+}
 
-resource "azapi_resource" "oneespool" {
-  for_each = toset(local.repos)
-
-  parent_id = azurerm_resource_group.onees_runner_pool.id
-  type      = "Microsoft.CloudTest/hostedpools@2020-05-07"
-  body = jsonencode({
+resource "azapi_resource" "identity_federated_credentials" {
+  for_each  = toset(local.all_repos)
+  type      = "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2023-07-31-preview"
+  name      = "${local.all_repos_parsed[each.value].owner}-${local.all_repos_parsed[each.value].name}"
+  parent_id = azapi_resource.identity[each.key].id
+  locks     = [azapi_resource.identity[each.key].id] # not needed but added if we configure more than one environment
+  body = {
     properties = {
-      organizationProfile = {
-        type = "GitHub",
-        url  = each.value
-      }
-      networkProfile = {
-        subnetId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.onees_runner_pool.name}/providers/Microsoft.Network/virtualNetworks/${azurerm_virtual_network.onees_vnet[try(local.repo_region[each.value], "eastus")].name}/subnets/${azurerm_subnet.runner[each.value].name}"
-      }
-      vmProviderProperties = {
-        VssAdminPermissions = "CreatorOnly"
-      }
-      agentProfile = {
-        type = "Stateless"
-      }
-      maxPoolSize = try(local.repo_pool_max_runners[each.value], 3)
-      images = [
-        {
-          imageName            = "ghrunner"
-          subscriptionId       = data.azurerm_client_config.current.subscription_id
-          poolBufferPercentage = "100"
-        }
-      ]
-      sku = {
-        name       = "Standard_D2ds_v4"
-        tier       = "StandardSSD"
-        enableSpot = false
-      }
-      vmProvider = "Azure"
+      audiences = ["api://AzureADTokenExchange"]
+      issuer    = "https://token.actions.githubusercontent.com"
+      subject   = "repo:${local.all_repos_parsed[each.value].owner}/${local.all_repos_parsed[each.value].name}:environment:${local.environment_name}"
     }
-  })
-  location                  = try(local.repo_region[each.value], "eastus")
-  name                      = lookup(local.repo_pool_names, each.value, local.repo_names[each.value])
-  schema_validation_enabled = false
-  tags = {
-    repo_url = each.value
-  }
-
-  timeouts {
-    create = "30m"
-    delete = "30m"
-    read   = "10m"
-  }
-  lifecycle {
-    ignore_changes = [
-      tags,
-    ]
   }
 }
 
-resource "null_resource" "pool_size_keeper" {
-  for_each = toset(local.repos)
-  triggers = {
-    size = try(local.repo_pool_max_runners[each.value], 3)
-  }
-}
-
-resource "azapi_update_resource" "identity" {
-  for_each = toset(local.repos)
-
-  type = "Microsoft.CloudTest/hostedpools@2020-05-07"
-  body = jsonencode({
-    identity = {
-      type = "UserAssigned"
-      userAssignedIdentities = {
-        (azurerm_user_assigned_identity.pool_identity["runner"].id) : {}
-      }
-    }
-  })
-  resource_id = azapi_resource.oneespool[each.value].id
-  lifecycle {
-    replace_triggered_by = [
-      null_resource.pool_size_keeper[each.key]
-    ]
-  }
-}
-
-# Onees Pool with Azure Firewall is still WIP. It seems like we cannot share one subnet with multiple pools, so this
-# design needs further improvement.
-
-#resource "azapi_resource" "oneespool_fw" {
-#  for_each = toset(local.repos_fw)
-#
-#  parent_id = azurerm_resource_group.onees_runner_pool.id
-#  type      = "Microsoft.CloudTest/hostedpools@2020-05-07"
-#  body      = jsonencode({
-#    properties = {
-#      organizationProfile = {
-#        type = "GitHub",
-#        url  = each.value
-#      }
-#      networkProfile = {
-#        subnetId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.onees_runner_pool.name}/providers/Microsoft.Network/virtualNetworks/${azurerm_virtual_network.onees_vnet.name}/subnets/${azurerm_subnet.runner.name}"
-#      }
-#      vmProviderProperties = {
-#        VssAdminPermissions = "CreatorOnly"
-#      }
-#      agentProfile = {
-#        type = "Stateless"
-#      }
-#      maxPoolSize = 3
-#      images      = [
-#        {
-#          imageName            = "ghrunner"
-#          subscriptionId       = data.azurerm_client_config.current.subscription_id
-#          poolBufferPercentage = "100"
-#        }
-#      ]
-#      sku = {
-#        name       = "Standard_D2ds_v4"
-#        tier       = "StandardSSD"
-#        enableSpot = false
-#      }
-#      vmProvider = "Azure"
-#    }
-#  })
-#  location                  = azurerm_resource_group.onees_runner_pool.location
-#  name                      = lookup(local.repo_pool_names, each.value, reverse(split("/", each.value))[0])
-#  schema_validation_enabled = false
-#  tags                      = {
-#    repo_url = each.value
-#  }
-#
-#  timeouts {
-#    create = "30m"
-#    delete = "30m"
-#    read   = "10m"
-#  }
-#}
-
-#resource "azapi_update_resource" "update_after_apply" {
-#  for_each = toset(local.repos_fw)
-#
-#  type = azapi_resource.oneespool_fw[each.key].type
-#  body = jsonencode({
-#    identity = {
-#      type                   = "UserAssigned"
-#      userAssignedIdentities = {
-#        (azurerm_user_assigned_identity.pool_identity["runner"].id) : {}
-#      }
-#    }
-#  })
-#  resource_id = azapi_resource.oneespool_fw[each.value].id
-#}
-
-data "azurerm_resource_group" "runner_state" {
-  name = "bambrane-runner-state"
-}
-
-data "azurerm_user_assigned_identity" "bambrane_operator" {
-  name                = "bambrane_operator"
-  resource_group_name = data.azurerm_resource_group.runner_state.name
-}
-
-#data "azurerm_subnet" "bambrane_onees_pool" {
-#  name                 = "runner"
-#  virtual_network_name = "control-plane-meta-controller"
-#  resource_group_name  = data.azurerm_resource_group.runner_state.name
-#}
-
-resource "azapi_resource" "onees_meta_pool" {
-  parent_id = azurerm_resource_group.onees_runner_pool.id
-  type      = "Microsoft.CloudTest/hostedpools@2020-05-07"
-  body = jsonencode({
+# Add owner role assignment.
+# The condition prevents the assignee from creating new role assignments for owner, user access administratior, or role based access control administrator.
+resource "azapi_resource" "identity_role_assignment" {
+  for_each  = toset(local.all_repos)
+  type      = "Microsoft.Authorization/roleAssignments@2022-04-01"
+  name      = uuidv5("url", "${each.value}${data.azapi_client_config.current.subscription_id}${data.azapi_client_config.current.tenant_id}")
+  parent_id = "/subscriptions/${data.azapi_client_config.current.subscription_id}"
+  body = {
     properties = {
-      organizationProfile = {
-        type = "GitHub",
-        url  = "https://github.com/Azure/terraform-azure-modules"
-      }
-      networkProfile = {
-        natGatewayIpAddressCount = 1
-      }
-      vmProviderProperties = {
-        VssAdminPermissions = "CreatorOnly"
-      }
-      agentProfile = {
-        type = "Stateless"
-      }
-      maxPoolSize = 3
-      images = [
-        {
-          imageName            = "bambrane-runner"
-          subscriptionId       = data.azurerm_client_config.current.subscription_id
-          poolBufferPercentage = "100"
-        }
-      ]
-      sku = {
-        name       = "Standard_D2ds_v4"
-        tier       = "StandardSSD"
-        enableSpot = false
-      }
-      vmProvider = "Azure"
+      roleDefinitionId = "/subscriptions/${data.azapi_client_config.current.subscription_id}/providers/Microsoft.Authorization/roleDefinitions/${local.role_definition_name_owner}"
+      principalType    = "ServicePrincipal"
+      principalId      = azapi_resource.identity[each.key].output.properties.principalId
+      description      = "Role assignment for AVM testing. Repo: ${local.all_repos_parsed[each.value].owner}/${local.all_repos_parsed[each.value].name}"
+      conditionVersion = "2.0"
+      condition        = <<CONDITION
+(
+ (
+  !(ActionMatches{'Microsoft.Authorization/roleAssignments/write'})
+ )
+ OR
+ (
+  @Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAllValues:GuidNotEquals {8e3af657-a8ff-443c-a75c-2fe8c4bcb635, 18d7d88d-d35e-4fb5-a5c3-7773c20a72d9, f58310d9-a9f6-439a-9e8d-f62e7b41a168}
+ )
+)
+AND
+(
+ (
+  !(ActionMatches{'Microsoft.Authorization/roleAssignments/delete'})
+ )
+ OR
+ (
+  @Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAllValues:GuidNotEquals {8e3af657-a8ff-443c-a75c-2fe8c4bcb635, 18d7d88d-d35e-4fb5-a5c3-7773c20a72d9, f58310d9-a9f6-439a-9e8d-f62e7b41a168}
+ )
+)
+CONDITION
     }
-  })
-  location                  = "eastus"
-  name                      = "terraform-azure-modules"
-  schema_validation_enabled = false
-  tags = {
-    repo_url = "https://github.com/Azure/terraform-azure-modules"
   }
-
-  timeouts {
-    create = "30m"
-    delete = "30m"
-    read   = "10m"
-  }
-  lifecycle {
-    ignore_changes = [
-      tags,
-    ]
-  }
-}
-
-resource "azapi_update_resource" "runner_backend_identity" {
-  type = "Microsoft.CloudTest/hostedpools@2020-05-07"
-  body = jsonencode({
-    identity = {
-      type = "UserAssigned"
-      userAssignedIdentities = {
-        (data.azurerm_user_assigned_identity.bambrane_operator.id) : {}
-      }
-    }
-  })
-  resource_id = azapi_resource.onees_meta_pool.id
-}
-
-resource "azapi_resource" "onees_pool_with_backend" {
-  for_each = toset(local.repos_with_backend)
-
-  parent_id = azurerm_resource_group.onees_runner_pool.id
-  type      = "Microsoft.CloudTest/hostedpools@2020-05-07"
-  body = jsonencode({
-    properties = {
-      organizationProfile = {
-        type = "GitHub",
-        url  = each.value
-      }
-      networkProfile = {
-        natGatewayIpAddressCount = 1
-      }
-      vmProviderProperties = {
-        VssAdminPermissions = "CreatorOnly"
-      }
-      agentProfile = {
-        type = "Stateless"
-      }
-      maxPoolSize = 3
-      images = [
-        {
-          imageName            = "bambrane-runner"
-          subscriptionId       = data.azurerm_client_config.current.subscription_id
-          poolBufferPercentage = "100"
-        }
-      ]
-      sku = {
-        name       = "Standard_D2ds_v4"
-        tier       = "StandardSSD"
-        enableSpot = false
-      }
-      vmProvider = "Azure"
-    }
-  })
-  location                  = "eastus"
-  name                      = lookup(local.repo_pool_names, each.value, reverse(split("/", each.value))[0])
-  schema_validation_enabled = false
-  tags = {
-    repo_url = each.value
-  }
-
-  timeouts {
-    create = "30m"
-    delete = "30m"
-    read   = "10m"
-  }
-  lifecycle {
-    ignore_changes = [
-      tags,
-    ]
-  }
-}
-
-resource "azapi_update_resource" "gitops_runner_backend_identity" {
-  for_each = toset(local.repos_with_backend)
-
-  type = "Microsoft.CloudTest/hostedpools@2020-05-07"
-  body = jsonencode({
-    identity = {
-      type = "UserAssigned"
-      userAssignedIdentities = {
-        (data.azurerm_user_assigned_identity.bambrane_operator.id) : {}
-      }
-    }
-  })
-  resource_id = azapi_resource.onees_pool_with_backend[each.value].id
 }
