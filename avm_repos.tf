@@ -5,5 +5,6 @@ data "github_repository" "avm_repo" {
 }
 
 locals {
-  valid_avm_repos = [for repo in data.github_repository.avm_repo : repo.html_url if repo.html_url != null && repo.html_url != ""]
+  avm_repos       = toset([for repo in data.github_repository.avm_repo : repo.html_url])
+  valid_avm_repos = [for r in local.avm_repos : r if r != "" && r != null]
 }
