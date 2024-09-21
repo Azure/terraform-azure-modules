@@ -6,7 +6,7 @@ resource "github_repository_ruleset" "main" {
 
   conditions {
     ref_name {
-      include = ["refs/heads/main"]
+      include = ["~DEFAULT_BRANCH"]
       exclude = []
     }
   }
