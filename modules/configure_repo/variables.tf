@@ -26,3 +26,17 @@ variable "template_repo_name" {
     description = "The name of the template repo to use when creating new AVM repos."
     default = "terraform-azurerm-avm-template"  
 }
+
+variable "test_environment_secrets" {
+    type = map(object({
+        environment_name = optional(string, "test")
+        secret_name = string
+        plaintext_value = string
+    }))  
+}
+
+variable "test_environment_name" {
+  type = string
+  description = "The name for the test environment"
+  default = "test"
+}

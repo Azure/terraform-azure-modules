@@ -14,4 +14,6 @@ resource "github_issue_label" "test_repo" {
   name       = each.value.Name
   color      = each.value.HEX
   description = each.value.Description
+
+  depends_on = [ github_repository.this ]
 }

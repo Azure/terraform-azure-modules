@@ -3,6 +3,7 @@ resource "github_repository" "this" {
   name = "terraform-azurerm-${var.name}"
   visibility = "public"
   vulnerability_alerts = true
+  archive_on_destroy = true
 
   template {
     owner = "Azure"

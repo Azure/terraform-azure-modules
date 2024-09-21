@@ -36,20 +36,24 @@ resource "github_team" "new_teams" {
   privacy     = "closed"
 }
 
-data "github_team" "existing_teams" {
-  for_each = {for k,v in local.team_map : k => v if v.type == "existing"}
-
-  slug = each.value.name #requires the team name to be lower case wihtout spaces
-}
-
-resource "github_team_repository" "all_teams" {
-  for_each = local.team_map
-
-  team_id    = each.value.type == "new" ? github_team.new_teams[each.key].id : data.github_team.existing_teams[each.key].id
+resource "github_repository_collaborators" "some_repo_collaborators" {
   repository = github_repository.this.name
-  permission = each.value.permission
 
-  depends_on = [ github_team.new_teams, data.github_team.existing_teams ]
+  user {
+    permission = "admin"
+    username = var.owner_gh_alias    
+  }  
+  
+  dynamic team {
+    for_each = local.team_map
+
+    content {
+        permission = team.value.permission
+        team_id = team.value.name
+    }
+  }
+
+  depends_on = [ github_team.new_teams ]
 }
 
 resource "github_team_membership" "default_owner" {
