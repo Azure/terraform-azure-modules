@@ -1,6 +1,6 @@
 resource "github_repository_ruleset" "main" {
   name        = "main"
-  repository  = github_repository.this.name
+  repository  = data.github_repository.this.name
   target      = "branch"
   enforcement = "active"
 
@@ -24,4 +24,6 @@ resource "github_repository_ruleset" "main" {
       required_approving_review_count = 0      
     }
   }
+
+  depends_on = [ github_repository_pull_request.this ]
 }

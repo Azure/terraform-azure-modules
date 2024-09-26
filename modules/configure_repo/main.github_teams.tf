@@ -9,7 +9,7 @@ locals {
         module_contributors = {
             name = "${var.name}-contributors-tf"
             description = "AVM module ${var.name} contributors team"
-            permission = "write"
+            permission = "admin"
             type = "new"
         }
         core_team_technical_terraform = {
@@ -37,7 +37,7 @@ resource "github_team" "new_teams" {
 }
 
 resource "github_repository_collaborators" "some_repo_collaborators" {
-  repository = github_repository.this.name
+  repository = data.github_repository.this.name
 
   user {
     permission = "admin"

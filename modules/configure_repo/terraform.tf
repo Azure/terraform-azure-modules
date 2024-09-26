@@ -8,9 +8,8 @@ terraform {
   }
 }
 
-/*
+
 #set the provider to use Azure repo when calling from a root module as needed
 provider "github" {
     owner = var.repo_owner
 }
-*/

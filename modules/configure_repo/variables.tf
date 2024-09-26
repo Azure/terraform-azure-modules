@@ -40,3 +40,9 @@ variable "test_environment_name" {
   description = "The name for the test environment"
   default = "test"
 }
+
+variable "template_copy_branch_name" {
+  type = string
+  description = "The new branch to create for copying the template files"
+  default = "template-files"
+}
