@@ -148,7 +148,7 @@ import {
             Write-Warning "Skipping: $orgAndRepoName as it has at least one destroy actions."
         }
 
-        if(!$planOnly -and !$plan.errored) {
+        if(!$planOnly -and $plan.errored) {
             Write-Warning "Skipping: Plan failed for $orgAndRepoName."
         }
 
