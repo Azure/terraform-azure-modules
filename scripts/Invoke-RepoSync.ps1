@@ -82,6 +82,7 @@ foreach($repo in $repos) {
             Message         = "Skipping: $orgAndRepoName has not been created yet."
             ForegroundColor = "Yellow"
             BackgroundColor = $Host.UI.RawUI.BackgroundColor ?? "Black"
+            NoNewLine       = $false
         }
         Write-Information $message
 
@@ -90,6 +91,7 @@ foreach($repo in $repos) {
             Message         = "$([Environment]::NewLine)Updating: $orgAndRepoName."
             ForegroundColor = "Green"
             BackgroundColor = $Host.UI.RawUI.BackgroundColor ?? "Black"
+            NoNewLine       = $false
         }
         Write-Information $message
 
