@@ -9,7 +9,7 @@
 
 param(
     [string]$stateStorageAccountName = "stoavmstate",
-    [string]$stateResourceGroupName = "rgavmstate",
+    [string]$stateResourceGroupName = "rg-avm-state",
     [string]$stateContainerName = "avm-state",
     [array]$repoFilter = @("avm-res-network-virtualnetwork", "avm-res-network-connection"),
     [bool]$planOnly = $false,
