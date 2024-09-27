@@ -16,8 +16,8 @@ on:
         description: 'Whether to only plan the changes'
         default: true
         type: boolean
-  #schedule:
-    #- cron: '0 0,4,8,12,16,20 * * *'
+  schedule:
+    - cron: '0 0,4,8,12,16,20 * * *'
 
 permissions:
   id-token: write
