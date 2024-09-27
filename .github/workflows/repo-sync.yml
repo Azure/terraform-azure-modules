@@ -60,10 +60,12 @@ jobs:
             $repositories = $repositories -split ','
           }
 
+          gh auth login -h "GitHub.com"
           ./scripts/Invoke-RepoSync.ps1 -repoFilter $repositories -firstRun $firstRun -planOnly $planOnly
         shell: pwsh
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
