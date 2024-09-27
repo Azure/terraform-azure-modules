@@ -114,6 +114,13 @@ import {
             }
         }
 
+        $ownerTeamName = $repo.ownerTeam.Replace("@Azure/", "")
+        $existingOwnerTeam = $(gh api "orgs/$orgName/teams/$($ownerTeamName)" 2> $null) | ConvertFrom-Json
+        if($existingOwnerTeam.status -eq 404) {
+            Write-Warning "Owner team does not exist: $($ownerTeamName)"
+            $ownerTeamName = ""
+        }
+
         $contributorTeamName = $repo.contributorTeam.Replace("@Azure/", "")
         $existingContributorTeam = $(gh api "orgs/$orgName/teams/$($contributorTeamName)" 2> $null) | ConvertFrom-Json
         if($existingContributorTeam.status -eq 404) {
@@ -130,7 +137,7 @@ import {
         terraform plan -out="$($repo.id).tfplan" `
             -var="github_repository_owner=$orgName" `
             -var="github_repository_name=$repoName" `
-            -var="github_owner_team_name=$($repo.ownerTeam)" `
+            -var="github_owner_team_name=$($ownerTeamName)" `
             -var="github_contributor_team_name=$($contributorTeamName)" `
             -var="manage_github_environment=$(($repo.type -eq "avm").ToString().ToLower())"
 
