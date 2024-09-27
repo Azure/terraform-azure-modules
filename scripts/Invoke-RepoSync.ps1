@@ -11,11 +11,11 @@ param(
     [string]$stateStorageAccountName = "stoavmstate",
     [string]$stateResourceGroupName = "rg-avm-state",
     [string]$stateContainerName = "avm-state",
-    [array]$repoFilter = @("avm-res-network-virtualnetwork", "avm-res-appconfiguration-configurationstore"),
+    [array]$repoFilter = @(),
     [bool]$planOnly = $false,
     [bool]$firstRun = $false,
     [array]$csvFiles = @( 
-        @{
+<#         @{
             path = "./temp/TerraformResourceModules.csv"
             type = "avm"
             subtype = "resource"
@@ -29,7 +29,7 @@ param(
             path = "./temp/TerraformUtilityModules.csv"
             type = "avm"
             subtype = "utility"
-        },
+        }, #>
         @{
             path = "./legacy_repos/LegacyRepos.csv"
             type = "legacy"
