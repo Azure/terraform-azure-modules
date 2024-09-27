@@ -1,1 +1,63 @@
 ---
+name: End to End Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      repositories:
+        description: 'Override the target repositories, use a comma separated list. Leave as All to run on all repositories.'
+        default: 'All'
+        type: string
+      first_run:
+        description: 'Whether to run in first run mode'
+        default: false
+        type: boolean
+      plan_only:
+        description: 'Whether to only plan the changes'
+        default: true
+        type: boolean
+  #schedule:
+    #- cron: '0 0,4,8,12,16,20 * * *'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  run-sync:
+    runs-on: ubuntu-latest
+    environment: avm-updates
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Download CSV Files
+        run: |
+          ./scripts/Invoke-AvmRepoCsvDownload.ps1
+        shell: pwsh
+      - name: Sync Repositories
+        run: |
+          $repositories = "${{ inputs.repositories }}"
+          $firstRun = "${{ inputs.first_run }}" -eq "true"
+          $planOnly = "${{ inputs.plan_only }}" -eq "true"
+
+          Write-Output "Repositories: $repositories"
+          Write-Output "First Run: $firstRun"
+          Write-Output "Plan Only: $planOnly"
+
+          if($repositories -eq "All") {
+            $repositories = @()
+          } else {
+            $repositories = $repositories -split ','
+          }
+
+          ./scripts/Invoke-AvmRepoSync.ps1 -repoFilter $repositories -firstRun $firstRun -planOnly $planOnly
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_USE_AZUREAD: true
+          ARM_USE_OIDC: true
+
+      
