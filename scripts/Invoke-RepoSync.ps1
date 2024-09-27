@@ -81,13 +81,14 @@ foreach($repo in $repos) {
         Write-Warning "Skipping: $orgAndRepoName has not been created yet."
 
     } else {
+        Write-Host "<--->" -ForegroundColor Green
         Write-Host "$([Environment]::NewLine)Updating: $orgAndRepoName.$([Environment]::NewLine)" -ForegroundColor Green
+        Write-Host "<--->" -ForegroundColor Green
 
         $existingEnvironment = $(gh api "repos/$orgAndRepoName/environments/test" 2> $null) | ConvertFrom-Json
 
-        if (($existingEnvironment.status -ne 404) -and ($repo.type -eq "avm")) {
-            if($firstRun) {
-
+        if (($existingEnvironment.status -ne 404) -and ($repo.type -eq "avm") -and $firstRun) {
+            Write-Host "First Run: Taking ownership of test environevent for $orgAndRepoName"
                 $import = @"
 import {
     to = github_repository_environment.this[0]
@@ -110,7 +111,6 @@ import {
                         }
                     }
                 }
-            }
         }
 
         terraform init `
