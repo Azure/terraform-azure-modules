@@ -1,5 +1,5 @@
 ---
-name: End to End Tests
+name: Repository Sync
 
 on:
   workflow_dispatch:
