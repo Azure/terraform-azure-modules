@@ -59,6 +59,8 @@ if($repoFilter.Length -gt 0) {
     $repos = $repos | Where-Object { $repoFilter -contains $_.id }
 }
 
+$errorLogs = @()
+
 $secretNames = @("ARM_TENANT_ID", "ARM_SUBSCRIPTION_ID", "ARM_CLIENT_ID")
 
 foreach($repo in $repos) {
@@ -80,7 +82,11 @@ foreach($repo in $repos) {
 
     if ($existingRepo.status -eq 404) {
         Write-Warning "Skipping: $orgAndRepoName has not been created yet."
-
+        $errorLogs += @{
+            orgAndRepoName = $orgAndRepoName
+            type = "repo-missing"
+            message = "Repo $orgAndRepoName does not exist."
+        }
     } else {
         Write-Host "<--->" -ForegroundColor Green
         Write-Host "$([Environment]::NewLine)Updating: $orgAndRepoName.$([Environment]::NewLine)" -ForegroundColor Green
@@ -114,18 +120,36 @@ import {
             }
         }
 
-        $ownerTeamName = $repo.ownerTeam.Replace("@Azure/", "")
-        $existingOwnerTeam = $(gh api "orgs/$orgName/teams/$($ownerTeamName)" 2> $null) | ConvertFrom-Json
-        if($existingOwnerTeam.status -eq 404) {
-            Write-Warning "Owner team does not exist: $($ownerTeamName)"
-            $ownerTeamName = ""
+        $ownerTeamName = ""
+        if($null -ne $repo.ownerTeam) {
+            $ownerTeamName = $repo.ownerTeam.Replace("@Azure/", "")
+            $existingOwnerTeam = $(gh api "orgs/$orgName/teams/$($ownerTeamName)" 2> $null) | ConvertFrom-Json
+            if($existingOwnerTeam.status -eq 404) {
+                Write-Warning "Owner team does not exist: $($ownerTeamName)"
+                $ownerTeamName = ""
+                $errorLogs += @{
+                    orgAndRepoName = $orgAndRepoName
+                    teamName = $ownerTeamName
+                    type = "owner-team-missing"
+                    message = "Team $ownerTeamName does not exist."
+                }
+            }
         }
 
-        $contributorTeamName = $repo.contributorTeam.Replace("@Azure/", "")
-        $existingContributorTeam = $(gh api "orgs/$orgName/teams/$($contributorTeamName)" 2> $null) | ConvertFrom-Json
-        if($existingContributorTeam.status -eq 404) {
-            Write-Warning "Contributor team does not exist: $($contributorTeamName)"
-            $contributorTeamName = ""
+        $contributorTeamName = ""
+        if($null -ne $repo.contributorTeam) {
+            $contributorTeamName = $repo.contributorTeam.Replace("@Azure/", "")
+            $existingContributorTeam = $(gh api "orgs/$orgName/teams/$($contributorTeamName)" 2> $null) | ConvertFrom-Json
+            if($existingContributorTeam.status -eq 404) {
+                Write-Warning "Contributor team does not exist: $($contributorTeamName)"
+                $contributorTeamName = ""
+                $errorLogs += @{
+                    orgAndRepoName = $orgAndRepoName
+                    teamName = $contributorTeamName
+                    type = "contributor-team-missing"
+                    message = "Team $contributorTeamName does not exist."
+                }
+            }
         }
 
         terraform init `
@@ -153,10 +177,22 @@ import {
 
         if($hasDestroy) {
             Write-Warning "Skipping: $orgAndRepoName as it has at least one destroy actions."
+            $errorLogs += @{
+                orgAndRepoName = $orgAndRepoName
+                plan = $plan
+                type = "plan-includes-destroy"
+                message = "Plan includes destroy for $orgAndRepoName."
+            }
         }
 
         if(!$planOnly -and $plan.errored) {
             Write-Warning "Skipping: Plan failed for $orgAndRepoName."
+            $errorLogs += @{
+                orgAndRepoName = $orgAndRepoName
+                plan = $plan
+                type = "plan-failed"
+                message = "Plan failed for $orgAndRepoName."
+            }
         }
 
         if(!$hasDestroy -and !$planOnly -and !$plan.errored) {
@@ -164,3 +200,7 @@ import {
         }
     }
 }
+
+$errorLogsJson = ConvertTo-Json $errorLogs
+
+$errorLogsJson | Out-File "error-logs.json"
