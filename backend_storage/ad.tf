@@ -18,12 +18,12 @@ resource "terraform_data" "roles_keeper" {
 resource "azuread_directory_role_assignment" "role_binding" {
   for_each = local.ad_role_names
 
-  directory_scope_id = "/"
+  directory_scope_id  = "/"
   role_id             = local.ad_roles[each.value]
   principal_object_id = azurerm_user_assigned_identity.bambrane_operator.principal_id
 
   lifecycle {
-    ignore_changes = [role_id]
+    ignore_changes       = [role_id]
     replace_triggered_by = [terraform_data.roles_keeper]
   }
 }

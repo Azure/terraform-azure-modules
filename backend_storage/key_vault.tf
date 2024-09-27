@@ -11,9 +11,9 @@ resource "azurerm_key_vault" "state_storage" {
 }
 
 resource "azurerm_key_vault_access_policy" "identity" {
-  key_vault_id    = azurerm_key_vault.state_storage.id
-  object_id       = azurerm_user_assigned_identity.state_storage_account.principal_id
-  tenant_id       = azurerm_user_assigned_identity.state_storage_account.tenant_id
+  key_vault_id = azurerm_key_vault.state_storage.id
+  object_id    = azurerm_user_assigned_identity.state_storage_account.principal_id
+  tenant_id    = azurerm_user_assigned_identity.state_storage_account.tenant_id
   key_permissions = [
     "Get",
     "UnwrapKey",
@@ -22,9 +22,9 @@ resource "azurerm_key_vault_access_policy" "identity" {
 }
 
 resource "azurerm_key_vault_access_policy" "current_user" {
-  key_vault_id    = azurerm_key_vault.state_storage.id
-  object_id       = coalesce(var.managed_identity_principal_id, data.azurerm_client_config.current.object_id)
-  tenant_id       = data.azurerm_client_config.current.tenant_id
+  key_vault_id = azurerm_key_vault.state_storage.id
+  object_id    = coalesce(var.managed_identity_principal_id, data.azurerm_client_config.current.object_id)
+  tenant_id    = data.azurerm_client_config.current.tenant_id
   key_permissions = [
     "Get",
     "Recover",
