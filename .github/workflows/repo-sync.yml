@@ -16,8 +16,8 @@ on:
         description: 'Whether to only plan the changes'
         default: true
         type: boolean
-  #schedule:
-    #- cron: '0 0,4,8,12,16,20 * * *'
+  schedule:
+    - cron: '0 0,4,8,12,16,20 * * *'
 
 permissions:
   id-token: write
@@ -25,8 +25,8 @@ permissions:
 
 jobs:
   run-sync:
+    name: Run Sync
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
     environment: avm-updates
     steps:
       - name: Checkout repository
@@ -37,9 +37,18 @@ jobs:
         shell: pwsh
       - name: Sync Repositories
         run: |
-          $repositories = "${{ inputs.repositories }}"
-          $firstRun = "${{ inputs.first_run }}" -eq "true"
-          $planOnly = "${{ inputs.plan_only }}" -eq "true"
+        
+          $triggerType = "${{ github.event_name }}"
+
+          $repositories = "All"
+          $firstRun = "false"
+          $planOnly = "false"
+
+          if($triggerType -eq "workflow_dispatch") {
+            $repositories = "${{ inputs.repositories }}"
+            $firstRun = "${{ inputs.first_run }}".ToLower() -eq "true"
+            $planOnly = "${{ inputs.plan_only }}".ToLower() -eq "true"
+          }
 
           Write-Output "Repositories: $repositories"
           Write-Output "First Run: $firstRun"
@@ -51,14 +60,25 @@ jobs:
             $repositories = $repositories -split ','
           }
 
-          ./scripts/Invoke-AvmRepoSync.ps1 -repoFilter $repositories -firstRun $firstRun -planOnly $planOnly
+          gh auth login -h "GitHub.com"
+          ./scripts/Invoke-RepoSync.ps1 -repoFilter $repositories -firstRun $firstRun -planOnly $planOnly
         shell: pwsh
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
           ARM_USE_AZUREAD: true
           ARM_USE_OIDC: true
-
-      
+      - name: Upload Issue Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue.log
+          path: issue.log
+      - name: Upload Issue Logs Json
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue.log.json
+          path: issue.log.json

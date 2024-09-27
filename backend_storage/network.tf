@@ -23,7 +23,7 @@ resource "azurerm_subnet" "bambrane_onees_pool" {
     name = "delegation"
 
     service_delegation {
-      name    = "Microsoft.CloudTest/hostedpools"
+      name = "Microsoft.CloudTest/hostedpools"
       actions = [
         "Microsoft.Network/virtualNetworks/subnets/join/action",
       ]

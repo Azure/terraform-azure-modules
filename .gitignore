@@ -39,3 +39,7 @@ terraform.rc
 
 # Mac folder attribute file
 .DS_Store
+temp
+*.tfplan
+issue.log
+issue.log.json

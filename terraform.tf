@@ -6,11 +6,11 @@ terraform {
     }
     azuread = {
       source  = "hashicorp/azuread"
-      version = "~> 2.0"
+      version = "~> 2.53"
     }
     github = {
       source  = "integrations/github"
-      version = "~> 5.43"
+      version = "~> 6.3"
     }
   }
 }
@@ -20,4 +20,6 @@ provider "azapi" {
   enable_hcl_output_for_data_source = true
 }
 
-provider "github" {}
+provider "github" {
+  owner = var.github_repository_owner
+}

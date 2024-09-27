@@ -1,20 +1,10 @@
 data "azapi_client_config" "current" {}
 
-resource "azapi_resource" "identity-rg" {
-  type     = "Microsoft.Resources/resourceGroups@2024-03-01"
-  name     = "rg-avm-identities"
-  location = "eastus2"
-  tags = {
-    "do_not_delete" : "",
-  }
-}
-
 resource "azapi_resource" "identity" {
-  for_each  = toset(local.all_repos)
   type      = "Microsoft.ManagedIdentity/userAssignedIdentities@2023-07-31-preview"
-  parent_id = azapi_resource.identity-rg.id
-  name      = "${local.all_repos_parsed[each.value].owner}-${local.all_repos_parsed[each.value].name}"
-  location  = azapi_resource.identity-rg.location
+  parent_id = "/subscriptions/${data.azapi_client_config.current.subscription_id}/resourceGroups/${var.identity_resource_group_name}"
+  name      = "${var.github_repository_owner}-${var.github_repository_name}"
+  location  = var.location
   body      = {} # empty body as HCL object is reqired to force output to be HCL and not JSON string.
   response_export_values = [
     "properties.principalId",
@@ -24,16 +14,15 @@ resource "azapi_resource" "identity" {
 }
 
 resource "azapi_resource" "identity_federated_credentials" {
-  for_each  = toset(local.all_repos)
   type      = "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2023-07-31-preview"
-  name      = "${local.all_repos_parsed[each.value].owner}-${local.all_repos_parsed[each.value].name}"
-  parent_id = azapi_resource.identity[each.key].id
-  locks     = [azapi_resource.identity[each.key].id] # not needed but added if we configure more than one environment
+  name      = "${var.github_repository_owner}-${var.github_repository_name}"
+  parent_id = azapi_resource.identity.id
+  locks     = [azapi_resource.identity.id] # not needed but added if we configure more than one environment
   body = {
     properties = {
       audiences = ["api://AzureADTokenExchange"]
       issuer    = "https://token.actions.githubusercontent.com"
-      subject   = "repo:${local.all_repos_parsed[each.value].owner}/${local.all_repos_parsed[each.value].name}:environment:${local.environment_name}"
+      subject   = "repo:${var.github_repository_owner}/${var.github_repository_name}:environment:${var.github_repository_environment_name}"
     }
   }
 }
@@ -41,16 +30,15 @@ resource "azapi_resource" "identity_federated_credentials" {
 # Add owner role assignment.
 # The condition prevents the assignee from creating new role assignments for owner, user access administratior, or role based access control administrator.
 resource "azapi_resource" "identity_role_assignment" {
-  for_each  = toset(local.all_repos)
   type      = "Microsoft.Authorization/roleAssignments@2022-04-01"
-  name      = uuidv5("url", "${each.value}${data.azapi_client_config.current.subscription_id}${data.azapi_client_config.current.tenant_id}")
+  name      = uuidv5("url", "${var.github_repository_owner}${var.github_repository_name}${data.azapi_client_config.current.subscription_id}${data.azapi_client_config.current.tenant_id}")
   parent_id = "/subscriptions/${data.azapi_client_config.current.subscription_id}"
   body = {
     properties = {
       roleDefinitionId = "/subscriptions/${data.azapi_client_config.current.subscription_id}/providers/Microsoft.Authorization/roleDefinitions/${local.role_definition_name_owner}"
       principalType    = "ServicePrincipal"
-      principalId      = azapi_resource.identity[each.key].output.properties.principalId
-      description      = "Role assignment for AVM testing. Repo: ${local.all_repos_parsed[each.value].owner}/${local.all_repos_parsed[each.value].name}"
+      principalId      = azapi_resource.identity.output.properties.principalId
+      description      = "Role assignment for AVM testing. Repo: ${var.github_repository_owner}/${var.github_repository_name}"
       conditionVersion = "2.0"
       condition        = <<CONDITION
 (

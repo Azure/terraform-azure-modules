@@ -141,7 +141,7 @@ resource "azurerm_role_assignment" "storage_contributor" {
   role_definition_name = "Storage Blob Data Contributor"
 }
 
-data azurerm_client_config this {}
+data "azurerm_client_config" "this" {}
 
 resource "azurerm_role_assignment" "subscription_contributor" {
   principal_id         = azurerm_user_assigned_identity.bambrane_operator.principal_id
