@@ -90,28 +90,35 @@ foreach($repo in $repos) {
 
         if (($existingEnvironment.status -ne 404) -and ($repo.type -eq "avm") -and $firstRun) {
             Write-Host "First Run: Taking ownership of test environevent for $orgAndRepoName"
-                $import = @"
+            $import = @"
 import {
     to = github_repository_environment.this[0]
     id = "$($repoName):test"
 }
 
 "@
-            
-                Add-Content -Path "imports.tf" -Value $import
 
-                foreach($secretName in $secretNames) {
-                    $existingSecret = $(gh api "repos/$orgAndRepoName/environments/test/secrets/$secretName" 2> $null) | ConvertFrom-Json
-                    if($existingSecret.status -ne 404) {
-                        
-                        if(!$planOnly) {
-                            Write-Host "Deleting secret: $secretName"
-                            gh api -X DELETE "repos/$orgAndRepoName/environments/test/secrets/$secretName"
-                        } else {
-                            Write-Host "Planning to delete secret: $secretName"
-                        }
+            Add-Content -Path "imports.tf" -Value $import
+
+            foreach($secretName in $secretNames) {
+                $existingSecret = $(gh api "repos/$orgAndRepoName/environments/test/secrets/$secretName" 2> $null) | ConvertFrom-Json
+                if($existingSecret.status -ne 404) {
+                    
+                    if(!$planOnly) {
+                        Write-Host "Deleting secret: $secretName"
+                        gh api -X DELETE "repos/$orgAndRepoName/environments/test/secrets/$secretName"
+                    } else {
+                        Write-Host "Planning to delete secret: $secretName"
                     }
                 }
+            }
+        }
+
+        $contributorTeamName = $repo.contributorTeam.Replace("@Azure/", "")
+        $existingContributorTeam = $(gh api "orgs/$orgName/teams/$($contributorTeamName)" 2> $null) | ConvertFrom-Json
+        if($existingContributorTeam.status -eq 404) {
+            Write-Error "Contributor team does not exist: $($contributorTeamName)"
+            $contributorTeamName = ""
         }
 
         terraform init `
@@ -124,7 +131,7 @@ import {
             -var="github_repository_owner=$orgName" `
             -var="github_repository_name=$repoName" `
             -var="github_owner_team_name=$($repo.ownerTeam)" `
-            -var="github_contributor_team_name=$($repo.contributorTeam)" `
+            -var="github_contributor_team_name=$($contributorTeamName)" `
             -var="manage_github_environment=$(($repo.type -eq "avm").ToString().ToLower())"
 
         $plan = $(terraform show -json "$($repo.id).tfplan") | ConvertFrom-Json
