@@ -25,8 +25,9 @@ permissions:
 
 jobs:
   run-sync:
+    name: Run Sync
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
+    if: 
     environment: avm-updates
     steps:
       - name: Checkout repository
@@ -37,9 +38,17 @@ jobs:
         shell: pwsh
       - name: Sync Repositories
         run: |
-          $repositories = "${{ inputs.repositories }}"
-          $firstRun = "${{ inputs.first_run }}" -eq "true"
-          $planOnly = "${{ inputs.plan_only }}" -eq "true"
+          $triggerType = "${{ github.event_name }}"
+
+          $repositories = "All"
+          $firstRun = "false"
+          $planOnly = "false"
+
+          if($triggerType -eq "workflow_dispatch") {
+            $repositories = "${{ inputs.repositories }}"
+            $firstRun = "${{ inputs.first_run }}".ToLower() -eq "true"
+            $planOnly = "${{ inputs.plan_only }}".ToLower() -eq "true"
+          }
 
           Write-Output "Repositories: $repositories"
           Write-Output "First Run: $firstRun"
@@ -51,7 +60,7 @@ jobs:
             $repositories = $repositories -split ','
           }
 
-          ./scripts/Invoke-AvmRepoSync.ps1 -repoFilter $repositories -firstRun $firstRun -planOnly $planOnly
+          ./scripts/Invoke-RepoSync.ps1 -repoFilter $repositories -firstRun $firstRun -planOnly $planOnly
         shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
