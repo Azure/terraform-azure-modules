@@ -117,7 +117,7 @@ import {
         $contributorTeamName = $repo.contributorTeam.Replace("@Azure/", "")
         $existingContributorTeam = $(gh api "orgs/$orgName/teams/$($contributorTeamName)" 2> $null) | ConvertFrom-Json
         if($existingContributorTeam.status -eq 404) {
-            Write-Error "Contributor team does not exist: $($contributorTeamName)"
+            Write-Warning "Contributor team does not exist: $($contributorTeamName)"
             $contributorTeamName = ""
         }
 
@@ -139,9 +139,13 @@ import {
         $hasDestroy = $false
         foreach($resource in $plan.resource_changes) {
             if($resource.change.actions -contains "destroy") {
-                Write-Error "Planning to destroy: $($resource.address)"
+                Write-Warning "Planning to destroy: $($resource.address)"
                 $hasDestroy = $true
             }
+        }
+
+        if($hasDestroy) {
+            Write-Warning "Skipping: $orgAndRepoName as it has at least one destroy actions."
         }
 
         if(!$hasDestroy -and !$planOnly -and !$plan.errored) {
