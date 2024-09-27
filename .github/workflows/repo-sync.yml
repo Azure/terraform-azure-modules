@@ -27,7 +27,6 @@ jobs:
   run-sync:
     name: Run Sync
     runs-on: ubuntu-latest
-    if: 
     environment: avm-updates
     steps:
       - name: Checkout repository
@@ -38,6 +37,7 @@ jobs:
         shell: pwsh
       - name: Sync Repositories
         run: |
+        
           $triggerType = "${{ github.event_name }}"
 
           $repositories = "All"
@@ -65,7 +65,6 @@ jobs:
         shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
