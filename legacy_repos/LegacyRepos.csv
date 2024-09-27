@@ -14,7 +14,5 @@ terraform-azurerm-openai,https://github.com/Azure/terraform-azurerm-openai
 terraform-azure-mdc-defender-plans-azure,https://github.com/Azure/terraform-azure-mdc-defender-plans-azure
 terraform-azurerm-database,https://github.com/Azure/terraform-azurerm-database
 terraform-azure-container-apps,https://github.com/Azure/terraform-azure-container-apps
-terraform-azurerm-avm-res-storage-storageaccounts,https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccounts
-terraform-azurerm-avm-res-keyvault-vault,https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault
 avm-gh-app,https://github.com/Azure/avm-gh-app
 oneesrunnerscleaner,https://github.com/Azure/oneesrunnerscleaner
