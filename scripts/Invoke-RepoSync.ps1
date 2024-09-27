@@ -78,9 +78,12 @@ foreach($repo in $repos) {
     $existingRepo = $(gh api "repos/$orgAndRepoName" 2> $null) | ConvertFrom-Json
 
     if ($existingRepo.status -eq 404) {
-        Write-Host "Skipping: $orgAndRepoName has not been created yet."
+        Write-Host "Skipping: $orgAndRepoName has not been created yet." -ForegroundColor Yellow
+
     } else {
-        Write-Host "Updating: $orgAndRepoName."
+        Write-Host ""
+        Write-Host "Updating: $orgAndRepoName." -ForegroundColor Green
+        Write-Host ""
 
         $existingEnvironment = $(gh api "repos/$orgAndRepoName/environments/test" 2> $null) | ConvertFrom-Json
 
@@ -100,9 +103,12 @@ import {
                 foreach($secretName in $secretNames) {
                     $existingSecret = $(gh api "repos/$orgAndRepoName/environments/test/secrets/$secretName" 2> $null) | ConvertFrom-Json
                     if($existingSecret.status -ne 404) {
-                        Write-Host "Deleting secret: $secretName"
+                        
                         if(!$planOnly) {
+                            Write-Host "Deleting secret: $secretName"
                             gh api -X DELETE "repos/$orgAndRepoName/environments/test/secrets/$secretName"
+                        } else {
+                            Write-Host "Planning to delete secret: $secretName"
                         }
                     }
                 }
