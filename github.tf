@@ -12,6 +12,11 @@ data "github_team" "owners" {
   slug = replace(var.github_owner_team_name, "@Azure/", "")
 }
 
+data "github_team" "contributors" {
+  count = var.manage_github_environment ? 1 : 0
+  slug = replace(var.github_contributor_team_name, "@Azure/", "")
+}
+
 resource "github_repository_environment" "this" {
   count               = var.manage_github_environment ? 1 : 0
   environment         = var.github_repository_environment_name
@@ -19,7 +24,8 @@ resource "github_repository_environment" "this" {
   reviewers {
     teams = [
       data.github_team.avm_core[0].id,
-      data.github_team.owners[0].id
+      data.github_team.owners[0].id,
+      data.github_team.contributors[0].id
     ]
   }
   deployment_branch_policy {

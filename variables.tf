@@ -32,6 +32,11 @@ variable "github_owner_team_name" {
   description = "Name of the GitHub owner team."
 }
 
+variable "github_contributor_team_name" {
+  type        = string
+  description = "Name of the GitHub owner team."
+}
+
 variable "location" {
   type        = string
   description = "Location of the resources."

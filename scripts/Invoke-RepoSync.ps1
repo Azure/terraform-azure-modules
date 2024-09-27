@@ -45,11 +45,12 @@ foreach ($csvFile in $csvFiles) {
   $reposFromFile = Import-Csv $($csvFile.path)
   foreach ($repoFromFile in $reposFromFile) {
     $repos += @{
-      id = $repoFromFile.ModuleName
-      url = $repoFromFile.RepoURL
-      type = $csvFile.type
-      subtype = $csvFile.subtype
-      ownerTeam = $repoFromFile.ModuleOwnersGHTeam
+      id              = $repoFromFile.ModuleName
+      url             = $repoFromFile.RepoURL
+      type            = $csvFile.type
+      subtype         = $csvFile.subtype
+      ownerTeam       = $repoFromFile.ModuleOwnersGHTeam
+      contributorTeam = $repoFromFile.ModuleContributorsGHTeam
     }
   }
 }
