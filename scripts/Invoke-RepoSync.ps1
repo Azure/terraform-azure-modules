@@ -124,6 +124,7 @@ import {
             -var="github_repository_owner=$orgName" `
             -var="github_repository_name=$repoName" `
             -var="github_owner_team_name=$($repo.ownerTeam)" `
+            -var="github_contributor_team_name=$($repo.contributorTeam)" `
             -var="manage_github_environment=$(($repo.type -eq "avm").ToString().ToLower())"
 
         $plan = $(terraform show -json "$($repo.id).tfplan") | ConvertFrom-Json
