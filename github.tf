@@ -30,11 +30,7 @@ resource "github_repository_environment" "this" {
   environment = var.github_repository_environment_name
   repository  = data.github_repository.this.name
   reviewers {
-    teams = [
-      data.github_team.avm_core[0].id,
-      data.github_team.owners[0].id,
-      data.github_team.contributors[0].id
-    ]
+    teams = local.environment_teams
   }
   deployment_branch_policy {
     protected_branches     = true
