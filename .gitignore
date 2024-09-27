@@ -41,3 +41,5 @@ terraform.rc
 .DS_Store
 temp
 *.tfplan
+issue.log
+issue.log.json

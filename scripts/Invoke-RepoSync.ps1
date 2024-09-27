@@ -11,7 +11,7 @@ param(
     [string]$stateStorageAccountName = "stoavmstate",
     [string]$stateResourceGroupName = "rg-avm-state",
     [string]$stateContainerName = "avm-state",
-    [array]$repoFilter = @("avm-res-network-virtualnetwork", "avm-res-network-connection"),
+    [array]$repoFilter = @("avm-res-network-virtualnetwork", "avm-res-appconfiguration-configurationstore"),
     [bool]$planOnly = $false,
     [bool]$firstRun = $false,
     [array]$csvFiles = @( 
@@ -38,6 +38,31 @@ param(
     )
 )
 
+function Add-IssueToLog {
+    param(
+        [string]$orgAndRepoName,
+        [string]$type,
+        [string]$message,
+        [object]$data,
+        [array]$issueLog,
+        [string]$issueLogFile="issue.log"
+    )
+
+    $issueLogItem = @{
+        orgAndRepoName = $orgAndRepoName
+        type = $type
+        message = $message
+        data = $data
+    }
+
+    $issueLog += $issueLogItem
+
+    $issueLogItemJson = ConvertTo-Json $issueLogItem -Depth 100
+    Add-Content -Path $issueLogFile -Value $issueLogItemJson
+
+    return $issueLog
+}
+
 $env:ARM_USE_AZUREAD = "true"
 $repos = @()
 
@@ -59,7 +84,7 @@ if($repoFilter.Length -gt 0) {
     $repos = $repos | Where-Object { $repoFilter -contains $_.id }
 }
 
-$errorLogs = @()
+$issueLog = @()
 
 $secretNames = @("ARM_TENANT_ID", "ARM_SUBSCRIPTION_ID", "ARM_CLIENT_ID")
 
@@ -82,11 +107,7 @@ foreach($repo in $repos) {
 
     if ($existingRepo.status -eq 404) {
         Write-Warning "Skipping: $orgAndRepoName has not been created yet."
-        $errorLogs += @{
-            orgAndRepoName = $orgAndRepoName
-            type = "repo-missing"
-            message = "Repo $orgAndRepoName does not exist."
-        }
+        $issueLog = Add-IssueToLog -orgAndRepoName $orgAndRepoName -type "repo-missing" -message "Repo $orgAndRepoName does not exist." -issueLog $issueLog
     } else {
         Write-Host "<--->" -ForegroundColor Green
         Write-Host "$([Environment]::NewLine)Updating: $orgAndRepoName.$([Environment]::NewLine)" -ForegroundColor Green
@@ -126,13 +147,8 @@ import {
             $existingOwnerTeam = $(gh api "orgs/$orgName/teams/$($ownerTeamName)" 2> $null) | ConvertFrom-Json
             if($existingOwnerTeam.status -eq 404) {
                 Write-Warning "Owner team does not exist: $($ownerTeamName)"
+                $issueLog = Add-IssueToLog -orgAndRepoName $orgAndRepoName -type "owner-team-missing" -message "Team $ownerTeamName does not exist." -data $ownerTeamName -issueLog $issueLog
                 $ownerTeamName = ""
-                $errorLogs += @{
-                    orgAndRepoName = $orgAndRepoName
-                    teamName = $ownerTeamName
-                    type = "owner-team-missing"
-                    message = "Team $ownerTeamName does not exist."
-                }
             }
         }
 
@@ -142,13 +158,8 @@ import {
             $existingContributorTeam = $(gh api "orgs/$orgName/teams/$($contributorTeamName)" 2> $null) | ConvertFrom-Json
             if($existingContributorTeam.status -eq 404) {
                 Write-Warning "Contributor team does not exist: $($contributorTeamName)"
+                $issueLog = Add-IssueToLog -orgAndRepoName $orgAndRepoName -type "contributor-team-missing" -message "Team $contributorTeamName does not exist." -data $contributorTeamName -issueLog $issueLog
                 $contributorTeamName = ""
-                $errorLogs += @{
-                    orgAndRepoName = $orgAndRepoName
-                    teamName = $contributorTeamName
-                    type = "contributor-team-missing"
-                    message = "Team $contributorTeamName does not exist."
-                }
             }
         }
 
@@ -177,22 +188,12 @@ import {
 
         if($hasDestroy) {
             Write-Warning "Skipping: $orgAndRepoName as it has at least one destroy actions."
-            $errorLogs += @{
-                orgAndRepoName = $orgAndRepoName
-                plan = $plan
-                type = "plan-includes-destroy"
-                message = "Plan includes destroy for $orgAndRepoName."
-            }
+            $issueLog = Add-IssueToLog -orgAndRepoName $orgAndRepoName -type "plan-includes-destroy" -message "Plan includes destroy for $orgAndRepoName." -data $plan -issueLog $issueLog
         }
 
         if(!$planOnly -and $plan.errored) {
             Write-Warning "Skipping: Plan failed for $orgAndRepoName."
-            $errorLogs += @{
-                orgAndRepoName = $orgAndRepoName
-                plan = $plan
-                type = "plan-failed"
-                message = "Plan failed for $orgAndRepoName."
-            }
+            $issueLog = Add-IssueToLog -orgAndRepoName $orgAndRepoName -type "plan-failed" -message "Plan failed for $orgAndRepoName." -data $plan -issueLog $issueLog
         }
 
         if(!$hasDestroy -and !$planOnly -and !$plan.errored) {
@@ -201,6 +202,6 @@ import {
     }
 }
 
-$errorLogsJson = ConvertTo-Json $errorLogs
+$issueLogJson = ConvertTo-Json $issueLog -Depth 100
 
-$errorLogsJson | Out-File "error-logs.json"
+$issueLogJson | Out-File "issue.log.json"

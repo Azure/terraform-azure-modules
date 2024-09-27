@@ -71,8 +71,15 @@ jobs:
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
           ARM_USE_AZUREAD: true
           ARM_USE_OIDC: true
-      - name: Upload Error Logs
+      - name: Upload Issue Logs
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: error-logs.json
-          path: error-logs.json
+          name: issue.log
+          path: issue.log
+      - name: Upload Issue Logs Json
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue.log.json
+          path: issue.log.json
