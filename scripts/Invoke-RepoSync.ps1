@@ -148,6 +148,10 @@ import {
             Write-Warning "Skipping: $orgAndRepoName as it has at least one destroy actions."
         }
 
+        if(!$planOnly -and !$plan.errored) {
+            Write-Warning "Skipping: Plan failed for $orgAndRepoName."
+        }
+
         if(!$hasDestroy -and !$planOnly -and !$plan.errored) {
             terraform apply "$($repo.id).tfplan"
         }
