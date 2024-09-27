@@ -85,7 +85,7 @@ foreach($repo in $repos) {
 
         $existingEnvironment = $(gh api "repos/$orgAndRepoName/environments/test" 2> $null) | ConvertFrom-Json
 
-        if ($existingEnvironment.status -ne 404) {
+        if (($existingEnvironment.status -ne 404) -and ($repo.type -eq "avm")) {
             if($firstRun) {
 
                 $import = @"
