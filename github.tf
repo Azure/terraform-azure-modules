@@ -19,7 +19,7 @@ data "github_team" "contributors" {
 
 locals {
   environment_teams = concat([data.github_team.avm_core[0].id],
-    var.var.github_owner_team_name == "" ? [] : [data.github_team.owners[0].id],
+    var.github_owner_team_name == "" ? [] : [data.github_team.owners[0].id],
     var.github_contributor_team_name == "" ? [] : [data.github_team.contributors[0].id]
   )
 }
