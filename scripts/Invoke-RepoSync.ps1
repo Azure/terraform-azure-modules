@@ -78,22 +78,10 @@ foreach($repo in $repos) {
     $existingRepo = $(gh api "repos/$orgAndRepoName" 2> $null) | ConvertFrom-Json
 
     if ($existingRepo.status -eq 404) {
-        $message = [System.Management.Automation.HostInformationMessage]@{
-            Message         = "Skipping: $orgAndRepoName has not been created yet."
-            ForegroundColor = "Yellow"
-            BackgroundColor = $Host.UI.RawUI.BackgroundColor ?? "Black"
-            NoNewLine       = $false
-        }
-        Write-Information $message
+        Write-Information "Skipping: $orgAndRepoName has not been created yet." -ForegroundColor Yellow
 
     } else {
-        $message = [System.Management.Automation.HostInformationMessage]@{
-            Message         = "$([Environment]::NewLine)Updating: $orgAndRepoName."
-            ForegroundColor = "Green"
-            BackgroundColor = $Host.UI.RawUI.BackgroundColor ?? "Black"
-            NoNewLine       = $false
-        }
-        Write-Information $message
+        Write-Information "$([Environment]::NewLine)Updating: $orgAndRepoName.$([Environment]::NewLine)" -ForegroundColor Green
 
         $existingEnvironment = $(gh api "repos/$orgAndRepoName/environments/test" 2> $null) | ConvertFrom-Json
 
