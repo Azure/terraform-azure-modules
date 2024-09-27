@@ -81,7 +81,7 @@ foreach($repo in $repos) {
         Write-Warning "Skipping: $orgAndRepoName has not been created yet."
 
     } else {
-        Write-Output "$([Environment]::NewLine)Updating: $orgAndRepoName.$([Environment]::NewLine)"
+        Write-Host "$([Environment]::NewLine)Updating: $orgAndRepoName.$([Environment]::NewLine)" -ForegroundColor Green
 
         $existingEnvironment = $(gh api "repos/$orgAndRepoName/environments/test" 2> $null) | ConvertFrom-Json
 
