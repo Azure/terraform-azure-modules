@@ -41,8 +41,8 @@ jobs:
           $triggerType = "${{ github.event_name }}"
 
           $repositories = "All"
-          $firstRun = "false"
-          $planOnly = "false"
+          $firstRun = $false
+          $planOnly = $false
 
           if($triggerType -eq "workflow_dispatch") {
             $repositories = "${{ inputs.repositories }}"
