@@ -32,10 +32,6 @@ resource "github_repository_environment" "this" {
   reviewers {
     teams = local.environment_teams
   }
-  deployment_branch_policy {
-    protected_branches     = false
-    custom_branch_policies = false
-  }
 }
 
 resource "github_actions_environment_secret" "tenant_id" {
