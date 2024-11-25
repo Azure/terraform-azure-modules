@@ -8,9 +8,11 @@
 # Must run gh auth login -h "GitHub.com" before running this script
 
 param(
-    [string]$stateStorageAccountName = "stoavmstate",
-    [string]$stateResourceGroupName = "rg-avm-state",
-    [string]$stateContainerName = "avm-state",
+    [string]$stateStorageAccountName,
+    [string]$stateResourceGroupName,
+    [string]$stateContainerName,
+    [string]$targetSubscriptionId,
+    [string]$identityResourceGroupName,
     [array]$repoFilter = @(),
     [bool]$planOnly = $false,
     [bool]$firstRun = $false,
@@ -174,7 +176,9 @@ import {
             -var="github_repository_name=$repoName" `
             -var="github_owner_team_name=$($ownerTeamName)" `
             -var="github_contributor_team_name=$($contributorTeamName)" `
-            -var="manage_github_environment=$(($repo.type -eq "avm").ToString().ToLower())"
+            -var="manage_github_environment=$(($repo.type -eq "avm").ToString().ToLower())" `
+            -var="target_subscription_id"=$($targetSubscriptionId) `
+            -var="identity_resource_group_name=$($identityResourceGroupName)"
 
         $plan = $(terraform show -json "$($repo.id).tfplan") | ConvertFrom-Json
 
