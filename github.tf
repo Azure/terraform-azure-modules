@@ -47,7 +47,7 @@ resource "github_actions_environment_secret" "subscription_id" {
   repository      = data.github_repository.this.name
   environment     = github_repository_environment.this[0].environment
   secret_name     = "ARM_SUBSCRIPTION_ID"
-  plaintext_value = data.azapi_client_config.current.subscription_id
+  plaintext_value = var.target_subscription_id
 }
 
 resource "github_actions_environment_secret" "client_id" {
