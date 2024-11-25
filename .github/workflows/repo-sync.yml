@@ -61,7 +61,13 @@ jobs:
           }
 
           gh auth login -h "GitHub.com"
-          ./scripts/Invoke-RepoSync.ps1 -repoFilter $repositories -firstRun $firstRun -planOnly $planOnly
+          ./scripts/Invoke-RepoSync.ps1 `
+            -repoFilter $repositories `
+            -firstRun $firstRun `
+            -planOnly $planOnly `
+            -stateStorageAccountName "${{ secrets.STORAGE_ACCOUNT_NAME }}" `
+            -stateResourceGroupName "${{ secrets.STORAGE_ACCOUNT_RESOURCE_GROUP_NAME }}" `
+            -stateContainerName "${{ secrets.STORAGE_ACCOUNT_CONTAINER_NAME }}" `
         shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
