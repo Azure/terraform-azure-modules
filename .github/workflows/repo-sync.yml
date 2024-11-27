@@ -45,7 +45,7 @@ jobs:
           
       - name: Sync Repositories
         run: |
-        
+                  
           $triggerType = "${{ github.event_name }}"
 
           $repositories = "All"
@@ -58,6 +58,7 @@ jobs:
             $planOnly = "${{ inputs.plan_only }}".ToLower() -eq "true"
           }
 
+          Write-Output "Token: $env:GH_TOKEN"
           Write-Output "Repositories: $repositories"
           Write-Output "First Run: $firstRun"
           Write-Output "Plan Only: $planOnly"
