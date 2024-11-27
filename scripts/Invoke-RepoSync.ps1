@@ -40,6 +40,8 @@ param(
     )
 )
 
+Write-Host "Running repo sync script"
+
 function Add-IssueToLog {
     param(
         [string]$orgAndRepoName,
@@ -68,6 +70,7 @@ function Add-IssueToLog {
 $env:ARM_USE_AZUREAD = "true"
 $repos = @()
 
+Write-Host "Getting repositories from csv files"
 foreach ($csvFile in $csvFiles) {
   $reposFromFile = Import-Csv $($csvFile.path)
   foreach ($repoFromFile in $reposFromFile) {
@@ -82,6 +85,7 @@ foreach ($csvFile in $csvFiles) {
   }
 }
 
+Write-Host "Filtering repositories"
 if($repoFilter.Length -gt 0) {
     $repos = $repos | Where-Object { $repoFilter -contains $_.id }
 }
@@ -90,7 +94,10 @@ $issueLog = @()
 
 $secretNames = @("ARM_TENANT_ID", "ARM_SUBSCRIPTION_ID", "ARM_CLIENT_ID")
 
+Write-Host "Iterating repositories"
+
 foreach($repo in $repos) {
+    Write-Host "Checking $($repo.id)"
     if(Test-Path "imports.tf") {
         Remove-Item "imports.tf" -Force
     }
