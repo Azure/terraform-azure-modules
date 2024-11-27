@@ -69,7 +69,9 @@ jobs:
             $repositories = $repositories -split ','
           }
 
+          Write-Host "Authenticating gh cli"
           gh auth login -h "GitHub.com"
+          Write-Host "Running repo sync"
           ./scripts/Invoke-RepoSync.ps1 `
             -repoFilter $repositories `
             -firstRun $firstRun `
