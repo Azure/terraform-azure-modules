@@ -45,7 +45,7 @@ jobs:
           
       - name: Sync Repositories
         run: |
-                  
+
           $triggerType = "${{ github.event_name }}"
 
           $repositories = "All"
