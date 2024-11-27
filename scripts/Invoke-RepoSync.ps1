@@ -40,6 +40,8 @@ param(
     )
 )
 
+Write-Host "Running repo sync"
+
 function Add-IssueToLog {
     param(
         [string]$orgAndRepoName,
