@@ -91,6 +91,7 @@ $issueLog = @()
 $secretNames = @("ARM_TENANT_ID", "ARM_SUBSCRIPTION_ID", "ARM_CLIENT_ID")
 
 foreach($repo in $repos) {
+    Write-Host "Checking $repo.id"
     if(Test-Path "imports.tf") {
         Remove-Item "imports.tf" -Force
     }
