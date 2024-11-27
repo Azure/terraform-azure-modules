@@ -35,6 +35,13 @@ jobs:
         run: |
           ./scripts/Invoke-AvmRepoCsvDownload.ps1
         shell: pwsh
+      - name: Create GitHub App Token
+        id: app-token
+        uses: actions/create-github-app-token@v1.11.0
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          
       - name: Sync Repositories
         run: |
         
@@ -72,12 +79,13 @@ jobs:
             -identityResourceGroupName "${{ secrets.IDENTITY_RESOURCE_GROUP_NAME }}" `
         shell: pwsh
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
           ARM_USE_AZUREAD: true
           ARM_USE_OIDC: true
+        
       - name: Upload Issue Logs
         if: always()
         uses: actions/upload-artifact@v4
