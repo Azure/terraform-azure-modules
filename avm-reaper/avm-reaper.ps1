@@ -1,3 +1,5 @@
+Import-Module Az.ResourceGraph
+
 $clientId = Get-AutomationVariable -Name 'ARM_CLIENT_ID'
 $subscriptionId = Get-AutomationVariable -Name 'ARM_SUBSCRIPTION_ID'
 
@@ -10,6 +12,7 @@ $connectedSubscriptionId = (Get-AzContext).Subscription.id
 Write-Output "Subscription Id: $connectedSubscriptionId"
 
 $reaperDelay = Get-AutomationVariable -Name 'REAPER_DELAY_HOURS'
+$resourceGraphQueryLookBackDays = Get-AutomationVariable -Name 'RESOURCE_GRAPH_QUERY_LOOK_BACK_DAYS'
 $currentDate = Get-Date
 $reapDate = ($currentDate).AddHours(0 - $reaperDelay)
 
@@ -22,12 +25,12 @@ resourcecontainerchanges `
     | where subscriptionId == "$subscriptionId"
     | where properties.targetResourceType == "microsoft.resources/subscriptions/resourcegroups"
     | where properties.changeType == "Create"
-    | where todatetime(properties.changeAttributes.timestamp) > now(-7d)
+    | where todatetime(properties.changeAttributes.timestamp) > now(-$($resourceGraphQueryLookBackDays)d)
     | extend changeTime = todatetime(properties.changeAttributes.timestamp), resourceGroupName = split(properties.targetResourceId, "/")[4]
     | order by changeTime desc
     | project changeTime, resourceGroupName
 "@
-$resourceGroupQueryResults = Search-AzGraph -Query $resourceGraphQuery
+$resourceGroupQueryResults = Search-AzGraph -Query $resourceGraphQuery -First 1000
 
 $resourceGroupDates = @{}
 
@@ -37,6 +40,9 @@ foreach($resourceGroupQueryResult in $resourceGroupQueryResults) {
     }
     $resourceGroupDates.Add($resourceGroupQueryResult.resourceGroupName, $resourceGroupQueryResult.changeTime)
 }
+
+Write-Output "Resource groups created in last $resourceGraphQueryLookBackDays days:"
+Write-Output (ConvertTo-Json $resourceGroupDates)
 
 foreach($resourceGroup in $resourceGroups) {
     $resourceGroupName = $resourceGroup.ResourceGroupName
