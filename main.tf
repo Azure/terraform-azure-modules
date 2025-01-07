@@ -64,3 +64,12 @@ CONDITION
     }
   }
 }
+
+data "azuread_group" "entra_readers" {
+  display_name     = "grp-sec-avm-tf-end-to-end-testing-entra-readers"
+}
+
+resource "azuread_group_member" "example" {
+  group_object_id  = data.azuread_group.entra_readers.object_id
+  member_object_id = azapi_resource.identity.output.properties.principalId
+}
