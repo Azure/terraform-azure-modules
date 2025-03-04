@@ -1,5 +1,5 @@
 ---
-name: Repository Sync
+name: Repository Sync For CSV
 
 on:
   workflow_dispatch:

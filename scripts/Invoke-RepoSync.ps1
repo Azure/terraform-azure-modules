@@ -17,7 +17,7 @@ param(
     [bool]$planOnly = $false,
     [bool]$firstRun = $false,
     [array]$csvFiles = @( 
-        @{
+       <#  @{
             path = "./temp/TerraformResourceModules.csv"
             type = "avm"
             subtype = "resource"
@@ -31,7 +31,7 @@ param(
             path = "./temp/TerraformUtilityModules.csv"
             type = "avm"
             subtype = "utility"
-        },
+        }, #>
         @{
             path = "./legacy_repos/LegacyRepos.csv"
             type = "legacy"
