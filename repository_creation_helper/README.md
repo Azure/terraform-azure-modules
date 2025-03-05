@@ -1,4 +1,4 @@
-# Repository Creation Steps
+# Azure Verified Modules - Repository Creation Steps
 
 1. Login to GitHub CLI: `gh auth login -h "github.com" -w -p "https" -s "delete_repo" -s "workflow" -s "read:user" -s "user:email"`
 2. Follow the prompts to login to your GitHub account.
