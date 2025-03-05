@@ -18,3 +18,6 @@
 5. Now head back to the console, then type `yes` and hit enter to complete the repository configuration
 6. Request `Azure Verified Modules` GitHub App installation using this link: https://github.com/microsoft/github-operations/issues/new/choose
 7. Once the GitHub App is installed, the rest of the repository setup will continue automatically within 4 hours
+8. Send an email or Teams message to the module owner to let them know the repository has been created
+9. Remove the `Status: Ready For Repository Creation` label from the [Issue](https://github.com/Azure/Azure-Verified-Modules/issues)
+10. Add the `Status: Repository Created` label to the [Issue](https://github.com/Azure/Azure-Verified-Modules/issues)
