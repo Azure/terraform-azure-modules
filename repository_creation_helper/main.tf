@@ -1,6 +1,8 @@
 locals {
   github_repository_name        = "terraform-${var.module_provider}-${var.module_id}"
-  github_reposisory_description = "Terraform Azure Verified Module for ${var.module_name}"
+  module_type                   = split("-", var.module_id)[1]
+  module_type_name              = local.module_type == "res" ? "Resource" : (local.module_type == "ptn" ? "Pattern" : "Utility")
+  github_reposisory_description = "Terraform Azure Verified ${local.module_type_name} Module for ${var.module_name}"
 }
 
 import {
