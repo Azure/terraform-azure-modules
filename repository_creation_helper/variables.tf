@@ -9,6 +9,12 @@ variable "module_owner_github_handle" {
   description = "GitHub handle of the module owner."
 }
 
+variable "module_provider" {
+  type        = string
+  description = "Terraform Provider of the AVM (e.g. azurerm or azapi)"
+  default     = "azurerm"
+}
+
 variable "module_id" {
   type        = string
   description = "ID of the AVM (e.g. avm-ptn-alz-managment)"

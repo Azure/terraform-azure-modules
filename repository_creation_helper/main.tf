@@ -1,5 +1,5 @@
 locals {
-  github_repository_name        = "terraform-azurerm-${var.module_id}"
+  github_repository_name        = "terraform-${var.module_provider}-${var.module_id}"
   github_reposisory_description = "Terraform Azure Verified Module for ${var.module_name}"
 }
 

@@ -5,11 +5,16 @@
 3. Run the following PowerShell command to create a new repository:
 
     ```pwsh
-    $moduleName = "avm-res-example-test-11" # Replace with the module name (do not include the "terraform-azurerm" prefix)
+    $moduleProvider = "azurerm"
+    $moduleName = "avm-res-example-test" # Replace with the module name (do not include the "terraform-azurerm" prefix)
     $moduleDescription = "Resource Module for Testing Purposes" # Replace with a short description of the module
     $moduleOwner = "github-username" # Replace with the GitHub handle of the module owner
 
-    ./New-Repository.ps1 -moduleName $moduleName -moduleDescription $moduleDescription -moduleOwner $moduleOwner
+    ./New-Repository.ps1 `
+        -moduleProvider $moduleProvider `
+        -moduleName $moduleName `
+        -moduleDescription $moduleDescription `
+        -moduleOwner $moduleOwner
 
     ```
 

@@ -1,10 +1,18 @@
 param (
+  [string]$moduleProvider = "azurerm",
   [string]$moduleName,
   [string]$moduleDescription,
   [string]$moduleOwner
 )
 
-$repositoryName = "terraform-azurerm-$moduleName"
+$moduleNameRegex = "^avm-(res|ptn|utl)-[a-z-]+$"
+
+if($moduleName -notmatch $moduleNameRegex) {
+  Write-Error "Module name must be in the format '$moduleNameRegex'" -Category InvalidArgument
+  return
+}
+
+$repositoryName = "terraform-$moduleProvider-$moduleName"
 
 Write-Host "Creating repository $moduleName"
 
@@ -20,6 +28,7 @@ while($response -ne "yes") {
 }
 
 $tfvars = @{
+  module_provider = $moduleProvider
   module_id = $moduleName
   module_name = $moduleDescription
   module_owner_github_handle = $moduleOwner
