@@ -47,4 +47,4 @@ if(Test-Path ".terraform.lock.hcl") {
 }
 
 terraform init
-terraform apply
+terraform apply -auto-approve
