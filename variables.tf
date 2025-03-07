@@ -52,3 +52,9 @@ variable "manage_github_environment" {
   description = "Whether to manage the environment."
   default     = false
 }
+
+variable "github_labels_source_url" {
+  type        = string
+  description = "Source url for labels."
+  default     = "https://azure.github.io/Azure-Verified-Modules/governance/avm-standard-github-labels.csv"
+}
