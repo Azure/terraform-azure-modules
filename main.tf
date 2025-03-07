@@ -66,7 +66,7 @@ CONDITION
 }
 
 data "azuread_group" "entra_readers" {
-  display_name     = "grp-sec-avm-tf-end-to-end-testing-entra-readers"
+  display_name = "grp-sec-avm-tf-end-to-end-testing-entra-readers"
 }
 
 resource "azuread_group_member" "example" {

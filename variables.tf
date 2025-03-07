@@ -6,7 +6,7 @@ variable "target_subscription_id" {
 variable "identity_resource_group_name" {
   type        = string
   description = "Name of the resource group to create the identities in."
- }
+}
 
 variable "github_repository_owner" {
   type        = string
