@@ -1,3 +1,6 @@
 ModuleName
-avm-res-network-virtualnetwork
+avm-ptn-alz
 avm-ptn-hubnetworking
+avm-ptn-virtualwan
+avm-ptn-alz-management
+avm-ptn-network-private-link-private-dns-zones
