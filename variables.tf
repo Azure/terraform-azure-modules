@@ -6,7 +6,7 @@ variable "target_subscription_id" {
 variable "identity_resource_group_name" {
   type        = string
   description = "Name of the resource group to create the identities in."
- }
+}
 
 variable "github_repository_owner" {
   type        = string
@@ -50,5 +50,17 @@ variable "location" {
 variable "manage_github_environment" {
   type        = bool
   description = "Whether to manage the environment."
+  default     = false
+}
+
+variable "github_labels_source_path" {
+  type        = string
+  description = "Source csv for labels."
+  default     = "./temp/labels.csv"
+}
+
+variable "is_protected_repo" {
+  type        = bool
+  description = "Whether the repository is protected and requires pull request approval."
   default     = false
 }

@@ -26,9 +26,11 @@ locals {
 }
 
 resource "github_repository_environment" "this" {
-  count       = var.manage_github_environment ? 1 : 0
-  environment = var.github_repository_environment_name
-  repository  = data.github_repository.this.name
+  count               = var.manage_github_environment ? 1 : 0
+  environment         = var.github_repository_environment_name
+  repository          = data.github_repository.this.name
+  can_admins_bypass   = true
+  prevent_self_review = false
   reviewers {
     teams = local.environment_teams
   }

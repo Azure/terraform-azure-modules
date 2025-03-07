@@ -36,6 +36,10 @@ jobs:
         with:
           terraform_version: latest
           terraform_wrapper: false
+      - name: Download Labels CSV File
+        run: |
+          ./scripts/Invoke-AvmLabelsCsvDownload.ps1
+        shell: pwsh
       - name: Create GitHub App Token
         id: app-token
         uses: actions/create-github-app-token@v1.11.0
@@ -43,7 +47,7 @@ jobs:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
-          
+
       - name: Sync Repositories
         run: |
 
@@ -90,7 +94,7 @@ jobs:
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
           ARM_USE_AZUREAD: true
           ARM_USE_OIDC: true
-        
+
       - name: Upload Issue Logs
         if: always()
         uses: actions/upload-artifact@v4
