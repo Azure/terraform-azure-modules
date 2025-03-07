@@ -7,7 +7,7 @@ locals {
   labels = { for label in local.label_list : label.Name => {
     name = label.Name
     color = label.HEX
-    description = strcontains(label.Description, ":") ? split(":", split(".",label.Description)[0])[1] : label.Description
+    description = strcontains(label.Description, ":") ? replace(split(":", split(".",label.Description)[0])[1], "this", "This"): label.Description
   } }
 }
 
