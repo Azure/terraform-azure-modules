@@ -58,3 +58,9 @@ variable "github_labels_source_path" {
   description = "Source csv for labels."
   default     = "./temp/labels.csv"
 }
+
+variable "is_protected_repo" {
+  type        = bool
+  description = "Whether the repository is protected and requires pull request approval."
+  default     = false
+}

@@ -80,6 +80,8 @@ foreach ($installedRepository in $installedRepositories) {
     $moduleType = "utility"
   }
 
+  $protectedRepos = Import-Csv "./protected_repos/ProtectedRepos.csv"
+
   $repos += @{
     id              = $moduleName
     url             = $installedRepository.html_url
@@ -87,6 +89,7 @@ foreach ($installedRepository in $installedRepositories) {
     subtype         = $moduleType
     ownerTeam       = "@Azure/$($moduleName)-module-owners-tf"
     contributorTeam = "@Azure/$($moduleName)-module-contributors-tf"
+    isProtected     = $protectedRepos.ModuleName -contains $moduleName
   }
 }
 
@@ -144,7 +147,7 @@ import {
             foreach($secretName in $secretNames) {
                 $existingSecret = $(gh api "repos/$orgAndRepoName/environments/test/secrets/$secretName" 2> $null) | ConvertFrom-Json
                 if($existingSecret.status -ne 404) {
-                    
+
                     if(!$planOnly) {
                         Write-Host "Deleting secret: $secretName"
                         gh api -X DELETE "repos/$orgAndRepoName/environments/test/secrets/$secretName"
@@ -190,7 +193,8 @@ import {
             -var="github_contributor_team_name=$($contributorTeamName)" `
             -var="manage_github_environment=$(($repo.type -eq "avm").ToString().ToLower())" `
             -var="target_subscription_id"=$($targetSubscriptionId) `
-            -var="identity_resource_group_name=$($identityResourceGroupName)"
+            -var="identity_resource_group_name=$($identityResourceGroupName)" `
+            -var="is_protected_repo=$(($repo.isProtected).ToString().ToLower())"
 
         $plan = $(terraform show -json "$($repo.id).tfplan") | ConvertFrom-Json
 
