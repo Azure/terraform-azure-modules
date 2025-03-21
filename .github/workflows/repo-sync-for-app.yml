@@ -31,6 +31,7 @@ jobs:
 
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
+      matrixParallel: ${{ steps.matrix.outputs.matrixParallel }}
 
     steps:
       - name: Checkout Bootstrap Modules
@@ -53,6 +54,12 @@ jobs:
 
           if($triggerType -eq "workflow_dispatch") {
             $repositories = "${{ inputs.repositories }}"
+            $firstRun = "${{ inputs.first_run }}".ToLower() -eq "true"
+            matrixParallel = 5
+            if($firstRun) {
+              $matrixParallel = 1
+            }
+            Write-Output "matrixParallel=$matrixParallel" >> $env:GITHUB_OUTPUT
           }
 
           if($repositories -eq "All") {
@@ -75,7 +82,7 @@ jobs:
     needs: generate-matrix
     strategy:
       fail-fast: false
-      max-parallel: 5
+      max-parallel: ${{ needs.generate-matrix.outputs.matrixParallel }}
       matrix:
         include: ${{ fromJSON(needs.generate-matrix.outputs.matrix) }}
     steps:
