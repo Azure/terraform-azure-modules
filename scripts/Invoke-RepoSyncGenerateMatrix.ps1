@@ -27,14 +27,25 @@ while($incompleteResults) {
   $page++
 }
 
+$validPrefixes = @("terraform-azurerm-", "terraform-azapi-")
+
 foreach ($installedRepository in ($installedRepositories | Sort-Object -Property name)) {
 
-  if(!$installedRepository.name.StartsWith("terraform-azurerm-")) {
-    Write-Host "Skipping $($installedRepository.name) as it does not start with terraform-azurerm-"
+  $skipRepository = $true
+  $moduleName = ""
+
+  foreach($validPrefix in $validPrefixes) {
+    if($installedRepository.name.StartsWith($validPrefix)) {
+      $moduleName = $installedRepository.name.Replace($validPrefix, "")
+      $skipRepository = $false
+    }
+  }
+
+  if($skipRepository) {
+    Write-Host "Skipping $($installedRepository.name) as it does not start with a valid prefix"
     continue
   }
 
-  $moduleName = $installedRepository.name.Replace("terraform-azurerm-", "")
   if(!$moduleName.StartsWith("avm-")) {
     Write-Host "Skipping $($installedRepository.name) as it does not start with avm-"
     continue
