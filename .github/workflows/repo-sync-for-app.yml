@@ -69,7 +69,7 @@ jobs:
           } else {
             $repositories = $repositories -split ','
           }
-          $matrix = ./scripts/Invoke-RepoSyncGenerateMatrix.ps1 -repoFilter $repositories
+          $matrix = @(./scripts/Invoke-RepoSyncGenerateMatrix.ps1 -repoFilter $repositories)
           $matrixJson = ConvertTo-Json $matrix -Depth 10 -Compress
           Write-Host (ConvertTo-Json $matrix -Depth 10)
           Write-Output "matrix=$matrixJson" >> $env:GITHUB_OUTPUT
