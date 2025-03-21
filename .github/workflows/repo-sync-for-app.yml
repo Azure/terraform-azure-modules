@@ -58,10 +58,10 @@ jobs:
           }
 
           $matrixParallel = 5
-            if($firstRun) {
-              $matrixParallel = 1
-            }
-            Write-Output "matrixParallel=$matrixParallel" >> $env:GITHUB_OUTPUT
+          if($firstRun) {
+            $matrixParallel = 1
+          }
+          Write-Output "matrixParallel=$matrixParallel" >> $env:GITHUB_OUTPUT
 
           if($repositories -eq "All") {
             $repositories = @()
