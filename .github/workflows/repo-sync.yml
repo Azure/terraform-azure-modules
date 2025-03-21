@@ -17,7 +17,7 @@ on:
         default: true
         type: boolean
   schedule:
-    - cron: '0 0,4,8,12,16,20 * * *'
+    - cron: '0 1,7,13,19,23 * * *'
 
 permissions:
   id-token: write
@@ -47,7 +47,7 @@ jobs:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
-          
+
       - name: Sync Repositories
         run: |
 
@@ -94,7 +94,7 @@ jobs:
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
           ARM_USE_AZUREAD: true
           ARM_USE_OIDC: true
-        
+
       - name: Upload Issue Logs
         if: always()
         uses: actions/upload-artifact@v4

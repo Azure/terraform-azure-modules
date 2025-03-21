@@ -24,22 +24,18 @@ permissions:
   contents: read
 
 jobs:
-  run-sync:
-    name: Run Sync
+  generate-matrix:
+    name: Generate Matrix
     runs-on: ubuntu-latest
     environment: avm-updates
+
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: latest
-          terraform_wrapper: false
-      - name: Download Labels CSV File
-        run: |
-          ./scripts/Invoke-AvmLabelsCsvDownload.ps1
-        shell: pwsh
+      - name: Checkout Bootstrap Modules
+        uses: actions/checkout@v4
+
       - name: Create GitHub App Token
         id: app-token
         uses: actions/create-github-app-token@v1.11.0
@@ -48,17 +44,72 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
 
-      - name: Sync Repositories
+      - name: Generate Matrix
+        id: matrix
+        run: |
+          $triggerType = "${{ github.event_name }}"
+
+          $repositories = "All"
+
+          if($triggerType -eq "workflow_dispatch") {
+            $repositories = "${{ inputs.repositories }}"
+          }
+
+          if($repositories -eq "All") {
+            $repositories = @()
+          } else {
+            $repositories = $repositories -split ','
+          }
+          $matrix = ./scripts/Invoke-RepoSyncGenerateMatrix.ps1 -repoFilter $repositories
+          $matrixJson = ConvertTo-Json $matrix -Depth 10 -Compress
+          Write-Host (ConvertTo-Json $matrix -Depth 10)
+          Write-Output "matrix=$matrixJson" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
+  run-sync:
+    name: ${{ matrix.repoId }}
+    runs-on: ubuntu-latest
+    environment: avm-updates
+    needs: generate-matrix
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        include: ${{ fromJSON(needs.generate-matrix.outputs.matrix) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: latest
+          terraform_wrapper: false
+
+      - name: Create GitHub App Token
+        id: app-token
+        uses: actions/create-github-app-token@v1.11.0
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Download Labels CSV File
+        run: |
+          ./scripts/Invoke-AvmLabelsCsvDownload.ps1
+        shell: pwsh
+
+      - name: Run Sync for ${{ matrix.repoId }}
         run: |
 
           $triggerType = "${{ github.event_name }}"
 
-          $repositories = "All"
           $firstRun = $false
           $planOnly = $false
 
           if($triggerType -eq "workflow_dispatch") {
-            $repositories = "${{ inputs.repositories }}"
             $firstRun = "${{ inputs.first_run }}".ToLower() -eq "true"
             $planOnly = "${{ inputs.plan_only }}".ToLower() -eq "true"
           }
@@ -68,17 +119,10 @@ jobs:
           Write-Output "First Run: $firstRun"
           Write-Output "Plan Only: $planOnly"
 
-          if($repositories -eq "All") {
-            $repositories = @()
-          } else {
-            $repositories = $repositories -split ','
-          }
-
           Write-Host "Authenticating gh cli"
           gh auth login -h "GitHub.com"
           Write-Host "Running repo sync"
-          ./scripts/Invoke-RepoSyncForApp.ps1 `
-            -repoFilter $repositories `
+          ./scripts/Invoke-RepoSyncForSingleRepo.ps1 `
             -firstRun $firstRun `
             -planOnly $planOnly `
             -stateStorageAccountName "${{ secrets.STORAGE_ACCOUNT_NAME }}" `
@@ -86,6 +130,13 @@ jobs:
             -stateContainerName "${{ secrets.STORAGE_ACCOUNT_CONTAINER_NAME }}" `
             -targetSubscriptionId "${{ secrets.TARGET_SUBSCRIPTION_ID }}" `
             -identityResourceGroupName "${{ secrets.IDENTITY_RESOURCE_GROUP_NAME }}" `
+            -repoId "${{ matrix.repoId }}" `
+            -repoUrl "${{ matrix.repoUrl }}" `
+            -repoType "${{ matrix.repoType }}" `
+            -repoSubType "${{ matrix.repoSubType }}" `
+            -repoOwnerTeam "${{ matrix.repoOwnerTeam }}" `
+            -repoContributorTeam "${{ matrix.repoContributorTeam }}" `
+            -repoIsProtected ("${{ matrix.repoIsProtected }}" -eq "true")
         shell: pwsh
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -95,15 +146,9 @@ jobs:
           ARM_USE_AZUREAD: true
           ARM_USE_OIDC: true
 
-      - name: Upload Issue Logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: issue.log
-          path: issue.log
       - name: Upload Issue Logs Json
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: issue.log.json
+          name: ${{ matrix.repoId }}.issue.log.json
           path: issue.log.json

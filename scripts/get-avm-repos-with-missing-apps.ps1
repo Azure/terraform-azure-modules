@@ -66,7 +66,7 @@ foreach ($uri in $searchUris) {
   $page = 1
   $incompleteResults = $true
 
-  # Get the paged results
+  # Get the paged results 
   while($incompleteResults) {
     $response = ConvertFrom-Json $(gh api "$uri+archived:false&per_page=$itemsPerPage&page=$page")
     $allRepositories += $response.items
