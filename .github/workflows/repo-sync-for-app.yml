@@ -55,12 +55,13 @@ jobs:
           if($triggerType -eq "workflow_dispatch") {
             $repositories = "${{ inputs.repositories }}"
             $firstRun = "${{ inputs.first_run }}".ToLower() -eq "true"
-            $matrixParallel = 5
+          }
+
+          $matrixParallel = 5
             if($firstRun) {
               $matrixParallel = 1
             }
             Write-Output "matrixParallel=$matrixParallel" >> $env:GITHUB_OUTPUT
-          }
 
           if($repositories -eq "All") {
             $repositories = @()
