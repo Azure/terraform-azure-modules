@@ -49,7 +49,7 @@ foreach ($installedRepository in $installedRepositories) {
     repoId              = $moduleName
     repoUrl             = $installedRepository.html_url
     repoType            = "avm"
-    repoSubtype         = $moduleType
+    repoSubType         = $moduleType
     repoOwnerTeam       = "@Azure/$($moduleName)-module-owners-tf"
     repoContributorTeam = "@Azure/$($moduleName)-module-contributors-tf"
     repoIsProtected     = $protectedRepos.ModuleName -contains $moduleName
