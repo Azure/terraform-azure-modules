@@ -134,7 +134,7 @@ jobs:
             -repoSubType "${{ matrix.repoSubType }}" `
             -repoOwnerTeam "${{ matrix.repoOwnerTeam }}" `
             -repoContributorTeam "${{ matrix.repoContributorTeam }}" `
-            -repoIsProtected "${{ matrix.repoIsProtected }}" -eq "true"
+            -repoIsProtected ("${{ matrix.repoIsProtected }}" -eq "true")
         shell: pwsh
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}

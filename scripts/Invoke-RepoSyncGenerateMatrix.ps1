@@ -28,8 +28,15 @@ while($incompleteResults) {
 }
 
 foreach ($installedRepository in ($installedRepositories | Sort-Object -Property name)) {
+
+  if(!$installedRepository.name.StartsWith("terraform-azurerm-")) {
+    Write-Host "Skipping $($installedRepository.name) as it does not start with terraform-azurerm-"
+    continue
+  }
+
   $moduleName = $installedRepository.name.Replace("terraform-azurerm-", "")
   if(!$moduleName.StartsWith("avm-")) {
+    Write-Host "Skipping $($installedRepository.name) as it does not start with avm-"
     continue
   }
 
@@ -41,6 +48,9 @@ foreach ($installedRepository in ($installedRepositories | Sort-Object -Property
     $moduleType = "pattern"
   } elseif($moduleType -eq "utl") {
     $moduleType = "utility"
+  } else {
+    Write-Host "Skipping $($installedRepository.name) as it does not have a valid module type"
+    continue
   }
 
   $protectedRepos = Import-Csv "./protected_repos/ProtectedRepos.csv"
