@@ -27,10 +27,11 @@ jobs:
   generate-matrix:
     name: Generate Matrix
     runs-on: ubuntu-latest
+    environment: avm-updates
     steps:
       - name: Checkout Bootstrap Modules
         uses: actions/checkout@v4
-        
+
       - name: Create GitHub App Token
         id: app-token
         uses: actions/create-github-app-token@v1.11.0
