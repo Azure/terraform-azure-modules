@@ -29,7 +29,7 @@ while($incompleteResults) {
 
 $validPrefixes = @("terraform-azurerm-", "terraform-azapi-")
 
-foreach ($installedRepository in ($installedRepositories | Sort-Object -Property name)) {
+foreach ($installedRepository in $installedRepositories) {
 
   $skipRepository = $true
   $moduleName = ""
@@ -84,4 +84,4 @@ if($repoFilter.Length -gt 0) {
 
 Write-Host "Found $($repos.Count) repositories"
 
-return $repos
+return $repos | Sort-Object -Property repoId
