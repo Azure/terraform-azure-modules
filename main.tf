@@ -3,7 +3,7 @@ data "azapi_client_config" "current" {}
 resource "azapi_resource" "identity" {
   type      = "Microsoft.ManagedIdentity/userAssignedIdentities@2023-07-31-preview"
   parent_id = "/subscriptions/${data.azapi_client_config.current.subscription_id}/resourceGroups/${var.identity_resource_group_name}"
-  name      = "${var.github_repository_owner}-${var.github_repository_name}"
+  name      = local.owner_repo_name
   location  = var.location
   body      = {} # empty body as HCL object is reqired to force output to be HCL and not JSON string.
   response_export_values = [
@@ -15,7 +15,7 @@ resource "azapi_resource" "identity" {
 
 resource "azapi_resource" "identity_federated_credentials" {
   type      = "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2023-07-31-preview"
-  name      = "${var.github_repository_owner}-${var.github_repository_name}"
+  name      = local.owner_repo_name
   parent_id = azapi_resource.identity.id
   locks     = [azapi_resource.identity.id] # not needed but added if we configure more than one environment
   body = {

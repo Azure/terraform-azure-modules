@@ -47,6 +47,8 @@ jobs:
       - name: Generate Matrix
         id: matrix
         run: |
+          $triggerType = "${{ github.event_name }}"
+
           $repositories = "All"
 
           if($triggerType -eq "workflow_dispatch") {
@@ -143,13 +145,6 @@ jobs:
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
           ARM_USE_AZUREAD: true
           ARM_USE_OIDC: true
-
-      - name: Upload Issue Logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.repoId }}.issue.log
-          path: issue.log
 
       - name: Upload Issue Logs Json
         if: always()
