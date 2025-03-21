@@ -28,6 +28,10 @@ jobs:
     name: Generate Matrix
     runs-on: ubuntu-latest
     environment: avm-updates
+
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+
     steps:
       - name: Checkout Bootstrap Modules
         uses: actions/checkout@v4
