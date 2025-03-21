@@ -1,6 +1,6 @@
 param(
-  $client_id,
-  $private_key_path = "azure-verified-modules.pem"
+  $client_id, # This is the Client ID of the GitHub App
+  $private_key_path = "azure-verified-modules.pem" # This is the path to the private key for the GitHub App
 )
 
 # Get the JWT for the GitHub App
@@ -12,7 +12,7 @@ $header = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes((Conve
 $payload = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes((ConvertTo-Json -InputObject @{
   iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-10).ToUnixTimeSeconds()
   exp = [System.DateTimeOffset]::UtcNow.AddMinutes(10).ToUnixTimeSeconds()
-   iss = $client_id 
+   iss = $client_id
 }))).TrimEnd('=').Replace('+', '-').Replace('/', '_');
 
 $rsa = [System.Security.Cryptography.RSA]::Create()
