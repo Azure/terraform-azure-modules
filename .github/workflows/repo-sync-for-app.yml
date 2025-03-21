@@ -60,7 +60,7 @@ jobs:
 
           $matrixParallel = 5
           if($firstRun) {
-            $matrixParallel = 1
+            $matrixParallel = 2
           }
           Write-Output "matrixParallel=$matrixParallel" >> $env:GITHUB_OUTPUT
 
