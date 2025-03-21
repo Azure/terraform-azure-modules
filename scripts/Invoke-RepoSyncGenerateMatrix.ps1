@@ -27,7 +27,7 @@ while($incompleteResults) {
   $page++
 }
 
-foreach ($installedRepository in $installedRepositories) {
+foreach ($installedRepository in ($installedRepositories | Sort-Object -Property name)) {
   $moduleName = $installedRepository.name.Replace("terraform-azurerm-", "")
   if(!$moduleName.StartsWith("avm-")) {
     continue

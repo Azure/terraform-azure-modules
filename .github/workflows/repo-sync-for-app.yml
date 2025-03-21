@@ -67,7 +67,7 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
   run-sync:
-    name: Run ${{ matrix.repoId }}
+    name: ${{ matrix.repoId }}
     runs-on: ubuntu-latest
     environment: avm-updates
     needs: generate-matrix
