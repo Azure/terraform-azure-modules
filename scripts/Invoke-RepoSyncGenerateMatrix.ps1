@@ -79,7 +79,7 @@ foreach ($installedRepository in ($installedRepositories | Sort-Object -Property
 
 Write-Host "Filtering repositories"
 if($repoFilter.Length -gt 0) {
-    $repos = $repos | Where-Object { $repoFilter -contains $_.id }
+    $repos = $repos | Where-Object { $repoFilter -contains $_.repoId }
 }
 
 Write-Host "Found $($repos.Count) repositories"
