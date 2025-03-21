@@ -60,7 +60,7 @@ jobs:
 
           $matrixParallel = 5
           if($firstRun) {
-            $matrixParallel = 2
+            $matrixParallel = 1
           }
           Write-Output "matrixParallel=$matrixParallel" >> $env:GITHUB_OUTPUT
 
@@ -84,7 +84,7 @@ jobs:
     needs: generate-matrix
     strategy:
       fail-fast: false
-      max-parallel: ${{ needs.generate-matrix.outputs.matrixParallel }}
+      max-parallel: ${{ needs.generate-matrix.outputs.matrixParallel == '1' && 1 || 5 }}
       matrix:
         include: ${{ fromJSON(needs.generate-matrix.outputs.matrix) }}
     steps:
