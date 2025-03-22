@@ -51,6 +51,11 @@ foreach ($installedRepository in $installedRepositories) {
     continue
   }
 
+  if($installedRepository.archived) {
+    Write-Host "Skipping $($installedRepository.name) as it is archived"
+    continue
+  }
+
   $moduleType = $moduleName.Split("-")[1]
 
   if($moduleType -eq "res") {
