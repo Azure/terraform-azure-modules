@@ -166,3 +166,4 @@ jobs:
         if: always() && hashFiles('issue.log.json') != ''
         run: |
           echo "::error title=${{ matrix.repoId }} has issues::Check the log file artifact for ${{ matrix.repoId }} to see the details."
+          exit 1
