@@ -175,9 +175,9 @@ id = "$($repoName):test"
 }
 
 if($issueLog.Count -eq 0) {
-    Write-Host "No issues found for $orgAndRepoName"
+    Write-Host "No issues found for $repoId"
 } else {
-    Write-Output "::warning title=$orgAndRepoName has issues::Issues were found for $orgAndRepoName, check the log artifact for details."
+    Write-Host "Issues found for $repoId"
     $issueLogJson = ConvertTo-Json $issueLog -Depth 100
     $issueLogJson | Out-File "issue.log.json"
 }

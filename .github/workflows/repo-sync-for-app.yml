@@ -155,6 +155,10 @@ jobs:
           ARM_USE_AZUREAD: true
           ARM_USE_OIDC: true
 
+      - name: Issue Warning
+        if: always() && hashFiles('issue.log.json') != ''
+        run: echo "::warning title=${{ matrix.repoId }} has issues::Check the log file artifact for ${{ matrix.repoId }} to see the details."
+
       - name: Upload Issue Logs Json
         if: always() && hashFiles('issue.log.json') != ''
         uses: actions/upload-artifact@v4
