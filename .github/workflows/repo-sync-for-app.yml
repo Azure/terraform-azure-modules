@@ -58,7 +58,7 @@ jobs:
             $firstRun = "${{ inputs.first_run }}".ToLower() -eq "true"
           }
 
-          $matrixParallel = 5
+          $matrixParallel = 3
           if($firstRun) {
             $matrixParallel = 1
           }
