@@ -156,7 +156,7 @@ jobs:
           ARM_USE_OIDC: true
 
       - name: Upload Issue Logs Json
-        if: always()
+        if: always() && hashFiles('issue.log.json') != ''
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.repoId }}.issue.log.json
