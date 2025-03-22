@@ -165,5 +165,10 @@ jobs:
       - name: Issue Error
         if: always() && hashFiles('issue.log.json') != ''
         run: |
-          echo "::error title=${{ matrix.repoId }} has issues::Check the log file artifact for ${{ matrix.repoId }} to see the details."
+          $issueLogJson = Get-Content -Path "issue.log.json" -Raw
+          $issueLog = ConvertFrom-Json $issueLogJson
+          $issueLog | ForEach-Object {
+            echo "::error title=${{ matrix.repoId }} has issues::$($_.message) Check the log file artifact for ${{ matrix.repoId }} to see the full details."
+          }
           exit 1
+        shell: pwsh
