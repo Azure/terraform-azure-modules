@@ -77,6 +77,24 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
+      - name: Upload Repo Logs Json
+        if: always() && hashFiles('warning.log.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: warning.log.json
+          path: warning.log.json
+
+      - name: Repo Error
+        if: always() && hashFiles('warning.log.json') != ''
+        run: |
+          $issueLogJson = Get-Content -Path "warning.log.json" -Raw
+          $issueLog = ConvertFrom-Json $issueLogJson
+          $issueLog | ForEach-Object {
+            echo "::error title=$($_.repoId) has issues::$($_.message)"
+          }
+          exit 1
+        shell: pwsh
+
   run-sync:
     name: ${{ matrix.repoId }} (${{ matrix.repoUrl }})
     runs-on: ubuntu-latest

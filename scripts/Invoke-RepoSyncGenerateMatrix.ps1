@@ -41,6 +41,8 @@ while($incompleteResults) {
   $page++
 }
 
+$warnings = @()
+
 foreach ($installedRepository in $installedRepositories | Sort-Object -Property name) {
   if($reposToSkip -contains $installedRepository.name) {
     Write-Host "Skipping $($installedRepository.name) as it is in the skip list..."
@@ -48,12 +50,22 @@ foreach ($installedRepository in $installedRepositories | Sort-Object -Property 
   }
 
   if($installedRepository.archived) {
-    Write-Warning "Skipping $($installedRepository.name) as it is archived..."
+    $warning = @{
+      repoId = $installedRepository.name
+      message = "Skipping $($installedRepository.name) as it is archived..."
+    }
+    Write-Warning $warning.message
+    $warnings += $warning
     continue
   }
 
   if(!$installedRepository.name.StartsWith("terraform-")) {
-    Write-Warning "Skipping $($installedRepository.name) as it does not start with 'terraform-'..."
+    $warning = @{
+      repoId = $installedRepository.name
+      message = "Skipping $($installedRepository.name) as it does not start with 'terraform-'..."
+    }
+    Write-Warning $warning.message
+    $warnings += $warning
     continue
   }
 
@@ -69,12 +81,22 @@ foreach ($installedRepository in $installedRepositories | Sort-Object -Property 
   }
 
   if($skipRepository) {
-    Write-Warning "Skipping $($installedRepository.name) as it does not have a valid provider segment..."
+    $warning = @{
+      repoId = $installedRepository.name
+      message = "Skipping $($installedRepository.name) as it does not start with a valid provider prefix..."
+    }
+    Write-Warning $warning.message
+    $warnings += $warning
     continue
   }
 
   if(!$moduleName.StartsWith("avm-")) {
-    Write-Warning "Skipping $($installedRepository.name) as it does not have the 'avm' segment..."
+    $warning = @{
+      repoId = $installedRepository.name
+      message = "Skipping $($installedRepository.name) as it does not start with 'avm-'..."
+    }
+    Write-Warning $warning.message
+    $warnings += $warning
     continue
   }
 
@@ -87,7 +109,12 @@ foreach ($installedRepository in $installedRepositories | Sort-Object -Property 
   } elseif($moduleType -eq "utl") {
     $moduleType = "utility"
   } else {
-    Write-Warning "Skipping $($installedRepository.name) as it does not have a valid module type segment..."
+    $warning = @{
+      repoId = $installedRepository.name
+      message = "Skipping $($installedRepository.name) as it does not have a valid module type segment..."
+    }
+    Write-Warning $warning.message
+    $warnings += $warning
     continue
   }
 
@@ -102,6 +129,14 @@ foreach ($installedRepository in $installedRepositories | Sort-Object -Property 
     repoContributorTeam = "@Azure/$($moduleName)-module-contributors-tf"
     repoIsProtected     = $protectedRepos.ModuleName -contains $moduleName
   }
+}
+
+if($warnings.Count -eq 0) {
+  Write-Host "No issues found"
+} else {
+  Write-Host "Issues found for"
+  $warningsJson = ConvertTo-Json $warnings -Depth 100
+  $warningsJson | Out-File "warning.log.json"
 }
 
 Write-Host "Filtering repositories"
