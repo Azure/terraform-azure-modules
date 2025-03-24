@@ -3,7 +3,21 @@
 # Must run gh auth login -h "GitHub.com" before running this script
 
 param(
-    [array]$repoFilter = @()
+    [array]$repoFilter = @(),
+    [array]$validProviders = @("azurerm", "azapi"),
+    [array]$reposToSkip = @(
+      "bicep-registry-modules",
+      "terraform-azure-modules",
+      "ALZ-PowerShell-Module",
+      "Azure-Verified-Modules",
+      "terraform-azurerm-avm-template",
+      "Azure-Verified-Modules-Grept",
+      "avmtester",
+      "tflint-ruleset-avm",
+      "avm-gh-app",
+      "avm-container-images-cicd-agents-and-runners",
+      "Azure-Verified-Modules-Workflows"
+    )
 )
 
 Write-Host "Generating matrix for AVM repositories"
@@ -27,14 +41,29 @@ while($incompleteResults) {
   $page++
 }
 
-$validPrefixes = @("terraform-azurerm-", "terraform-azapi-")
+$validProviders = @("azurerm", "azapi")
 
-foreach ($installedRepository in $installedRepositories) {
+foreach ($installedRepository in $installedRepositories | Sort-Object -Property name) {
+  if($reposToSkip -contains $installedRepository.name) {
+    Write-Host "Skipping $($installedRepository.name) as it is in the skip list..."
+    continue
+  }
+
+  if($installedRepository.archived) {
+    Write-Warning "Skipping $($installedRepository.name) as it is archived..."
+    continue
+  }
+
+  if(!$installedRepository.name.StartsWith("terraform-")) {
+    Write-Warning "Skipping $($installedRepository.name) as it does not start with 'terraform-'..."
+    continue
+  }
 
   $skipRepository = $true
   $moduleName = ""
 
-  foreach($validPrefix in $validPrefixes) {
+  foreach($validProvider in $validProviders) {
+    $validPrefix = "terraform-$validProvider-"
     if($installedRepository.name.StartsWith($validPrefix)) {
       $moduleName = $installedRepository.name.Replace($validPrefix, "")
       $skipRepository = $false
@@ -42,17 +71,12 @@ foreach ($installedRepository in $installedRepositories) {
   }
 
   if($skipRepository) {
-    Write-Host "Skipping $($installedRepository.name) as it does not start with a valid prefix"
+    Write-Warning "Skipping $($installedRepository.name) as it does not have a valid provider segment..."
     continue
   }
 
   if(!$moduleName.StartsWith("avm-")) {
-    Write-Host "Skipping $($installedRepository.name) as it does not start with avm-"
-    continue
-  }
-
-  if($installedRepository.archived) {
-    Write-Host "Skipping $($installedRepository.name) as it is archived"
+    Write-Warning "Skipping $($installedRepository.name) as it does not have the 'avm' segment..."
     continue
   }
 
@@ -65,7 +89,7 @@ foreach ($installedRepository in $installedRepositories) {
   } elseif($moduleType -eq "utl") {
     $moduleType = "utility"
   } else {
-    Write-Host "Skipping $($installedRepository.name) as it does not have a valid module type"
+    Write-Warning "Skipping $($installedRepository.name) as it does not have a valid module type segment..."
     continue
   }
 
