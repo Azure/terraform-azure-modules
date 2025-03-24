@@ -4,7 +4,7 @@
 
 param(
     [array]$repoFilter = @(),
-    [array]$validProviders = @("azurerm", "azapi"),
+    [array]$validProviders = @("azure", "azurerm", "azapi"),
     [array]$reposToSkip = @(
       "bicep-registry-modules",
       "terraform-azure-modules",
@@ -40,8 +40,6 @@ while($incompleteResults) {
   $incompleteResults = $page * $itemsPerPage -lt $response.total_count
   $page++
 }
-
-$validProviders = @("azurerm", "azapi")
 
 foreach ($installedRepository in $installedRepositories | Sort-Object -Property name) {
   if($reposToSkip -contains $installedRepository.name) {
