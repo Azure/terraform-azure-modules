@@ -1,5 +1,5 @@
 ---
-name: Repository Sync For App
+name: Repository Data Generation
 
 on:
   workflow_dispatch:
