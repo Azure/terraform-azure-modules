@@ -40,12 +40,14 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Upload Repo Data JSON
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: repositoryData.json
           path: repositoryData.json
 
       - name: Upload Repo Data CSV Files
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: CSV
