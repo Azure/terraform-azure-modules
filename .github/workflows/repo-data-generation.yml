@@ -4,7 +4,7 @@ name: Repository Data Generation
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0,4,8,12,16,20 * * *'
+    - cron: '0 3 * * *'
 
 permissions:
   id-token: write
