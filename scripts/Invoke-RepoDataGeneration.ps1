@@ -181,7 +181,7 @@ foreach($repositoryType in $repositoryTypes) {
 if($warnings.Count -eq 0) {
     Write-Host "No issues found"
 } else {
-    Write-Host "Issues found for"
+    Write-Host "Issues found ($($warnings.Count))"
     $warningsJson = ConvertTo-Json $warnings -Depth 100
     $warningsJson | Out-File "warning.log.json"
 }
