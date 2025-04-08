@@ -18,17 +18,56 @@ foreach($repository in $repositories) {
     $orgAndRepoName = "$orgName/$repoName"
 
     # Meta Data
-    $providerNamespace = ""
-    $resourceType = ""
-    $moduleDisplayName = ""
-    $alternativeNames = @()
-    $comments = ""
-    $primaryOwnerHandle = ""
-    $primaryOwnerDisplayName = ""
-    $secondaryOwnerHandle = ""
-    $secondaryOwnerDisplayName = ""
+    $metaDataVariables = @(
+        @{
+            key = "providerNamespace"
+            name = "AVM_RESOURCE_PROVIDER_NAMESPACE"
+            required = $true
+        },
+        @{
+            key = "resourceType"
+            name = "AVM_RESOURCE_TYPE"
+            required = $true
+        },
+        @{
+            key = "moduleDisplayName"
+            name = "AVM_MODULE_DISPLAY_NAME"
+            required = $true
+        },
+        @{
+            key = "alternativeNames"
+            name = "AVM_MODULE_ALTERNATIVE_NAMES"
+            required = $false
+        },
+        @{
+            key = "comments"
+            name = "AVM_COMMENTS"
+            required = $false
+        },
+        @{
+            key = "primaryOwnerHandle"
+            name = "AVM_OWNER_PRIMARY_GITHUB_HANDLE"
+            required = $true
+        },
+        @{
+            key = "primaryOwnerDisplayName"
+            name = "AVM_OWNER_PRIMARY_DISPLAY_NAME"
+            required = $true
+        },
+        @{
+            key = "secondaryOwnerHandle"
+            name = "AVM_OWNER_SECONDARY_GITHUB_HANDLE"
+            required = $false
+        },
+        @{
+            key = "secondaryOwnerDisplayName"
+            name = "AVM_OWNER_SECONDARY_DISPLAY_NAME"
+            required = $false
+        }
+    )
 
-    $metaData = $(gh api "/repos/$orgAndRepoName/actions/variables/avm_meta_data" 2> $null) | ConvertFrom-Json
+    $metaData = $(gh api "/repos/$orgAndRepoName/actions/variables?per_page=30" 2> $null) | ConvertFrom-Json
+    $metaDataObject = @{}
 
     if($metaData.status -and $metaData.status -ne 200) {
         $warning = @{
@@ -40,77 +79,23 @@ foreach($repository in $repositories) {
     } else {
         Write-Host "Meta data found for: $($orgAndRepoName)"
 
-        $metaDataObject = $metaData.value | ConvertFrom-Json
+        foreach($item in $metaDataVariables) {
+            $metaDataItem = $metaData.variables | Where-Object { $_.name -eq $item.name }
+            if($metaDataItem -and $metaDataItem.value) {
+                $metaDataObject.Add($item.key, $metaDataItem.value)
+                continue
+            } 
+            
+            $metaDataObject.Add($item.key, "")
 
-        if($metaDataObject.ProviderNamespace) {
-            $providerNamespace = $metaDataObject.ProviderNamespace
-        } else {
-            $warning = @{
-                repoId = $repository.repoId
-                message = "ProviderNamespace not found for: $($orgAndRepoName)"
+            if($item.required) {
+                $warning = @{
+                    repoId = $repository.repoId
+                    message = "Required meta data $($item.name) not found for: $($orgAndRepoName)"
+                }
+                Write-Warning $warning.message
+                $warnings += $warning
             }
-            Write-Warning $warning.message
-            $warnings += $warning
-        }
-
-        if($metaDataObject.ResourceType) {
-            $resourceType = $metaDataObject.ResourceType
-        } else {
-            $warning = @{
-                repoId = $repository.repoId
-                message = "ResourceType not found for: $($orgAndRepoName)"
-            }
-            Write-Warning $warning.message
-            $warnings += $warning
-        }
-
-        if($metaDataObject.ModuleDisplayName) {
-            $moduleDisplayName = $metaDataObject.ModuleDisplayName
-        } else {
-            $warning = @{
-                repoId = $repository.repoId
-                message = "ModuleDisplayName not found for: $($orgAndRepoName)"
-            }
-            Write-Warning $warning.message
-            $warnings += $warning
-        }
-
-        if($metaDataObject.AlternativeNames) {
-            $alternativeNames = @($metaDataObject.AlternativeNames)
-        }
-
-        if($metaDataObject.Comments) {
-            $comments = $metaDataObject.Comments
-        }
-
-        if($metaDataObject.PrimaryOwnerHandle) {
-            $primaryOwnerHandle = $metaDataObject.PrimaryOwnerHandle
-        } else {
-            $warning = @{
-                repoId = $repository.repoId
-                message = "PrimaryOwnerHandle not found for: $($orgAndRepoName)"
-            }
-            Write-Warning $warning.message
-            $warnings += $warning
-        }
-
-        if($metaDataObject.PrimaryOwnerDisplayName) {
-            $primaryOwnerDisplayName = $metaDataObject.PrimaryOwnerDisplayName
-        } else {
-            $warning = @{
-                repoId = $repository.repoId
-                message = "PrimaryOwnerDisplayName not found for: $($orgAndRepoName)"
-            }
-            Write-Warning $warning.message
-            $warnings += $warning
-        }
-
-        if($metaDataObject.SecondaryOwnerHandle) {
-            $secondaryOwnerHandle = $metaDataObject.SecondaryOwnerHandle
-        }
-
-        if($metaDataObject.SecondaryOwnerDisplayName) {
-            $secondaryOwnerDisplayName = $metaDataObject.SecondaryOwnerDisplayName
         }
     }
 
@@ -147,24 +132,24 @@ foreach($repository in $repositories) {
         registryFirstPublishedDate = $terraformRegistryFirstPublishedDate
         registryCurrentVersion = $terraformRegistryLatestVersion
         registryModuleOwner = $terraformRegistryModuleOwner
-        ProviderNamespace = $providerNamespace
-        ResourceType = $resourceType
-        ModuleDisplayName = $moduleDisplayName
-        AlternativeNames = $alternativeNames -join ", "
+        ProviderNamespace = $metaDataObject.providerNamespace
+        ResourceType = $metaDataObject.resourceType
+        ModuleDisplayName = $metaDataObject.moduleDisplayName
+        AlternativeNames = $metaDataObject.alternativeNames
         ModuleName = $repoId
         ParentModule = "n/a"
         ModuleStatus = $terraformRegistryPublished ? "Available :green_circle:" : "Proposed :new:"
         RepoURL = $repoUrl
         PublicRegistryReference = "https://registry.terraform.io/modules/$orgName/$repoId/$providerName/latest"
         TelemetryIdPrefix = ""
-        PrimaryModuleOwnerGHHandle = $primaryOwnerHandle
-        PrimaryModuleOwnerDisplayName = $primaryOwnerDisplayName
-        SecondaryModuleOwnerGHHandle = $secondaryOwnerHandle
-        SecondaryModuleOwnerDisplayName = $secondaryOwnerDisplayName
+        PrimaryModuleOwnerGHHandle = $metaDataObject.primaryOwnerHandle
+        PrimaryModuleOwnerDisplayName = $metaDataObject.primaryOwnerDisplayName
+        SecondaryModuleOwnerGHHandle = $metaDataObject.secondaryOwnerHandle
+        SecondaryModuleOwnerDisplayName = $metaDataObject.secondaryOwnerDisplayName
         ModuleOwnersGHTeam = $repository.repoOwnerTeam
         ModuleContributorsGHTeam = $repository.repoContributorTeam
-        Description = "AVM $moduleType Module for $moduleDisplayName"
-        Comments = $comments
+        Description = "AVM $moduleType Module for $($metaDataObject.moduleDisplayName)"
+        Comments = $metaDataObject.comments
         FirstPublishedIn = $firstPublishedIn
     }
 }
@@ -196,7 +181,7 @@ foreach($repositoryType in $repositoryTypes) {
 if($warnings.Count -eq 0) {
     Write-Host "No issues found"
 } else {
-    Write-Host "Issues found for"
+    Write-Host "Issues found ($($warnings.Count))"
     $warningsJson = ConvertTo-Json $warnings -Depth 100
     $warningsJson | Out-File "warning.log.json"
 }
