@@ -148,7 +148,7 @@ foreach($repository in $repositories) {
         SecondaryModuleOwnerDisplayName = $metaDataObject.secondaryOwnerDisplayName
         ModuleOwnersGHTeam = $repository.repoOwnerTeam
         ModuleContributorsGHTeam = $repository.repoContributorTeam
-        Description = "AVM $moduleType Module for $metaDataObject.moduleDisplayName"
+        Description = "AVM $moduleType Module for $($metaDataObject.moduleDisplayName)"
         Comments = $metaDataObject.comments
         FirstPublishedIn = $firstPublishedIn
     }
