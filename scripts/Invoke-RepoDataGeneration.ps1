@@ -21,47 +21,47 @@ foreach($repository in $repositories) {
     $metaDataVariables = @(
         @{
             key = "providerNamespace"
-            name = "AVM_META_DATA_RESOURCE_PROVIDER_NAMESPACE"
+            name = "AVM_RESOURCE_PROVIDER_NAMESPACE"
             required = $true
         },
         @{
             key = "resourceType"
-            name = "AVM_META_DATA_RESOURCE_TYPE"
+            name = "AVM_RESOURCE_TYPE"
             required = $true
         },
         @{
             key = "moduleDisplayName"
-            name = "AVM_META_DATA_MODULE_DISPLAY_NAME"
+            name = "AVM_MODULE_DISPLAY_NAME"
             required = $true
         },
         @{
             key = "alternativeNames"
-            name = "AVM_META_DATA_MODULE_ALTERNATIVE_NAMES"
+            name = "AVM_MODULE_ALTERNATIVE_NAMES"
             required = $false
         },
         @{
             key = "comments"
-            name = "AVM_META_DATA_COMMENTS"
+            name = "AVM_COMMENTS"
             required = $false
         },
         @{
             key = "primaryOwnerHandle"
-            name = "AVM_META_DATA_OWNER_PRIMARY_GITHUB_HANDLE"
+            name = "AVM_OWNER_PRIMARY_GITHUB_HANDLE"
             required = $true
         },
         @{
             key = "primaryOwnerDisplayName"
-            name = "AVM_META_DATA_OWNER_PRIMARY_DISPLAY_NAME"
+            name = "AVM_OWNER_PRIMARY_DISPLAY_NAME"
             required = $true
         },
         @{
             key = "secondaryOwnerHandle"
-            name = "AVM_META_DATA_OWNER_SECONDARY_GITHUB_HANDLE"
+            name = "AVM_OWNER_SECONDARY_GITHUB_HANDLE"
             required = $false
         },
         @{
             key = "secondaryOwnerDisplayName"
-            name = "AVM_META_DATA_OWNER_SECONDARY_DISPLAY_NAME"
+            name = "AVM_OWNER_SECONDARY_DISPLAY_NAME"
             required = $false
         }
     )
