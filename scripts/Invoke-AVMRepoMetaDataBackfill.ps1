@@ -77,7 +77,7 @@ foreach($repository in $repositories) {
 
   foreach($item in $metaDataVariables) {
     if(!$repositoryCSVData.PSObject.Properties.Name -contains $item.key) {
-      Write-Warning "Meta data item $($item.name) not found in CSV data for: $($repository.repoId)"
+      Write-Host "Meta data item $($item.name) not found in CSV data for: $($repository.repoId)"
       continue
     }
     $metaDataItem = $repositoryCSVData.($item.key)
@@ -85,13 +85,13 @@ foreach($repository in $repositories) {
     Write-Host "Meta data item $($item.name) found for: $($repository.repoId)"
 
     if($null -eq $metaDataItem -or $metaDataItem -eq "") {
-      Write-Warning "Meta data item $($item.name) is null or empty for: $($repository.repoId)"
+      Write-Host "Meta data item $($item.name) is null or empty for: $($repository.repoId)"
       continue
     }
 
     # Set the variable in the GitHub repository
     $cliCommand = "gh variable set `"$($item.name)`" --body `"$metaDataItem`" --repo `"$($repository.repoUrl)`""
-    Write-Host "Running: $cliCommand" -ForegroundColor Yellow
+    Write-Host "Running: $cliCommand" -ForegroundColor Blue
     gh variable set "$($item.name)" --body "$metaDataItem" --repo "$($repository.repoUrl)"
   }
 }
