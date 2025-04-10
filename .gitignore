@@ -43,3 +43,4 @@ temp
 *.tfplan
 issue.log
 issue.log.json
+azure-verified-modules.pem
