@@ -23,16 +23,19 @@ foreach($repository in $repositories) {
             key = "providerNamespace"
             name = "AVM_RESOURCE_PROVIDER_NAMESPACE"
             required = $true
+            requiredFor = @("resource")
         },
         @{
             key = "resourceType"
             name = "AVM_RESOURCE_TYPE"
             required = $true
+            requiredFor = @("resource")
         },
         @{
             key = "moduleDisplayName"
             name = "AVM_MODULE_DISPLAY_NAME"
             required = $true
+            requiredFor = @("resource", "pattern", "utility")
         },
         @{
             key = "alternativeNames"
@@ -48,11 +51,13 @@ foreach($repository in $repositories) {
             key = "primaryOwnerHandle"
             name = "AVM_OWNER_PRIMARY_GITHUB_HANDLE"
             required = $true
+            requiredFor = @("resource", "pattern", "utility")
         },
         @{
             key = "primaryOwnerDisplayName"
             name = "AVM_OWNER_PRIMARY_DISPLAY_NAME"
             required = $true
+            requiredFor = @("resource", "pattern", "utility")
         },
         @{
             key = "secondaryOwnerHandle"
@@ -88,7 +93,7 @@ foreach($repository in $repositories) {
             
             $metaDataObject.Add($item.key, "")
 
-            if($item.required) {
+            if($item.required -and $item.requiredFor -contains $repository.repoSubType) {
                 $warning = @{
                     repoId = $repository.repoId
                     message = "Required meta data $($item.name) not found for: $($orgAndRepoName)"
