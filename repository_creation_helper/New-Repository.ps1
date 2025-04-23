@@ -1,9 +1,28 @@
 param (
   [string]$moduleProvider = "azurerm",
   [string]$moduleName,
-  [string]$moduleDescription,
-  [string]$moduleOwner
+  [string]$moduleDisplayName,
+  [string]$resourceProviderNamespace,
+  [string]$resourceType,
+  [string]$moduleAlternativeNames = "",
+  [string]$moduleComments = "",
+  [string]$ownerPrimaryGitHubHandle,
+  [string]$ownerPrimaryDisplayName,
+  [string]$ownerSecondaryGitHubHandle = "",
+  [string]$ownerSecondaryDisplayName = ""
 )
+
+$metaDataVariables = @{
+  "AVM_RESOURCE_PROVIDER_NAMESPACE" = $resourceProviderNamespace
+  "AVM_RESOURCE_TYPE" = $resourceType
+  "AVM_MODULE_DISPLAY_NAME" = $moduleDisplayName
+  "AVM_MODULE_ALTERNATIVE_NAMES" = $moduleAlternativeNames
+  "AVM_COMMENTS" = $moduleComments
+  "AVM_OWNER_PRIMARY_GITHUB_HANDLE" = $ownerPrimaryGitHubHandle
+  "AVM_OWNER_PRIMARY_DISPLAY_NAME" = $ownerPrimaryDisplayName
+  "AVM_OWNER_SECONDARY_GITHUB_HANDLE" = $ownerSecondaryGitHubHandle
+  "AVM_OWNER_SECONDARY_DISPLAY_NAME" = $ownerSecondaryDisplayName
+}
 
 $moduleNameRegex = "^avm-(res|ptn|utl)-[a-z-]+$"
 
@@ -30,8 +49,9 @@ while($response -ne "yes") {
 $tfvars = @{
   module_provider = $moduleProvider
   module_id = $moduleName
-  module_name = $moduleDescription
-  module_owner_github_handle = $moduleOwner
+  module_name = $moduleDisplayName
+  module_owner_github_handle = $ownerPrimaryGitHubHandle
+  github_repository_metadata = $metaDataVariables
 }
 
 $tfvars | ConvertTo-Json | Out-File -FilePath "terraform.tfvars.json" -Force

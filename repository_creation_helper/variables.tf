@@ -45,3 +45,8 @@ variable "maintainer_teams" {
     terraform_avm = "terraform-avm"
   }
 }
+
+variable "github_repository_metadata" {
+  type        = map(string)
+  description = "Metadata for the GitHub repository."
+}

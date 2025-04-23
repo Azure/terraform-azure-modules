@@ -95,3 +95,10 @@ resource "github_team_repository" "contributors_team" {
   repository = github_repository.this.name
   permission = "push"
 }
+
+resource "github_actions_variable" "meta_date" {
+  for_each      = { for key, value in var.github_repository_metadata : key => value if value != "" }
+  repository    = github_repository.this.name
+  variable_name = each.key
+  value         = each.value
+}
