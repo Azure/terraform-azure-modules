@@ -86,7 +86,7 @@ if ($existingRepo.status -eq 404) {
     $existingEnvironment = $(gh api "repos/$orgAndRepoName/environments/test" 2> $null) | ConvertFrom-Json
 
     if (($existingEnvironment.status -ne 404) -and ($repoType -eq "avm") -and $firstRun) {
-        Write-Host "First Run: Taking ownership of test environevent for $orgAndRepoName"
+        Write-Host "First Run: Taking ownership of test environment for $orgAndRepoName"
         $import = @"
 import {
 to = github_repository_environment.this[0]
