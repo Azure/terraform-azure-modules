@@ -143,7 +143,9 @@ foreach($repository in $repositories) {
         AlternativeNames = $metaDataObject.alternativeNames
         ModuleName = $repoId
         ParentModule = "n/a"
-        ModuleStatus = $terraformRegistryPublished ? "Available :green_circle:" : "Proposed :new:"
+        PublishedStatus = $terraformRegistryPublished ? "Available" : "Proposed"
+        ModuleStatus = $terraformRegistryPublished ? ($null -eq $metaDataObject.primaryOwnerHandle -or $metaDataObject.primaryOwnerHandle -eq "" ? "Orphaned" : "Available") : "Proposed"
+        IsOrphaned = $null -eq $metaDataObject.primaryOwnerHandle -or $metaDataObject.primaryOwnerHandle -eq ""
         RepoURL = $repoUrl
         PublicRegistryReference = "https://registry.terraform.io/modules/$orgName/$repoId/$providerName/latest"
         TelemetryIdPrefix = ""
@@ -177,6 +179,8 @@ foreach($repositoryType in $repositoryTypes) {
         $repository.Remove("registryFirstPublishedDate")
         $repository.Remove("registryCurrentVersion")
         $repository.Remove("registryModuleOwner")
+        $repository.Remove("PublishedStatus")
+        $repository.Remove("IsOrphaned")
     }
 
     $repositoryTypeTitleCase = $textInfo.ToTitleCase($repositoryType)

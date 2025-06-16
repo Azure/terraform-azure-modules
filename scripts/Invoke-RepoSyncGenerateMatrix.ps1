@@ -16,7 +16,8 @@ param(
       "tflint-ruleset-avm",
       "avm-gh-app",
       "avm-container-images-cicd-agents-and-runners",
-      "Azure-Verified-Modules-Workflows"
+      "Azure-Verified-Modules-Workflows",
+      "avm-terraform-governance"
     )
 )
 
