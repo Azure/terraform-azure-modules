@@ -89,8 +89,8 @@ foreach($repository in $repositories) {
             if($metaDataItem -and $metaDataItem.value) {
                 $metaDataObject.Add($item.key, $metaDataItem.value)
                 continue
-            } 
-            
+            }
+
             $metaDataObject.Add($item.key, "")
 
             if($item.required -and $item.requiredFor -contains $repository.repoSubType) {
@@ -113,7 +113,7 @@ foreach($repository in $repositories) {
     $terraformRegistryModuleOwner = ""
     $terraformRegistryFirstPublishedDate = ""
 
-    if($response.errors -and $response.errors -contains "Not Found") {
+    if($statusCode -eq 404 -or ($response.errors -and $response.errors -contains "module not found")) {
         Write-Host "Module not found in Terraform Registry: $url"
     } else {
         $terraformRegistryPublished = $true
