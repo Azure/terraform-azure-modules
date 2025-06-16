@@ -31,7 +31,7 @@ jobs:
       - name: Get Repository Data
         run: |
           $repositories = @(./scripts/Invoke-RepoSyncGenerateMatrix.ps1)
-          Write-Host (ConvertTo-Json $matrix -Depth 10)
+          Write-Host (ConvertTo-Json $repositories -Depth 10)
 
           ./scripts/Invoke-RepoDataGeneration.ps1 -repositories $repositories
 
